@@ -4,20 +4,55 @@ namespace argh;
 
 class Argh
 {
-	const DEFAULT_REGEXP = '';
+	const KEY = 0;
+	const VALUE = 1;
+	const COMMAND = 2;
+	const SUBCOMMAND = 3;
 	
-	private $regexp = null;
+	private $syntax = array([
+		
+		[
+			'name'			=>	'--key',
+			'syntax'		=>	'/^\-\-([a-z_\-]+)$/i',
+			'semantics'	=>	[KEY]
+		],
+		[
+			'name'			=>	'--key=value',
+			'syntax'		=>	'/^\-\-([a-z_\-]+)=(.*)$/i',
+			'semantics'	=>	[KEY, VALUE]
+		],
+		[
+			'name'			=>	'-k',
+			'syntax'		=>	'/^\-\-([a-z]{1})$/i',
+			'semantics'	=>	[KEY]
+		],
+		[
+			'name'			=>	'cmd:sub',
+			'syntax'		=>	'/^([a-z]+):([a-z]+)$/i',
+			'semantics'	=>	[COMMAND, SUBCOMMAND]
+		],
+		
+	]);
 	
-	private $argv = null
+	private $argv = null;
 	private $parameters = null;
 	
 	private $arguments = null;
 	
 	/*
+	** STATIC METHODS
+	*/
+	
+	public static function parse(array $argv, array $parameters, array $syntax=null)
+	{
+		return new Argh($argv, $parameters, $syntax);
+	}
+	
+	/*
 	** PUBLIC METHODS
 	*/
 	
-	public function __contructor(array $argv, array $parameters)
+	public function __contructor(array $argv, array $parameters, array $syntax=null)
 	{
 		/*
 		** CHECK ARGUMENTS
@@ -29,14 +64,14 @@ class Argh
 		}
 		else if(!is_array($argv))
 		{
-			throw new ArghException('Expecting array \$argv, ' + gettype($argv) ' found');
+			throw new ArghException('Expecting array \$argv, ' . gettype($argv) . ' found');
 		}
 		else
 		{
 			$this->argv = $argv;
 		}
 		
-		if( (!isset($parameters)) || (!is_array($parameters) )
+		if( (!isset($parameters)) || (!is_array($parameters)) )
 		{
 			$this->parameters = array();
 		}
@@ -57,7 +92,7 @@ class Argh
 	}
 	
 	// Returns the value of an argument supplied on command line, or the default value from parameter definition
-	public fuction get($name)
+	public function get($name)
 	{
 	}
 	
