@@ -10,7 +10,7 @@
 
 require_once "Argh.php";
 
-use argh\Argh;
+use NetFocus\Argh\Argh;
 
 /*
 // Init memory

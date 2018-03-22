@@ -1,6 +1,6 @@
 <?php
 	
-namespace argh;
+namespace NetFocus\Argh;
 
 class Argh
 {
