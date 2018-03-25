@@ -1,0 +1,17 @@
+{
+    "name": "netfocus/argh",
+    "description": "Argument Helper. Easily parse all types of command line arguments in PHP command line scripts.",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Benjamin Hough",
+            "email": "benjamin@netfocusinc.com"
+        }
+    ],
+    "autoload": {
+	  	"psr-4": {
+		  	"NetFocus\\" : "src/"
+		  }
+	  }
+    "require": {}
+}
