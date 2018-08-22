@@ -2,8 +2,6 @@
 	
 namespace NetFocus\Argh;
 
-require_once 'ArghException.php';
-
 class ArghRuleParser
 {
 	public static function parse(array $rules)

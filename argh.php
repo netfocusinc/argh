@@ -6,10 +6,7 @@
 ** Demonstrates the capabilities of Argh
 */
 
-//! TODO: Figure out how to "use" this class without including it (? autoloader)
-
-require_once 'Argh.php';
-require_once 'ArghException.php';
+require "vendor/autoload.php";
 
 use NetFocus\Argh\Argh;
 use NetFocus\Argh\ArghException;
@@ -42,7 +39,7 @@ try
 			'flag'			=>			'f',
 			'type'			=>			'string',
 			'required'	=>			TRUE,
-			'default'		=>			NULL,
+			'default'		=>			'sample.out',
 			'text'			=>			'File to use (just an example).'
 		]
 	]);
@@ -51,13 +48,17 @@ try
 	print_r($argv);
 	echo "\n---------------------\n\n";
 	
-	echo "Command: " . $argh->command . "\n";
+	echo "Command: " . $argh->command() . "\n";
 	
-	//echo "Parameters: \n " . $argh->parametersString() . "\n";
+	echo "Parameters: \n" . $argh->parametersString() . "\n";
 	
-	//echo "Arguments: \n " . $argh->argumentsString() . "\n";
+	echo "Arguments: \n" . $argh->argumentsString() . "\n";
 	
+	echo "Map: \n" . $argh->mapString() . "\n";
+		
 	echo "\$argh->debug = " . $argh->debug . "\n";
+	
+	echo "\$argh->help = " . $argh->help . "\n";
 	
 	echo "\$argh->file = " . $argh->file . "\n";
 	

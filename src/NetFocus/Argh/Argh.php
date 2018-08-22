@@ -2,16 +2,21 @@
 	
 namespace NetFocus\Argh;
 
-require_once 'ArghException.php';
-require_once 'ArghRuleParser.php';
-
 class Argh
 {
+	/*
+	** CONTANTS
+	*/
+	
 	const KEY = 0;
 	const VALUE = 1;
 	const COMMAND = 2;
 	const SUBCOMMAND = 3;
 	const VARIABLE = 4;
+	
+	/*
+	** PRIVATE MEMBER DATA
+	*/
 	
 	private $rules = [
 		
@@ -53,21 +58,45 @@ class Argh
 	private $argv = null;
 	private $parameters = null;
 	private $arguments = null;
+	private $map = null;
 	
-	public $command = null;
+	/*
+	** PUBLIC MEMBER DATA
+	*/
 	
 	/*
 	** STATIC METHODS
 	*/
 	
-	public static function parse($argv, array $parameters, array $syntax=null)
+	public static function parse($argv, array $parameters, array $rules=null)
 	{
 		// Play nice when $argv is a string
 		if(is_string($argv)) $argv = explode(' ', $argv);
 		
-		return new Argh($argv, $parameters, $syntax);
+		return new Argh($argv, $parameters, $rules);
 	}
-
+	
+	/*
+	** PROPERTY OVERLOADING
+	*/
+	
+	//public void __set ( string $name , mixed $value )
+	
+	public function __get(string $name)
+	{
+		if(isset($this->{$name}))
+		{
+			return $this->{$name};
+		}
+		else
+		{
+			// Get parameters from this object
+			return $this->get($name);
+		}
+	}
+	
+	//public bool __isset ( string $name )
+	//public void __unset ( string $name )
 	
 	/*
 	** PUBLIC METHODS
@@ -110,7 +139,6 @@ class Argh
 			throw $e;
 		}
 		
-		
 		/*
 		** CHECK ARGUMENTS
 		*/
@@ -126,36 +154,68 @@ class Argh
 		else
 		{
 			$this->argv = $argv;
-			
-			// Set $this->command
-			$command = "";
-			foreach($argv as $arg)
-			{
-				$command .= $arg . " ";
-			}
-			$this->command = $command;
 		}
 		
-		if( (!isset($parameters)) || (!is_array($parameters)) )
-		{
-			$this->parameters = array();
-		}
 		
 		try
 		{
-			$this->parseParameters($parameters);
-			//$this->parseSyntax();
-			$this->parseArguments();
+			$this->parameters = ArghParameterParser::parse($parameters);
+		
+			// Do NOT include $argv[0] in call to parse(); it contains the name of the cli script
+			$this->arguments = ArghArgumentParser::parse(array_slice($this->argv, 1), $this->rules, $this->parameters);
+			
+			// Merge arguments into $parameters by key
+			ArghParameterParser::merge($this->parameters, $this->arguments);
+			
+			// Create an index map for parameters by 'name' and 'flag'
+			$this->map = ArghParameterParser::map($this->parameters);
+			
 		}
-		catch(Exception $e)
+		catch(ArghException $e)
 		{
 			throw $e;
-		}
+		}		
+	}
+	
+	public function command()
+	{
+		return implode(' ', $this->argv);
 	}
 	
 	// Returns the value of an argument supplied on command line, or the default value from parameter definition
 	public function get($name)
 	{
+		// check the map for parameter with name or flag =$name
+		if( array_key_exists($name, $this->map) )
+		{
+			// retrieve the matching parameters index from the map
+			$i = $this->map[$name];
+			
+			// retrieve the value of the parameter, or the default, or null
+			if( array_key_exists('argument', $this->parameters[$i]) )
+			{
+				if( array_key_exists('value', $this->parameters[$i]['argument']) )
+				{
+					return $this->parameters[$i]['argument']['value'];
+				}
+				else
+				{
+					throw new ArghException(__METHOD__ . ': Argument \'' . $name .  '\' has no value.'); 
+				}
+			}
+			else if( array_key_exists('default', $this->parameters[$i]) )
+			{
+				return $this->parameters[$i]['default'];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			throw new ArghException('Parameter \'' . $name . '\' was not defined.');
+		}
 	}
 	
 	// Returns the definition of a parameter by name
@@ -173,6 +233,11 @@ class Argh
 		return print_r($this->arguments, TRUE);
 	}
 	
+	public function mapString()
+	{
+		return print_r($this->map, TRUE);
+	}
+	
 	public function debugString()
 	{
 	}
@@ -184,6 +249,7 @@ class Argh
 		return $buff;
 	}
 	
+	//! TODO: Accept a formatting string/array (e.g. ['-f', '--name', 'text'])
 	// An alias for usageString()
 	public function usage() { return self::usageString(); }
 	
@@ -196,189 +262,7 @@ class Argh
 	/*
   ** PRIVATE METHODS
   */
-  
-  // throws an Exception of $this->parameters
-  private function parseParameters(array $parameters)
-  {
-	  // Do not just accept given $parameters;
-	  // Process them to make sure they are valid
-	  
-	  if( is_array($parameters) )
-		{	  
-	  	$this->parameters = array();
-	  
-			// process an array of parameters to use for parsing arguments
-			foreach($parameters as $param)
-			{
-				/* Example $param
-				[
-					'name'			=>			'debug',
-					'flag'			=>			'd',
-					'type'			=>			'boolean',
-					'required'	=>			FALSE,
-					'default'		=>			FALSE,
-					'text'			=>			'Enables debug mode.'
-				]
-				*/
-				
-				// Rebuild $param in a $tmp array
-				$tmp = array();
-				
-				// Check for required elements
-				if( array_key_exists('name', $param) )
-				{
-					$tmp['name'] = $param['name'];
-				}
-				else
-				{
-					throw new ArghException('Parameter definitions missing required name');
-				}
-				
-				if( array_key_exists('flag', $param) )
-				{
-					$tmp['flag'] = $param['flag'];
-				}
-				
-				if( array_key_exists('type', $param) )
-				{
-					if( in_array($param['type'], ['boolean','string']) )
-					{
-						$tmp['type'] = $param['type'];
-					}
-					else
-					{
-						throw new ArghException('Parameter ' . $tmp['name'] . ' has an invalid type');
-					}
-				}
-				else
-				{
-					// Assign default type
-					$tmp['type'] = 'boolean';
-				}
-				
-				if( array_key_exists('required', $param) )
-				{
-					if($param['required'])
-						$tmp['required'] = TRUE;
-					else
-						$tmp['required'] = FALSE;
-				}
-				else
-				{
-					// Assign default required
-					$tmp['required'] = FALSE;
-				}
-				
-				if( array_key_exists('default', $param) )
-				{
-					//! TODO: confirm that default value matches type of this paramter
-					$tmp['default'] = $param['default'];
-				}
-				
-				if( array_key_exists('text', $param) )
-				{
-					$tmp['text'] = $param['text'];
-				}
-				
-				// Add the $tmp param to this objects $parameters array
-				array_push($this->parameters, $tmp);
-				
-			} // END: foreach($paramters as $param)
-		}
-		else
-		{
-			throw new ArghException('parseParameters() expects an array of $parameters)');
-		}
 
-
-	}
-  
-	private function parseArguments()
-	{
-		// parse $this->argv using $this->syntax and $this->parameters to create a $this->arguments array
-		
-		// create a map of arguments
-		// create a map of parameters (includes argument values)
-		// create convenience maps by flag, name
-		
-		// create convenience properties on this object (for each parameter)
-		//eg $this->{$key} = $value;
-		
-		// Initialize this objects $arguments array
-		$this->arguments = array();
-		
-		// Convenience pointers
-		$argv = $this->argv;
-		
-		for($i=1; $i<count($argv); $i++)
-		{
-			echo "\nDEBUG: Considering \$argv[$i] " . $argv[$i] . " ... \n";
-			
-			echo count($this->rules) . " rules to test\n";
-			
-			foreach($this->rules as $rule)
-			{
-				echo "DEBUG: Checking for match with rule: " . $rule['name'] . " (" . $rule['syntax'] . ")" . "\n";
-				
-				$tokens = array();
-				if( preg_match($rule['syntax'], $argv[$i], $tokens) )
-				{
-					echo "DEBUG: " . $argv[$i] . " matches syntax pattern " . $rule['syntax'] . "\n";
-					
-					// Build an argument in a $tmp array
-					$tmp = array();
-					
-					// Loop through $matches and assign data to $arguments based on the current rules semantics
-					for($j=1; $j<count($tokens); $j++)
-					{
-						$token = $tokens[$j];
-						//echo "DEBUG: token: " . $token . "\n";
-						// Semantic meaning of token for this rule
-						$meaning = $rule['semantics'][$j-1];
-						echo "DEBUG: token: " . $token . " (" . $meaning . ")\n";
-						
-						switch($meaning)
-						{
-							case self::KEY:
-								//! TODO: Check if this 'key' matches a defined parameter 'name' or 'flag'
-								// if it matches a 'flag', use the corresponding 'name' for this arguments 'key' instead
-								// ? if no match, okay to assign to arguments anyway
-								$tmp['key'] = $token;
-								break;
-							case self::VALUE:
-								$tmp['value'] = $token;
-								break;
-							case self::COMMAND:
-								break;
-							case self::SUBCOMMAND:
-								break;
-							default:
-								// ? Throw exception
-						}
-						
-					} // END: for($j=1; $j<count($matches); $j++)
-					
-					//! TODO: set boolean values for flags to TRUE
-					
-					//! TODO: validate tmp argument before adding to this objects arguments array
-					
-					// Create a property on this object with the arguments name
-					$this->{$tmp['key']} = $tmp['value'];
-					
-					// Add $tmp argument to this objects $arguments array
-					array_push($this->arguments, $tmp);
-					
-					break; // move on to the next $argv element
-					
-				} // END: if( preg_match($rule->syntax, $argv[$i], $matches) )
-				
-				
-				
-			} // END: foreach($interpreter as $rule)
-			
-		} // END: for($i=1; $i<count($argv); $i++)
-		
-	}
 	
 }
 	
