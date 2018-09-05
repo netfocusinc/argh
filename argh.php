@@ -15,6 +15,11 @@ use NetFocus\Argh\ArghException;
 // Init memory
 */
 
+echo "\n\n---------------------\n";
+echo "RAW \$argv:\n";
+print_r($argv);
+echo "\n---------------------\n\n";
+
 try
 {
 	$argh = new Argh($argv, [
@@ -45,7 +50,6 @@ try
 	]);
 	
 	echo "\n\n";
-	print_r($argv);
 	echo "\n---------------------\n\n";
 	
 	echo "Command: " . $argh->command() . "\n";

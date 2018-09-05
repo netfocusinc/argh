@@ -4,58 +4,13 @@ namespace NetFocus\Argh;
 
 class Argh
 {
-	/*
-	** CONTANTS
-	*/
-	
-	const KEY = 0;
-	const VALUE = 1;
-	const COMMAND = 2;
-	const SUBCOMMAND = 3;
-	const VARIABLE = 4;
-	
+		
 	/*
 	** PRIVATE MEMBER DATA
 	*/
 	
-	private $rules = [
-		
-		[
-			'name'			=>	'cmd:sub variable',
-			'syntax'		=>	'/^([a-z]+):([a-z]+)[\s]+([\S]+)$/i',
-			'semantics'	=>	[self::COMMAND, self::SUBCOMMAND, self::VARIABLE]
-		],
-		
-		[
-			'name'			=>	'-f value',
-			'syntax'		=>	'/^\-([a-z]{1})[\s]+([\S]+)$/i',
-			'semantics'	=>	[self::KEY, self::VALUE]
-		],
-		
-		[
-			'name'			=>	'--key',
-			'syntax'		=>	'/^\-\-([a-z_\-]+)$/i',
-			'semantics'	=>	[self::KEY]
-		],
-		[
-			'name'			=>	'--key=value',
-			'syntax'		=>	'/^\-\-([a-z_\-]+)=([\S]+)$/i',
-			'semantics'	=>	[self::KEY, self::VALUE]
-		],
-		[
-			'name'			=>	'-k',
-			'syntax'		=>	'/^\-([a-z]{1})$/i',
-			'semantics'	=>	[self::KEY]
-		],
-		[
-			'name'			=>	'cmd:sub',
-			'syntax'		=>	'/^([a-z]+):([a-z]+)$/i',
-			'semantics'	=>	[self::COMMAND, self::SUBCOMMAND]
-		],
-		
-	];
-	
 	private $argv = null;
+	private $rules = null;
 	private $parameters = null;
 	private $arguments = null;
 	private $map = null;
@@ -71,7 +26,14 @@ class Argh
 	public static function parse($argv, array $parameters, array $rules=null)
 	{
 		// Play nice when $argv is a string
-		if(is_string($argv)) $argv = explode(' ', $argv);
+		if(is_string($argv))
+		{
+			// Force string into an array
+			$argv = explode(' ', $argv);
+			
+			// Prepend a placeholder element at index 0; this will be removed by constructor
+			array_unshift($argv, 'garbage');
+		}
 		
 		return new Argh($argv, $parameters, $rules);
 	}
@@ -102,33 +64,15 @@ class Argh
 	** PUBLIC METHODS
 	*/
 	
-	public function __construct(array $argv, array $parameters, array $rules=null)
+	public function __construct(array $argv, array $parameters)
 	{
 		/*
-		** CHECK RULES
+		** RULES
 		*/
-		
-		// Check for defined $rules argument to override defaults
-		if( isset($rules) )
-		{
-			if( is_array($rules) )
-			{
-				if( count($rules) > 0 )
-				{
-					// Replace this objects default rules with given rules
-					$this->rules = $rules;
-				}
-				else
-				{
-					throw new ArghException('Empty rule set given');
-				}
-			}
-			else
-			{
-				throw new ArghException('Expecting array \$rules, ' . gettype($rules) . ' given');
-			}
-		}
-		
+	
+		// Get rules from ArghRules	
+		$this->rules = ArghRules::rules();
+				
 		// Parse the rules to confirm their validity
 		try
 		{
@@ -160,8 +104,9 @@ class Argh
 		try
 		{
 			$this->parameters = ArghParameterParser::parse($parameters);
-		
-			// Do NOT include $argv[0] in call to parse(); it contains the name of the cli script
+			
+			// Parse $argv
+			// remove element at index 0; it contains the name of the cli script
 			$this->arguments = ArghArgumentParser::parse(array_slice($this->argv, 1), $this->rules, $this->parameters);
 			
 			// Merge arguments into $parameters by key

@@ -51,18 +51,18 @@ class ArghArgumentParser
 						
 						switch($meaning)
 						{
-							case Argh::KEY:
+							case ARGH_SYM_KEY:
 								//! TODO: Check if this 'key' matches a defined parameter 'name' or 'flag'
 								// if it matches a 'flag', use the corresponding 'name' for this arguments 'key' instead
 								// ? if no match, okay to assign to arguments anyway
 								$tmp['key'] = $token;
 								break;
-							case Argh::VALUE:
+							case ARGH_SYM_VALUE:
 								$tmp['value'] = $token;
 								break;
-							case Argh::COMMAND:
+							case ARGH_SYM_CMD:
 								break;
-							case Argh::SUBCOMMAND:
+							case ARGH_SYM_SUB:
 								break;
 							default:
 								// ? Throw exception
