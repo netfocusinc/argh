@@ -5,9 +5,51 @@ namespace NetFocus\Argh;
 class ArghArgumentParser
 {
 	
+	/**
+	 * Prepare an array of arguments for parsing
+	 *
+	 * 
+	 * PHP registers the $argv array with input from the command line.
+	 * This process includes some items that make it difficult to parse the way Argh wants to.
+	 * This function takes an $argv (like) array and creates a new array where ...
+	 * Quotes are wrapped around string with spaces
+	 * Bracketed lists are put in a single element, regardless of spacing
+	 * 
+	 * @param array $args An '$argv' like array of arguments
+	 *
+	 * @return array
+	 */
+	
+	public static function preprocess(array $args)
+	{
+		// Check for arguments with spaces, these were originally quoted on the command line
+		for($i=0; $i<count($args); $i++)
+		{
+			if( strpos($args[$i], ' ') !== FALSE )
+			{
+
+				// if argument is part of a list, do NOT include the delimiting comma inside quotes
+				if( substr($args[$i], -1) == ',' )
+				{
+					// Wrap (space containing) argument in single quotes; with trailing comma
+					$args[$i] = "'" . substr($args[$i], 0, -1) . "',"; 
+				}
+				else
+				{
+					// Wrap (space containing) argument in single quotes
+					$args[$i] = "'" . $args[$i] . "'";
+				}				
+				
+			} // END: if( strpos($args[$i], ' ') !== FALSE )
+			
+		} // END: for($i=0; $i<count($args); $i++)	
+		
+		return $args;	
+	}
+	
 	public static function parse(array $args, array $rules, array $parameters)
 	{
-		// parse $argv using $rules and $parameters to create an $arguments array
+		// parse $args using $rules and $parameters to create an $arguments array
 		
 		if( count($rules) == 0 )
 		{
@@ -19,129 +61,113 @@ class ArghArgumentParser
 			throw new ArghException(__METHOD__ . ': Needs at least one parameter to parse arguments.');
 		}
 		
+		//
+		// Prepare $args for parsing
+		$args = static::preprocess($args);
+		
 		// Initialize an array of arguments, this will be returned later
 		$arguments = array();
 		
-		for($i=0; $i<count($args); $i++)
+		// As parsing progresses, args will be divided into 2-sides (Left-and-Right)
+		// The Left-Hand-Side will contain args to attempt matching with rules
+		// The Right-Hand-Side will save args that didn't match in previous iterations (to be checked again later)
+		
+		do
 		{
-			echo "\nDEBUG: Considering \$args[$i] " . $args[$i] . " ... \n";
+			// Reset temporary variables
+			$argsL = array();
+			$argsR = array();
+			$argsS = "";
 			
-			echo count($rules) . " rules to test\n";
+			// Copy remaining $args to $argsL (left-hand-side array)
+			$argsL = array_merge($args);
 			
-			foreach($rules as $rule)
+			do
 			{
-				echo "DEBUG: Checking for match with rule: " . $rule['name'] . " (" . $rule['syntax'] . ")" . "\n";
+				// Combine $argsL elements into a single string, for matching against rules
+				$argsS = implode(' ', $argsL);
 				
-				$tokens = array();
-				if( preg_match($rule['syntax'], $args[$i], $tokens) )
+				//
+				// DEBUG: show detailed contents of each variable
+				//
+				
+				echo "\nITERATION:\n----------------------\n";
+				 
+				echo implode(' ', $argsL) . " | " . implode(' ', $argsR) . "\n";
+				
+				for($i=0; $i<count($argsL); $i++)
 				{
-					echo "DEBUG: " . $args[$i] . " matches syntax pattern " . $rule['syntax'] . "\n";
-					
-					// Build an argument in a $tmp array
-					$tmp = array();
-					
-					// Loop through $tokens and assign data to $arguments based on the current rules semantics
-					for($j=1; $j<count($tokens); $j++)
+					for($j=0; $j<strlen($argsL[$i]); $j++)
 					{
-						$token = $tokens[$j];
-						//echo "DEBUG: token: " . $token . "\n";
-						// Semantic meaning of token for this rule
-						$meaning = $rule['semantics'][$j-1];
-						echo "DEBUG: token: " . $token . " (" . $meaning . ")\n";
-						
-						switch($meaning)
-						{
-							case ARGH_SYM_KEY:
-								//! TODO: Check if this 'key' matches a defined parameter 'name' or 'flag'
-								// if it matches a 'flag', use the corresponding 'name' for this arguments 'key' instead
-								// ? if no match, okay to assign to arguments anyway
-								$tmp['key'] = $token;
-								break;
-							case ARGH_SYM_VALUE:
-								$tmp['value'] = $token;
-								break;
-							case ARGH_SYM_CMD:
-								break;
-							case ARGH_SYM_SUB:
-								break;
-							default:
-								// ? Throw exception
-						}
-						
-					} // END: for($j=1; $j<count($matches); $j++)
-					
-					// Look for a parameter associated with this argument
-					$argumentParameter = null;
-					
-					foreach($parameters as $parameter)
-					{
-						if($parameter['name'] == $tmp['key'])
-						{
-							$argumentParameter = $parameter;
-						}
-						else
-						{
-							if( array_key_exists('flag', $parameter) )
-							{
-								if($parameter['flag'] == $tmp['key'])
-								{
-									$argumentParameter = $parameter;
-								}
-							}
-						}
-					} // END: foreach($parameters as $parameter)
-					
-					if($argumentParameter === null)
-					{
-						//! TODO: throw ArghUnknownArgumentException; clients can catch this and display 'usage'
-						throw new ArghException(__METHOD__ . ': Argument \'' . $tmp['key'] . '\' does not match a defined parameter.');
+						echo $i;
 					}
-					
-					// Set boolean values for flags to TRUE
-					switch($argumentParameter['type'])
+					echo " ";
+				}
+				echo "| ";
+				for($i=0; $i<count($argsR); $i++)
+				{
+					for($j=0; $j<strlen($argsR[$i]); $j++)
 					{
-						case 'boolean':
-						
-							if( array_key_exists('value', $tmp) )
-							{
-								// When value is present, re-set to its literal boolean equivalent
-								
-								if($tmp['value'])
-								{
-									$tmp['value'] = TRUE;
-								}
-								else
-								{
-									$tmp['value'] = FALSE;
-								}
-							}
-							else
-							{
-								// When no value is specified, default to TRUE
-								$tmp['value'] = TRUE;
-							}
-							break;
-							
-						case 'string':
-						
-							break;
-							
-						default:
+						echo $i;
 					}
-						 
-					//! TODO: validate tmp argument before adding to this objects arguments array
-					
-					
-					// Add $tmp argument to this objects $arguments array
-					array_push($arguments, $tmp);
-					
-					break; // move on to the next $argv element
-					
-				} // END: if( preg_match($rule->syntax, $args[$i], $matches) )
+					echo " ";
+				}			
+				echo "\n----------------------\n\n";
 				
-			} // END: foreach($rules as $rule)
+				echo "\nDEBUG: Considering: " . $argsS . " ... \n\n";
+				
+				foreach($rules as $rule)
+				{
+					echo "DEBUG: Checking for match with rule: " . $rule['name'] . " (" . $rule['syntax'] . ")" . "\n";
+					
+					$tokens = array(); // init array to capture matching tokens from preg_match()
+					
+					if( preg_match($rule['syntax'], $argsS, $tokens) )
+					{
+						// Count the number of arguments that were matched
+						$count = count($argsL);
+						
+						echo "* MATCH (n=$count) *\n";
+						
+						// Empty $argsL; prevent this inner while loop from continuing
+						for($i=0; $i<$count; $i++) array_shift($argsL);
+						
+						// Remove (shift) matching elements from $args
+						// These arguments have been consumed by the parser and are no longer needed
+						for($i=0; $i<$count; $i++) array_shift($args);
+						
+						// Build an argument in a $tmp array
+						//$tmp = array();
+						
+						break; // stop checking rules
+						
+					} // END: if( preg_match($rule->syntax, $args[$i], $matches) )
+					
+				} // END: foreach($rules as $rule)
+				
+				if( count($tokens) == 0 )
+				{
+					// $argsS did NOT match any rules
+					
+					// Pop last element off of $argsL
+					$arg = array_pop($argsL);
+					
+					// Prepend popped elemented to beginning of $argsR
+					array_unshift($argsR, $arg);
+					
+					if( count($argsL) == 0 )
+					{
+						// There was no match, and there are no arguments left to pop from $argsL
+						throw new ArghException(__METHOD__ . ': Syntax Error: ' . $arg);
+					}
+					
+				} // END: if( count($tokens) == 0 )
+				
+			} // END do
+			while( count($argsL) > 0 );
 			
-		} // END: for($i=0; $i<count($args); $i++)
+		} // END: do
+		while( count($args) > 0 );
 		
 		return $arguments;
 		

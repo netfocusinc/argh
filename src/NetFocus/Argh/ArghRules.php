@@ -2,20 +2,22 @@
 	
 namespace NetFocus\Argh;
 
+// Syntax Contants
+define('ARGH_SYN_FLAG', '[a-z]{1}', true);
+define('ARGH_SYN_FLAGS', '[a-z]+', true);
+define('ARGH_SYN_KEY', '[a-z0-9_]+', true);
+define('ARGH_SYN_VALUE', '[a-z0-9_]*', true);
+define('ARGH_SYN_LIST', '[a-z0-9_\-, ]+', true);
+define('ARGH_SYN_QUOTED', '[a-z0-9_\-\' ]+', true);
+define('ARGH_SYN_CMD', '[a-z0-9_]{2,}', true);
+
+// Semantic Contants
 define('ARGH_SYM_KEY', 0, true);
 define('ARGH_SYM_KEYS', 1, true);
 define('ARGH_SYM_VALUE', 2, true);
 define('ARGH_SYM_LIST', 3, true);
 define('ARGH_SYM_CMD', 4, true);
 define('ARGH_SYM_SUB', 5, true);
-
-define('ARGH_SYN_FLAG', '[a-z]{1}', true);
-define('ARGH_SYN_FLAGS', '[a-z]+', true);
-define('ARGH_SYN_KEY', '[a-z0-9_\-]+', true);
-define('ARGH_SYN_VALUE', '[a-z0-9_\-]+', true);
-define('ARGH_SYN_LIST', '[a-z0-9_\-, ]+', true);
-define('ARGH_SYN_QUOTED', '[a-z0-9_\-\' ]+', true);
-define('ARGH_SYN_CMD', '[a-z0-9_\-]{2,}', true);
 
 class ArghRules
 {	
@@ -50,23 +52,19 @@ class ArghRules
 				'semantics'	=>	[ARGH_SYM_KEY, ARGH_SYM_LIST]
 			],
 			
-			/*
 			[
 				'name'			=>	'Hyphenated Flag with Quoted Value',
 				'example'		=>	'-f \'Hello World\'',
 				'syntax'		=>	'/^\-(' . ARGH_SYN_FLAG . ')[\s]+\'(' . ARGH_SYN_QUOTED . ')\'$/i',
 				'semantics'	=>	[ARGH_SYM_KEY, ARGH_SYM_VALUE]
 			],
-			*/
-			
-			/*
+
 			[
 				'name'			=>	'Double Hyphenated Key with Quoted Value',
 				'example'		=>	'--key=\'quoted value\'',
 				'syntax'		=>	'/^\-\-(' . ARGH_SYN_KEY . ')=\'(' . ARGH_SYN_QUOTED . ')\'$/i',
 				'semantics'	=>	[ARGH_SYM_KEY, ARGH_SYM_VALUE]
 			],
-			*/
 			
 			[
 				'name'			=>	'Hyphenated Flag with Value',
@@ -106,7 +104,7 @@ class ArghRules
 			[
 				'name'			=>	'Hyphenated Multi Flag',
 				'example'		=>	'-xvf',
-				'syntax'		=>	'/^\-(' . ARGH_SYN_KEYS . ')$/i',
+				'syntax'		=>	'/^\-(' . ARGH_SYN_FLAGS . ')$/i',
 				'semantics'	=>	[ARGH_SYM_KEYS]
 			],
 			
@@ -127,7 +125,7 @@ class ArghRules
 			[
 				'name'			=>	'Naked Multi Flag',
 				'example'		=>	'xvf',
-				'syntax'		=>	'/^(' . ARGH_SYN_KEYS . ')$/i',
+				'syntax'		=>	'/^(' . ARGH_SYN_FLAGS . ')$/i',
 				'semantics'	=>	[ARGH_SYM_KEYS]
 			],
 			
