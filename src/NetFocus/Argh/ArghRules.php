@@ -7,7 +7,7 @@ define('ARGH_SYN_FLAG', '[a-z]{1}', true);
 define('ARGH_SYN_FLAGS', '[a-z]+', true);
 define('ARGH_SYN_KEY', '[a-z0-9_]+', true);
 define('ARGH_SYN_VALUE', '[a-z0-9_]*', true);
-define('ARGH_SYN_LIST', '[a-z0-9_\-, ]+', true);
+define('ARGH_SYN_LIST', '[a-z0-9_\-,\' ]+', true);
 define('ARGH_SYN_QUOTED', '[a-z0-9_\-\' ]+', true);
 define('ARGH_SYN_CMD', '[a-z0-9_]{2,}', true);
 

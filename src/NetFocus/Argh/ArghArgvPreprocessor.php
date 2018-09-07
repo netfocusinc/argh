@@ -102,21 +102,46 @@ class ArghArgvPreprocessor
 				if( strpos($args[$i], '[') !== FALSE )
 				{
 					//! TODO: Process each item in the list separately
+					echo "DEBUG: Quoting items in a list\n";
 					
 					// Extract the items from the list; they are contained between brackets [ ]
+					$tokens = array(); // init array to capture matching tokens from preg_match()
 					
-					// Explode the items to an array
+					if( preg_match('/\[([^\]]+)\]/i', $args[$i], $tokens) )
+					{
+						echo "DEBUG: List items: " . $tokens[1] . "\n";
+
+						// Explode the items to an array
+						$list = explode(',', $tokens[1]);
 					
-					// Process each item in the list separately
+						// Process each item in the list separately
+						for($j=0; $j<count($list); $j++)
+						{
+
+							if( strpos($list[$j], ' ') !== FALSE )
+							{
+								// Wrap (space containing) items in quotes
+								$list[$j] = "'" . $list[$j] . "'";
+							}
+							
+						} // END: for($j=0; $j<count($list); $j++)
 					
-					// Wrap (space containing) items in single quotes
+						// Implode the list to a comma separated string
+						$listS = implode(",", $list);
 					
-					// Implode the items to a comma separated string
-					
-					// Put the (processed) item string back into the list; between the brackets [ ]
-					
-					// Replace the original argument at $args[$i] with the processed one
-					
+						// Put the (processed) list string back between the brackets [ ]
+						// Replace the original argument at $args[$i] with the processed one	
+						$args[$i] = preg_replace('/\[([^\]]+)\]/i', '[' . $listS . ']', $args[$i]);
+						
+						
+						//$args[$i] = $token[1] . '[' . $listS . ']';
+						
+					}
+					else
+					{
+						throw new ArghException(__METHOD__ . ': Syntax Error: Invalid list.');
+					}
+				
 				}
 				else
 				{
