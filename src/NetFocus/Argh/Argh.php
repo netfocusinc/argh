@@ -60,15 +60,15 @@ class Argh
 	//public bool __isset ( string $name )
 	//public void __unset ( string $name )
 	
-	/*
-	** PUBLIC METHODS
-	*/
+	//
+	// PUBLIC METHODS
+	//
 	
 	public function __construct(array $argv, array $parameters)
 	{
-		/*
-		** RULES
-		*/
+		//
+		// RULES
+		//
 	
 		// Get rules from ArghRules	
 		$this->rules = ArghRules::rules();
@@ -83,9 +83,9 @@ class Argh
 			throw $e;
 		}
 		
-		/*
-		** CHECK ARGUMENTS
-		*/
+		//
+		// CHECK ARGUMENTS
+		//
 		
 		if(!isset($argv))
 		{
@@ -100,14 +100,18 @@ class Argh
 			$this->argv = $argv;
 		}
 		
+		//
+		// PARSE PARAMETERS AND ARGUMENTS
+		//
 		
 		try
 		{
 			$this->parameters = ArghParameterParser::parse($parameters);
 			
-			// Parse $argv
-			// remove element at index 0; it contains the name of the cli script
-			$this->arguments = ArghArgumentParser::parse(array_slice($this->argv, 1), $this->rules, $this->parameters);
+			// Prepare $argv for parsing
+			$args = ArghArgvPreprocessor::process($this->argv);
+			
+			$this->arguments = ArghArgumentParser::parse($args, $this->rules, $this->parameters);
 			
 			// Merge arguments into $parameters by key
 			ArghParameterParser::merge($this->parameters, $this->arguments);

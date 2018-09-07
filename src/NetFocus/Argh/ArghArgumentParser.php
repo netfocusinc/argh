@@ -5,48 +5,6 @@ namespace NetFocus\Argh;
 class ArghArgumentParser
 {
 	
-	/**
-	 * Prepare an array of arguments for parsing
-	 *
-	 * 
-	 * PHP registers the $argv array with input from the command line.
-	 * This process includes some items that make it difficult to parse the way Argh wants to.
-	 * This function takes an $argv (like) array and creates a new array where ...
-	 * Quotes are wrapped around string with spaces
-	 * Bracketed lists are put in a single element, regardless of spacing
-	 * 
-	 * @param array $args An '$argv' like array of arguments
-	 *
-	 * @return array
-	 */
-	
-	public static function preprocess(array $args)
-	{
-		// Check for arguments with spaces, these were originally quoted on the command line
-		for($i=0; $i<count($args); $i++)
-		{
-			if( strpos($args[$i], ' ') !== FALSE )
-			{
-
-				// if argument is part of a list, do NOT include the delimiting comma inside quotes
-				if( substr($args[$i], -1) == ',' )
-				{
-					// Wrap (space containing) argument in single quotes; with trailing comma
-					$args[$i] = "'" . substr($args[$i], 0, -1) . "',"; 
-				}
-				else
-				{
-					// Wrap (space containing) argument in single quotes
-					$args[$i] = "'" . $args[$i] . "'";
-				}				
-				
-			} // END: if( strpos($args[$i], ' ') !== FALSE )
-			
-		} // END: for($i=0; $i<count($args); $i++)	
-		
-		return $args;	
-	}
-	
 	public static function parse(array $args, array $rules, array $parameters)
 	{
 		// parse $args using $rules and $parameters to create an $arguments array
@@ -60,10 +18,6 @@ class ArghArgumentParser
 		{
 			throw new ArghException(__METHOD__ . ': Needs at least one parameter to parse arguments.');
 		}
-		
-		//
-		// Prepare $args for parsing
-		$args = static::preprocess($args);
 		
 		// Initialize an array of arguments, this will be returned later
 		$arguments = array();
