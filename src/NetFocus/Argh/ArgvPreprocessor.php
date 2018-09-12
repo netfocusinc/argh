@@ -2,7 +2,7 @@
 	
 namespace NetFocus\Argh;
 
-class ArghArgvPreprocessor
+class ArgvPreprocessor
 {
 	
 	/**

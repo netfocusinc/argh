@@ -2,25 +2,27 @@
 	
 namespace NetFocus\Argh;
 
-class ArghArgumentParser
+class ArgumentParser
 {
 	
-	public static function parse(array $args, array $rules, array $parameters)
+	public static function parse(array $args, Language $language, Parameters $parameters)
 	{
-		// parse $args using $rules and $parameters to create an $arguments array
+		// Parse $args using $rules and $params to create Arguments
+		$rules = $language->rules();
+		$params = $parameters->all();
 		
 		if( count($rules) == 0 )
 		{
-			throw new ArghException(__METHOD__ . ': Needs at least one rule to parse arguments.');
+			throw new ArghException(__METHOD__ . ': Language needs at least one rule to parse arguments.');
 		}
 		
-		if( count($parameters) == 0 )
+		if( count($params) == 0 )
 		{
 			throw new ArghException(__METHOD__ . ': Needs at least one parameter to parse arguments.');
 		}
 		
-		// Initialize an array of arguments, this will be returned later
-		$arguments = array();
+		// Create a new Arguments instance
+		$arguments = new Arguments();
 		
 		// As parsing progresses, args will be divided into 2-sides (Left-and-Right)
 		// The Left-Hand-Side will contain args to attempt matching with rules
@@ -72,11 +74,11 @@ class ArghArgumentParser
 				
 				foreach($rules as $rule)
 				{
-					echo "DEBUG: Checking for match with rule: " . $rule['name'] . " (" . $rule['syntax'] . ")" . "\n";
+					echo "DEBUG: Checking for match with rule: " . $rule->name() . " (" . $rule->syntax() . ")" . "\n";
 					
 					$tokens = array(); // init array to capture matching tokens from preg_match()
 					
-					if( preg_match($rule['syntax'], $argsS, $tokens) )
+					if( preg_match($rule->syntax(), $argsS, $tokens) )
 					{
 						// Count the number of arguments that were matched
 						$count = count($argsL);
@@ -90,27 +92,27 @@ class ArghArgumentParser
 						// These arguments have been consumed by the parser and are no longer needed
 						for($i=0; $i<$count; $i++) array_shift($args);
 						
-						// Build an new argument
-						$argument = array();
+						// Create a new Argument instance
+						//$argument = array();
 
 	 					// Loop through $tokens and assign data to $arguments based on the current rules semantics
 	 					for($j=1; $j<count($tokens); $j++)
 	 					{
 	 						$token = $tokens[$j];
 
-	 						echo "DEBUG: token: " . $token . " (" . $rule['semantics'][$j-1] . ")\n";
+	 						echo "DEBUG: token: " . $token . " (" . $rule->semantics()[$j-1] . ")\n";
 	 						
-	 						switch( $rule['semantics'][$j-1] )
+	 						switch( $rule->semantics()[$j-1] )
 	 						{
 	 							case ARGH_SYM_KEY:
 	 							
 	 								// Check if this 'key' matches a defined parameters 'name' or 'flag'	 								
-	 								for($k=0; $k<count($parameters); $k++)
+	 								for($k=0; $k<count($params); $k++)
 	 								{
-		 								if( ($token == $parameters[$k]['name']) || ($token == $parameters[$k]['flag']) )
+		 								if( ($token == $params[$k]->name) || ($token == $params[$k]->flag) )
 		 								{
 			 								// Use the parameters 'name' for this arguments 'key'
-			 								$argument['key'] = $parameters[$k]['name'];
+			 								//$argument['key'] = $params[$k]->name;
 			 								
 			 								// Stop searching for parameter
 			 								break;
@@ -118,10 +120,10 @@ class ArghArgumentParser
 		 							}
 		 							
 		 							// Token does not match any defined parameter
-		 							if( !array_key_exists('key', $argument) )
-		 							{
-			 							throw new ArghException(__METHOD__ . ': No parameter with key: ' . $token . "'");
-			 						}
+		 							//if( !array_key_exists('key', $argument) )
+		 							//{
+			 							//throw new ArghException(__METHOD__ . ': No parameter with key: ' . $token . "'");
+			 						//}
 	 								
 	 								break;
 	 								
@@ -135,9 +137,9 @@ class ArghArgumentParser
 	 								for($k=0; $k<strlen($token); $k++)
 	 								{
 		 								
-		 								for($m=0; $m<count($parameters); $m++)
+		 								for($m=0; $m<count($params); $m++)
 		 								{
-			 								if( $token{$k} == $parameters[$m]['flag'] )
+			 								if( $token{$k} == $params[$m]->flag )
 			 								{
 				 							}
 			 							}
@@ -149,7 +151,7 @@ class ArghArgumentParser
 	 								
 	 							case ARGH_SYM_VALUE:
 	 							
-	 								$argument['value'] = $token;
+	 								//$argument['value'] = $token;
 	 								
 	 								break;
 	 								
@@ -176,8 +178,8 @@ class ArghArgumentParser
 	 					
 	 					//! TODO: validate tmp argument before adding to this objects arguments array
 	 					
-	 					// Add $argument to this objects $arguments array
-	 					array_push($arguments, $argument);
+	 					// Add $argument to Arguments
+	 					//$arguments->addArgument($argument);
 
 						break; // stop checking rules
 						

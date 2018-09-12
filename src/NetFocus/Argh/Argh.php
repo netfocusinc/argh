@@ -5,25 +5,25 @@ namespace NetFocus\Argh;
 class Argh
 {
 		
-	/*
-	** PRIVATE MEMBER DATA
-	*/
+	//
+	// PRIVATE PROPERTIES
+	//
 	
 	private $argv = null;
-	private $rules = null;
-	private $parameters = null;
-	private $arguments = null;
+	private $language = null; // Language
+	private $parameters = null; // array of Parameters
+	private $arguments = null; // array of Arguments
 	private $map = null;
 	
-	/*
-	** PUBLIC MEMBER DATA
-	*/
+	//
+	// PUBLIC PROPERTIES
+	//
 	
-	/*
-	** STATIC METHODS
-	*/
+	//
+	// STATIC METHODS
+	//
 	
-	public static function parse($argv, array $parameters, array $rules=null)
+	public static function parse($argv, array $params)
 	{
 		// Play nice when $argv is a string
 		if(is_string($argv))
@@ -32,15 +32,32 @@ class Argh
 			$argv = explode(' ', $argv);
 			
 			// Prepend a placeholder element at index 0; this will be removed by constructor
+			// This mimics PHP's $argv[0] that is registered as the name of the CLI script
 			array_unshift($argv, 'garbage');
 		}
 		
-		return new Argh($argv, $parameters, $rules);
+		// Create a new Parameters instance
+		$parameters = new Parameters();
+		
+		// Add Parameters for each elements defined in $params array
+		foreach($params as $p)
+		{
+			try
+			{
+				$parameters->addParameter(Parameter::createFromArray($p));
+			}
+			catch(Exception $e)
+			{
+				throw($e);
+			}
+		}
+		
+		return new Argh($argv, $parameters);
 	}
 	
-	/*
-	** PROPERTY OVERLOADING
-	*/
+	//
+	// PROPERTY OVERLOADING
+	//
 	
 	//public void __set ( string $name , mixed $value )
 	
@@ -64,21 +81,18 @@ class Argh
 	// PUBLIC METHODS
 	//
 	
-	public function __construct(array $argv, array $parameters)
+	public function __construct(array $argv, Parameters $parameters)
 	{
 		//
-		// RULES
+		// LANGUAGE (RULES)
 		//
-	
-		// Get rules from ArghRules	
-		$this->rules = ArghRules::rules();
 				
-		// Parse the rules to confirm their validity
 		try
 		{
-			ArghRuleParser::parse($this->rules);
+			// Get a reference to the Language (singleton instance)
+			$this->language = Language::instance();
 		}
-		catch(ArghException $e)
+		catch(Exception $e)
 		{
 			throw $e;
 		}
@@ -106,18 +120,21 @@ class Argh
 		
 		try
 		{
-			$this->parameters = ArghParameterParser::parse($parameters);
+			$this->parameters = $parameters;
 			
 			// Prepare $argv for parsing
-			$args = ArghArgvPreprocessor::process($this->argv);
+			$args = ArgvPreprocessor::process($this->argv);
 			
-			$this->arguments = ArghArgumentParser::parse($args, $this->rules, $this->parameters);
+			$this->arguments = ArgumentParser::parse($args, $this->language, $this->parameters);
 			
 			// Merge arguments into $parameters by key
-			ArghParameterParser::merge($this->parameters, $this->arguments);
+			//ArghParameterParser::merge($this->parameters, $this->arguments);
+			//! TODO: ? Merging NOT necessary any more, add methods on Argh to lookup a Parameters value based on existing Arguments
 			
 			// Create an index map for parameters by 'name' and 'flag'
-			$this->map = ArghParameterParser::map($this->parameters);
+			//$this->map = ParameterMapper::map($this->parameters);
+			//! TODO: ? Mapping NOT necessary any more, add methods on Parameters to lookup a Parameter by key
+			//! OR: Create a ParameterMapper and Parameter->get($i) methods
 			
 		}
 		catch(ArghException $e)
@@ -207,10 +224,6 @@ class Argh
 	{
 		return $this->argv[$i];
 	}
-	
-	/*
-  ** PRIVATE METHODS
-  */
 
 	
 }

@@ -22,7 +22,7 @@ echo "---------------------\n\n";
 
 try
 {
-	$argh = new Argh($argv, [
+	$argh = Argh::parse($argv, [
 		[
 			'name'			=>			'debug',
 			'flag'			=>			'd',
