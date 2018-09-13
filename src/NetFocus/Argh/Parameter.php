@@ -2,11 +2,6 @@
 	
 namespace NetFocus\Argh;
 
-// Syntax Contants
-define('ARGH_TYPE_BOOLEAN', 0);
-define('ARGH_TYPE_STRING', 1);
-define('ARGH_TYPE_LIST', 2);
-
 class Parameter
 {
 	
@@ -14,12 +9,12 @@ class Parameter
 	// PUBLIC PROPERTIES
 	//
 	
-	public $name = null;
-	public $flag = null;
-	public $type = ARGH_TYPE_BOOLEAN;
-	public $required = FALSE;
-	public $default = null;
-	public $text = null;
+	private $name = null;
+	private $flag = null;
+	private $type = null;
+	private $required = null;
+	private $default = null;
+	private $text = null;
 	
 	//
 	// STATIC METHODS
@@ -27,6 +22,7 @@ class Parameter
 	
 	public static function createFromArray(array $p)
 	{
+		
 		try
 		{
 			if( !is_array($p) )
@@ -34,21 +30,24 @@ class Parameter
 				throw new ArghException(__METHOD__ . ' Expecting array \$p ' . gettype($p) .' given');
 			}
 			
+			// Defaults
 			$name = null;
 			$flag = null;
-			$type = null;
-			$required = null;
-			$default = null;
+			$type = ARGH_TYPE_BOOLEAN;
+			$required = FALSE;
+			$default = FALSE;
 			$text = null;
 			
 			if( array_key_exists('name', $p) ) $name = $p['name'];
-			if( array_key_exists('flag', $p) ) $name = $p['flag'];
-			if( array_key_exists('type', $p) ) $name = $p['type'];
-			if( array_key_exists('required', $p) ) $name = $p['required'];
-			if( array_key_exists('default', $p) ) $name = $p['default'];
-			if( array_key_exists('text', $p) ) $name = $p['text'];
+			if( array_key_exists('flag', $p) ) $flag = $p['flag'];
+			if( array_key_exists('type', $p) ) $type = $p['type'];
+			if( array_key_exists('required', $p) ) $required = $p['required'];
+			if( array_key_exists('default', $p) ) $default = $p['default'];
+			if( array_key_exists('text', $p) ) $text = $p['text'];
 			
-			return new Parameter($name, $flag, $type, $required, $default, $text);
+			// Create a new Parameter instance
+			$parameter = new Parameter($name, $flag, $type, $required, $default, $text);
+			return $parameter;
 		}
 		catch(Exception $e)
 		{
@@ -60,8 +59,10 @@ class Parameter
 	// PUBLIC METHODS
 	//
 	
-	public function __contruct($name, $flag=null, $type=ARGH_TYPE_BOOLEAN, $required=FALSE, $default=null, $text=null)
+	public function __construct($name, $flag=null, $type=ARGH_TYPE_BOOLEAN, $required=FALSE, $default=FALSE, $text=null)
 	{
+		
+		//echo "new Parameter(name=$name, flag=$flag, type=$type, required=$required, default=$default, text=$text)\n";
 		
 		// Check for required $name
 		if( empty($name) )
@@ -73,7 +74,8 @@ class Parameter
 		if( !empty($type) )
 		{
 			// Check for valid $type
-			if( !in_array($type, [ARGH_TYPE_BOOLEAN, ARGH_TYPE_STRING, ARGH_TYPE_LIST]) )
+			$valid = array(ARGH_TYPE_BOOLEAN, ARGH_TYPE_INT, ARGH_TYPE_STRING, ARGH_TYPE_LIST);
+			if( !in_array($type, $valid) )
 			{
 				throw new ArghException('Parameter \'' . $name . '\' has an invalid type');
 			}

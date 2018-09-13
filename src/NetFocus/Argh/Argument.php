@@ -5,22 +5,56 @@ namespace NetFocus\Argh;
 class Argument
 {
 	
-	public key = null;
-	public value = null;
+	//
+	// PRIVATE PROPERTIES
+	//
+	
+	private $key = null;
+	private $type = null; // Argument inherits the type of its Parameter
+	private $value = null;
 	
 	//
 	// PUBLIC METHODS
 	//
 	
-	public function __contruct($key, $value)
+	public function __contruct($key=null, $value=null)
 	{
 		$this->key = $key;
 		$this->value = $value;
 	}
 	
-	public function key() { return $this->key; }
+	// GETTERS/SETTERS
 	
-	public function value() { return $this->value; }
+	public function key($key=null)
+	{ 
+		if( $key !== null)
+		{
+			$this->key = $key;
+		}
+		
+		return $this->key;
+	}
+
+	public function type($type=null)
+	{ 
+		if( $type !== null )
+		{
+			$this->type = $type;
+		}
+		
+		return $this->type;
+	}	
+	
+	
+	public function value($value=null)
+	{
+		if( $value !== null )
+		{
+			$this->value = $value;
+		}
+		
+		return $this->value;
+	}
 	
 	public function isArray()
 	{

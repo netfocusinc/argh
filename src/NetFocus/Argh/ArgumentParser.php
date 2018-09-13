@@ -5,6 +5,12 @@ namespace NetFocus\Argh;
 class ArgumentParser
 {
 	
+	/**
+		* 
+		*
+		*
+	*/
+	
 	public static function parse(array $args, Language $language, Parameters $parameters)
 	{
 		// Parse $args using $rules and $params to create Arguments
@@ -83,7 +89,7 @@ class ArgumentParser
 						// Count the number of arguments that were matched
 						$count = count($argsL);
 						
-						echo "* MATCH (n=$count) *\n";
+						echo "* MATCHED $count \$argv elements *\n";
 						
 						// Empty $argsL; prevent this inner while loop from continuing
 						for($i=0; $i<$count; $i++) array_shift($argsL);
@@ -92,78 +98,144 @@ class ArgumentParser
 						// These arguments have been consumed by the parser and are no longer needed
 						for($i=0; $i<$count; $i++) array_shift($args);
 						
-						// Create a new Argument instance
-						//$argument = array();
+						// Create an array of new Argument
+						// In most cases, a single Rule will create a single Arugment
+						// Unless the Rule contains an ARGH_SEMANTICS_FLAGS, which creates an Argument for each flag
+						$argument = array();
 
-	 					// Loop through $tokens and assign data to $arguments based on the current rules semantics
-	 					for($j=1; $j<count($tokens); $j++)
+	 					// Loop through $tokens and define Argument(s) based on the current rules semantics
+	 					for($i=1; $i<count($tokens); $i++)
 	 					{
-	 						$token = $tokens[$j];
+	 						$token = $tokens[$i];
+	 						$semantics = $rule->semantics()[$i-1];
 
-	 						echo "DEBUG: token: " . $token . " (" . $rule->semantics()[$j-1] . ")\n";
+	 						echo "DEBUG: token: $token (" . Rule::semanticsToString($semantics) . ")\n";
 	 						
-	 						switch( $rule->semantics()[$j-1] )
-	 						{
-	 							case ARGH_SYM_KEY:
+	 						switch( $semantics )
+	 						{ 
+	 							case ARGH_SEMANTICS_FLAG:
 	 							
-	 								// Check if this 'key' matches a defined parameters 'name' or 'flag'	 								
-	 								for($k=0; $k<count($params); $k++)
+	 								// Check if this $token matches a defined parameters 'flag' 								
+	 								for($j=0; $j<count($params); $j++)
 	 								{
-		 								if( ($token == $params[$k]->name) || ($token == $params[$k]->flag) )
+		 								if( $token == $params[$j]->flag() )
 		 								{
-			 								// Use the parameters 'name' for this arguments 'key'
-			 								//$argument['key'] = $params[$k]->name;
+			 								// This Rule will create a single Argument
+			 								if(count($argument)==0) $argument[0] = new Argument();
 			 								
-			 								// Stop searching for parameter
+			 								// Use the parameters 'name' for this argument's 'key'
+			 								$argument[0]->key($params[$j]->name());
+			 								
+			 								// Argument inherits the 'type' of its parameter
+			 								$argument[0]->type($params[$j]->type());
+			 								
+			 								// Stop searching for matching parameter flag
+			 								break;
+			 							}
+		 							}
+		 							
+		 							// Check for $token that does not match any defined parameter
+		 							if( (!array_key_exists(0, $argument)) || (empty($argument[0]->key())) )
+		 							{
+			 							throw new ArghException(__METHOD__ . ': No parameter with flag: \'' . $token . '\'');
+			 						}
+	 								
+	 								break;
+	 								
+	 							case ARGH_SEMANTICS_FLAGS:
+	 								
+	 								// Create new Argument for each flag
+	 								for($j=0; $j<strlen($token); $j++)
+	 								{
+		 								if( !array_key_exists($j, $argument) ) $argument[$j] = new Argument();
+		 							}
+	 								
+	 								// Check every character of this $token for a matching parameter 'flag'
+	 								for($j=0; $j<strlen($token); $j++)
+	 								{
+		 								
+		 								for($k=0; $k<count($params); $k++)
+		 								{
+			 								
+			 								if( $token{$j} == $params[$k]->flag() )
+			 								{
+				 								// Use the parameters 'name' for this argument's 'key'
+				 								$argument[$j]->key($params[$k]->name());
+				 								
+				 								// Argument inherits the 'type' of its parameter
+				 								$argument[0]->type($params[$j]->type());
+				 								
+				 								// Stop searching for matching parameter flag
+				 								break;
+				 							}
+				 							
+			 							} // END: for($k=0; $k<count($params); $k++)
+			 							
+			 							// Check for $token that does not match any defined parameter
+			 							if( empty($argument[$j]->key()) )
+			 							{
+			 								throw new ArghException(__METHOD__ . ': No parameter with flag: ' . $token . "'");
+			 							}	
+		 								
+		 							} // END: for($j=0; $j<strlen($token); $j++)
+	 								
+	 								break;
+	 								
+	 							case ARGH_SEMANTICS_NAME:
+	 						
+	 								// Check if this $token matches a defined parameters 'name'	 								
+	 								for($j=0; $j<count($params); $j++)
+	 								{
+		 								
+		 								echo "DEBUG: Checking param[$j]: '" . $params[$j]->name() . "'\n";
+		 								
+		 								if( $token == $params[$j]->name() )
+		 								{
+			 								echo "DEBUG: '$token' matches with parameter name '" . $params[$j]->name() . "'\n";
+			 								
+			 								// This Rule will create a single Argument
+			 								if(count($argument)==0) $argument[0] = new Argument();
+			 								
+			 								// Use the parameters 'name' for this argument's 'key'
+			 								$argument[0]->key($params[$j]->name());
+			 								
+			 								// Argument inherits the 'type' of its parameter
+			 								$argument[0]->type($params[$j]->type());
+			 								
+			 								// Stop searching for matching parameter name
 			 								break;
 			 							}
 		 							}
 		 							
 		 							// Token does not match any defined parameter
-		 							//if( !array_key_exists('key', $argument) )
-		 							//{
-			 							//throw new ArghException(__METHOD__ . ': No parameter with key: ' . $token . "'");
-			 						//}
+		 							if( (!array_key_exists(0, $argument)) || (empty($argument[0]->key())) )
+		 							{
+			 							throw new ArghException(__METHOD__ . ': No parameter with name: \'' . $token . '\'');
+			 						}
+	 						
+	 								break;			
 	 								
-	 								break;
-	 								
-	 							case ARGH_SYM_KEYS:
+	 							case ARGH_SEMANTICS_VALUE:
 	 							
-	 								//! NOTES: this should/will add multiple new arguments
-	 								
-	 								//! TODO: Seperate keys (into single character flags), check that each matches a defined parameter
-	 								// NOTE: KEYS are ALWAYS for boolean parameters
-	 								
-	 								for($k=0; $k<strlen($token); $k++)
-	 								{
-		 								
-		 								for($m=0; $m<count($params); $m++)
-		 								{
-			 								if( $token{$k} == $params[$m]->flag )
-			 								{
-				 							}
-			 							}
-		 								
-		 							}
-	 								
-	 								break;
-	 								
-	 								
-	 							case ARGH_SYM_VALUE:
+	 								// If no new Argument created by this Rule yet, create one now
+			 						if(count($argument)==0) $argument[0] = new Argument();
 	 							
-	 								//$argument['value'] = $token;
+	 								// Use this $token as the 'value' for all new Argument created by this Rule
+	 								// Usually, this will only apply to a single Argument
+	 								// Unless this Rule contains ARGH_SEMANTICS_FLAGS
+	 								foreach($argument as $a) $a->value($token);
 	 								
 	 								break;
 	 								
-	 							case ARGH_SYM_LIST:
+	 							case ARGH_SEMANTICS_LIST:
 	 							
 	 								break;
 	 								
-	 							case ARGH_SYM_CMD:
+	 							case ARGH_SEMANTICS_CMD:
 	 							
 	 								break;
 	 								
-	 							case ARGH_SYM_SUB:
+	 							case ARGH_SEMANTICS_SUB:
 	 							
 	 								break;
 	 								
@@ -174,12 +246,41 @@ class ArgumentParser
 	 						
 	 					} // END: for($j=1; $j<count($matches); $j++)
 	 					
-	 					//! TODO: set boolean values for flags to TRUE
+	 					// Set boolean values
+	 					foreach($argument as &$a)
+	 					{
+		 					if( ARGH_TYPE_BOOLEAN == $a->type() )
+		 					{
+			 					// null (no value) considered TRUE (this is how flags work)
+			 					// PHP 'Falsey' values should be considered to mean FALSE
+			 					// Certain character values should be considered to mean FALSE
+			 					// Everything else considered TRUE
+			 					
+			 					if( null === $a->value() )
+			 					{
+				 					$a->value(TRUE);
+				 				}
+				 				else if( FALSE == $a->value() )
+				 				{
+					 				// 'Falsey' (boolean) FALSE, (int) 0, (float 0.0), (string) '0', (string) '', NULL
+					 				$a->value(FALSE);
+					 			}
+			 					else if( in_array($a->value(), array('0', 'false', 'False', 'FALSE', 'off', 'Off', 'OFF')) )
+			 					{
+				 					$a->value(FALSE);
+				 				}
+				 				else
+				 				{
+					 				$a->value(TRUE);
+					 			}
+			 					
+			 				} // END: if( ARGH_TYPE_BOOLEAN == $a->type() )
+		 				} // END: foreach($argument as $a)
 	 					
 	 					//! TODO: validate tmp argument before adding to this objects arguments array
 	 					
-	 					// Add $argument to Arguments
-	 					//$arguments->addArgument($argument);
+	 					// Add the new Argument(s) (from array) to Arguments
+	 					foreach($argument as $a) $arguments->addArgument($a);
 
 						break; // stop checking rules
 						

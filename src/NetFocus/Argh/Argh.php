@@ -2,6 +2,30 @@
 	
 namespace NetFocus\Argh;
 
+// Parameter Data Type Contants
+define('ARGH_TYPE_BOOLEAN', 1);
+define('ARGH_TYPE_INT', 2);
+define('ARGH_TYPE_STRING', 3);
+define('ARGH_TYPE_LIST', 4);
+
+// Syntax Contants
+define('ARGH_SYNTAX_FLAG', '[a-z]{1}', true);
+define('ARGH_SYNTAX_FLAGS', '[a-z]+', true);
+define('ARGH_SYNTAX_NAME', '[a-z0-9_]+', true);
+define('ARGH_SYNTAX_VALUE', '[a-z0-9_\.\/]*', true);
+define('ARGH_SYNTAX_LIST', '[a-z0-9_\-,\' ]+', true);
+define('ARGH_SYNTAX_CMD', '[a-z0-9_]{2,}', true);
+define('ARGH_SYNTAX_QUOTED', '[a-z0-9_\-\' ]+', true);
+
+// Semantic Contants
+define('ARGH_SEMANTICS_FLAG', 1, true);
+define('ARGH_SEMANTICS_FLAGS', 2, true);
+define('ARGH_SEMANTICS_NAME', 3, true);
+define('ARGH_SEMANTICS_VALUE', 4, true);
+define('ARGH_SEMANTICS_LIST', 5, true);
+define('ARGH_SEMANTICS_CMD', 6, true);
+define('ARGH_SEMANTICS_SUB', 7, true);
+
 class Argh
 {
 		
@@ -41,7 +65,7 @@ class Argh
 		
 		// Add Parameters for each elements defined in $params array
 		foreach($params as $p)
-		{
+		{	
 			try
 			{
 				$parameters->addParameter(Parameter::createFromArray($p));
@@ -69,7 +93,7 @@ class Argh
 		}
 		else
 		{
-			// Get parameters from this object
+			// Get parameters from this instance
 			return $this->get($name);
 		}
 	}
@@ -117,6 +141,12 @@ class Argh
 		//
 		// PARSE PARAMETERS AND ARGUMENTS
 		//
+		
+		// DEBUG
+		foreach($parameters->all() as $p)
+		{
+			echo "DEBUG: Parameter: (name: " . $p->name() . ") (flag: " . $p->flag() . ")\n";
+		}
 		
 		try
 		{
@@ -183,6 +213,10 @@ class Argh
 			throw new ArghException('Parameter \'' . $name . '\' was not defined.');
 		}
 	}
+	
+	public function parameters() { return $this->parameters; }
+	
+	public function arguments() { return $this->arguments; }
 	
 	// Returns the definition of a parameter by name
 	public function param($name)

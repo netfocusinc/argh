@@ -22,12 +22,19 @@ class Arguments
 	
 	public function addArgument(Argument $argument)
 	{
-		$this->arguments[] = $arguments;
+		//! TODO: If an argument with the same 'key' already exists, throw an exception
+		
+		$this->arguments[] = $argument;
 	}
 	
 	public function all()
 	{
 		return $this->arguments;
+	}
+	
+	public function toString()
+	{
+		return print_r($this->arguments, TRUE);
 	}
 	
 }

@@ -2,23 +2,6 @@
 	
 namespace NetFocus\Argh;
 
-// Syntax Contants
-define('ARGH_SYN_FLAG', '[a-z]{1}', true);
-define('ARGH_SYN_FLAGS', '[a-z]+', true);
-define('ARGH_SYN_KEY', '[a-z0-9_]+', true);
-define('ARGH_SYN_VALUE', '[a-z0-9_]*', true);
-define('ARGH_SYN_LIST', '[a-z0-9_\-,\' ]+', true);
-define('ARGH_SYN_QUOTED', '[a-z0-9_\-\' ]+', true);
-define('ARGH_SYN_CMD', '[a-z0-9_]{2,}', true);
-
-// Semantic Contants
-define('ARGH_SYM_KEY', 0, true);
-define('ARGH_SYM_KEYS', 1, true);
-define('ARGH_SYM_VALUE', 2, true);
-define('ARGH_SYM_LIST', 3, true);
-define('ARGH_SYM_CMD', 4, true);
-define('ARGH_SYM_SUB', 5, true);
-
 class Rule
 {	
 	//
@@ -29,6 +12,25 @@ class Rule
 	private $example = null;
 	private $syntax = null;
 	private $semantics = null;
+	
+	//
+	// STATIC FUNCTIONS
+	//
+	
+	public static function semanticsToString($semantics)
+	{
+		switch($semantics)
+		{
+			case ARGH_SEMANTICS_FLAG:		return 'FLAG';
+			case ARGH_SEMANTICS_FLAGS:	return 'FLAGS';
+			case ARGH_SEMANTICS_NAME:		return 'NAME';
+			case ARGH_SEMANTICS_VALUE:	return 'VALUE';
+			case ARGH_SEMANTICS_LIST:		return 'LIST';
+			case ARGH_SEMANTICS_CMD:		return 'CMD';
+			case ARGH_SEMANTICS_SUB:		return 'SUB';
+			default:										return '*invalid*';
+		}
+	}
 	
 	//
 	// PUBLIC METHODS

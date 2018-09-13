@@ -19,7 +19,7 @@ class Parameters
 		// Create a Parameter array
 		$this->parameters = array();
 	}
-	
+
 	public function addParameter(Parameter $param)
 	{
 		$this->parameters[] = $param;
@@ -28,6 +28,11 @@ class Parameters
 	public function all()
 	{
 		return $this->parameters;
+	}
+	
+	public function toString()
+	{
+		return print_r($this->parameters, TRUE);
 	}
 	
 }
