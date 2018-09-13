@@ -13,5 +13,8 @@
 		  	"NetFocus\\" : "src/NetFocus/"
 		  }
 	  },
-    "require": {}
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^7.3"
+    }
 }

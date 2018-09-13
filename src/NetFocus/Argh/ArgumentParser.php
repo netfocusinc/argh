@@ -277,7 +277,7 @@ class ArgumentParser
 			 				} // END: if( ARGH_TYPE_BOOLEAN == $a->type() )
 		 				} // END: foreach($argument as $a)
 	 					
-	 					//! TODO: validate tmp argument before adding to this objects arguments array
+	 					//! TODO: validate Argument (for data type) before adding to this objects arguments array
 	 					
 	 					// Add the new Argument(s) (from array) to Arguments
 	 					foreach($argument as $a) $arguments->addArgument($a);
