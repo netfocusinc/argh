@@ -2,29 +2,14 @@
 	
 namespace NetFocus\Argh;
 
-// Parameter Data Type Contants
-define('ARGH_TYPE_BOOLEAN', 1);
-define('ARGH_TYPE_INT', 2);
-define('ARGH_TYPE_STRING', 3);
-define('ARGH_TYPE_LIST', 4);
+//
+// CONVENIENCE DEFINITIONS
+//
 
-// Syntax Contants
-define('ARGH_SYNTAX_FLAG', '[a-z]{1}', true);
-define('ARGH_SYNTAX_FLAGS', '[a-z]+', true);
-define('ARGH_SYNTAX_NAME', '[a-z0-9_]+', true);
-define('ARGH_SYNTAX_VALUE', '[a-z0-9_\.\/]*', true);
-define('ARGH_SYNTAX_LIST', '[a-z0-9_\-,\' ]+', true);
-define('ARGH_SYNTAX_CMD', '[a-z0-9_]{2,}', true);
-define('ARGH_SYNTAX_QUOTED', '[a-z0-9_\-\' ]+', true);
-
-// Semantic Contants
-define('ARGH_SEMANTICS_FLAG', 1, true);
-define('ARGH_SEMANTICS_FLAGS', 2, true);
-define('ARGH_SEMANTICS_NAME', 3, true);
-define('ARGH_SEMANTICS_VALUE', 4, true);
-define('ARGH_SEMANTICS_LIST', 5, true);
-define('ARGH_SEMANTICS_CMD', 6, true);
-define('ARGH_SEMANTICS_SUB', 7, true);
+define('ARGH_TYPE_BOOLEAN', Parameter::ARGH_TYPE_BOOLEAN, true);
+define('ARGH_TYPE_INT', Parameter::ARGH_TYPE_INT, true);
+define('ARGH_TYPE_STRING', Parameter::ARGH_TYPE_STRING, true);
+define('ARGH_TYPE_LIST', Parameter::ARGH_TYPE_LIST, true);
 
 class Argh
 {

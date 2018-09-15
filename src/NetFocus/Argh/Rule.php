@@ -3,7 +3,29 @@
 namespace NetFocus\Argh;
 
 class Rule
-{	
+{
+	//
+	// CONSTANTS
+	//
+	
+	// Syntax Contants
+	const ARGH_SYNTAX_FLAG		= '[a-z]{1}';
+	const ARGH_SYNTAX_FLAGS		= '[a-z]+';
+	const ARGH_SYNTAX_NAME		= '[a-z0-9_]+';
+	const ARGH_SYNTAX_VALUE		= '[a-z0-9_\.\/]*';
+	const ARGH_SYNTAX_LIST		= '[a-z0-9_\-,\' ]+';
+	const ARGH_SYNTAX_CMD			= '[a-z0-9_]{2,}';
+	const ARGH_SYNTAX_QUOTED	= '[a-z0-9_\-\' ]+';
+	
+	// Semantic Contants
+	const ARGH_SEMANTICS_FLAG		= 1;
+	const ARGH_SEMANTICS_FLAGS	= 2;
+	const ARGH_SEMANTICS_NAME		= 3;
+	const ARGH_SEMANTICS_VALUE	= 4;
+	const ARGH_SEMANTICS_LIST		= 5;
+	const ARGH_SEMANTICS_CMD		= 6;
+	const ARGH_SEMANTICS_SUB		= 7;
+	
 	//
 	// PUBLIC PROPERTIES
 	//
@@ -21,13 +43,13 @@ class Rule
 	{
 		switch($semantics)
 		{
-			case ARGH_SEMANTICS_FLAG:		return 'FLAG';
-			case ARGH_SEMANTICS_FLAGS:	return 'FLAGS';
-			case ARGH_SEMANTICS_NAME:		return 'NAME';
-			case ARGH_SEMANTICS_VALUE:	return 'VALUE';
-			case ARGH_SEMANTICS_LIST:		return 'LIST';
-			case ARGH_SEMANTICS_CMD:		return 'CMD';
-			case ARGH_SEMANTICS_SUB:		return 'SUB';
+			case self::ARGH_SEMANTICS_FLAG:		return 'FLAG';
+			case self::ARGH_SEMANTICS_FLAGS:	return 'FLAGS';
+			case self::ARGH_SEMANTICS_NAME:		return 'NAME';
+			case self::ARGH_SEMANTICS_VALUE:	return 'VALUE';
+			case self::ARGH_SEMANTICS_LIST:		return 'LIST';
+			case self::ARGH_SEMANTICS_CMD:		return 'CMD';
+			case self::ARGH_SEMANTICS_SUB:		return 'SUB';
 			default:										return '*invalid*';
 		}
 	}

@@ -2,8 +2,31 @@
 	
 namespace NetFocus\Argh;
 
+//
+// CONVENIENCE DEFINITIONS
+//
+
+// Syntax Contants
+define('ARGH_SYNTAX_FLAG', Rule::ARGH_SYNTAX_FLAG, true);
+define('ARGH_SYNTAX_FLAGS', Rule::ARGH_SYNTAX_FLAGS, true);
+define('ARGH_SYNTAX_NAME', Rule::ARGH_SYNTAX_NAME, true);
+define('ARGH_SYNTAX_VALUE', Rule::ARGH_SYNTAX_VALUE, true);
+define('ARGH_SYNTAX_LIST', Rule::ARGH_SYNTAX_LIST, true);
+define('ARGH_SYNTAX_CMD', Rule::ARGH_SYNTAX_CMD, true);
+define('ARGH_SYNTAX_QUOTED', Rule::ARGH_SYNTAX_QUOTED, true);
+
+// Semantic Contants
+define('ARGH_SEMANTICS_FLAG', Rule::ARGH_SEMANTICS_FLAG, true);
+define('ARGH_SEMANTICS_FLAGS', Rule::ARGH_SEMANTICS_FLAGS, true);
+define('ARGH_SEMANTICS_NAME', Rule::ARGH_SEMANTICS_NAME, true);
+define('ARGH_SEMANTICS_VALUE', Rule::ARGH_SEMANTICS_VALUE, true);
+define('ARGH_SEMANTICS_LIST', Rule::ARGH_SEMANTICS_LIST, true);
+define('ARGH_SEMANTICS_CMD', Rule::ARGH_SEMANTICS_CMD, true);
+define('ARGH_SEMANTICS_SUB', Rule::ARGH_SEMANTICS_SUB, true);
+
 class Language
 {	
+	
 	//
 	// PRIVATE PROPERTIES
 	//

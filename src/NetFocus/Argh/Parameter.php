@@ -6,6 +6,16 @@ class Parameter
 {
 	
 	//
+	// CONSTANTS
+	//
+	
+	// Parameter Data Types
+	const ARGH_TYPE_BOOLEAN	= 1;
+	const ARGH_TYPE_INT			= 2;
+	const ARGH_TYPE_STRING	= 3;
+	const ARGH_TYPE_LIST		= 4;
+	
+	//
 	// PUBLIC PROPERTIES
 	//
 	
@@ -24,16 +34,11 @@ class Parameter
 	{
 		
 		try
-		{
-			if( !is_array($p) )
-			{
-				throw new ArghException(__METHOD__ . ' Expecting array \$p ' . gettype($p) .' given');
-			}
-			
+		{	
 			// Defaults
 			$name = null;
 			$flag = null;
-			$type = ARGH_TYPE_BOOLEAN;
+			$type = self::ARGH_TYPE_BOOLEAN;
 			$required = FALSE;
 			$default = FALSE;
 			$text = null;
@@ -46,7 +51,7 @@ class Parameter
 			if( array_key_exists('text', $p) ) $text = $p['text'];
 			
 			// Create a new Parameter instance
-			$parameter = new Parameter($name, $flag, $type, $required, $default, $text);
+			$parameter = new self($name, $flag, $type, $required, $default, $text);
 			return $parameter;
 		}
 		catch(Exception $e)
@@ -59,7 +64,7 @@ class Parameter
 	// PUBLIC METHODS
 	//
 	
-	public function __construct($name, $flag=null, $type=ARGH_TYPE_BOOLEAN, $required=FALSE, $default=FALSE, $text=null)
+	public function __construct($name, $flag=null, $type=self::ARGH_TYPE_BOOLEAN, $required=FALSE, $default=FALSE, $text=null)
 	{
 		
 		//echo "new Parameter(name=$name, flag=$flag, type=$type, required=$required, default=$default, text=$text)\n";
@@ -74,7 +79,7 @@ class Parameter
 		if( !empty($type) )
 		{
 			// Check for valid $type
-			$valid = array(ARGH_TYPE_BOOLEAN, ARGH_TYPE_INT, ARGH_TYPE_STRING, ARGH_TYPE_LIST);
+			$valid = array(self::ARGH_TYPE_BOOLEAN, self::ARGH_TYPE_INT, self::ARGH_TYPE_STRING, self::ARGH_TYPE_LIST);
 			if( !in_array($type, $valid) )
 			{
 				throw new ArghException('Parameter \'' . $name . '\' has an invalid type');
@@ -91,7 +96,7 @@ class Parameter
 		// Check for optional $default
 		if( !empty($defaut) )
 		{
-			if(ARGH_TYPE_BOOLEAN == $type)
+			if(self::ARGH_TYPE_BOOLEAN == $type)
 			{
 				// Assign literal TRUE for boolean defaults
 				$default = TRUE;
@@ -99,7 +104,7 @@ class Parameter
 		}
 		else
 		{
-			if(ARGH_TYPE_BOOLEAN == $type)
+			if(self::ARGH_TYPE_BOOLEAN == $type)
 			{
 				// Assign literal FALSE for boolean defaults
 				$default = FALSE;
