@@ -30,7 +30,7 @@ class Parameter
 	// STATIC METHODS
 	//
 	
-	public static function createFromArray(array $p)
+	public static function createFromArray(array $p): Parameter
 	{
 		
 		try
@@ -47,11 +47,13 @@ class Parameter
 			if( array_key_exists('flag', $p) ) $flag = $p['flag'];
 			if( array_key_exists('type', $p) ) $type = $p['type'];
 			if( array_key_exists('required', $p) ) $required = $p['required'];
-			if( array_key_exists('default', $p) ) $default = $p['default'];
+			if( array_key_exists('default', $p) && (!empty($p['default']))) $default = $p['default'];
 			if( array_key_exists('text', $p) ) $text = $p['text'];
 			
 			// Create a new Parameter instance
+			// Throws an Exception if arguments are invalid
 			$parameter = new self($name, $flag, $type, $required, $default, $text);
+			
 			return $parameter;
 		}
 		catch(Exception $e)
@@ -93,22 +95,15 @@ class Parameter
 			$required = TRUE;
 		}
 		
-		// Check for optional $default
-		if( !empty($defaut) )
+		// Check default value for booleans
+		if(self::ARGH_TYPE_BOOLEAN == $type)
 		{
-			if(self::ARGH_TYPE_BOOLEAN == $type)
+			// Interpret any non-empty value as TRUE
+			if( !empty($default) )
 			{
 				// Assign literal TRUE for boolean defaults
 				$default = TRUE;
 			}	
-		}
-		else
-		{
-			if(self::ARGH_TYPE_BOOLEAN == $type)
-			{
-				// Assign literal FALSE for boolean defaults
-				$default = FALSE;
-			}			
 		}
 		
 		// Set properties on this object
@@ -120,16 +115,16 @@ class Parameter
 		$this->text = $text;
 	}
 	
-	public function name() { return $this->name; }
+	public function name(): string { return $this->name; }
 	
-	public function flag() { return $this->flag; }
+	public function flag(): string { return $this->flag; }
 	
-	public function type() { return $this->type; }
+	public function type(): int { return $this->type; }
 	
-	public function required() { return $this->required; }
+	public function required(): bool { return $this->required; }
 	
 	public function default() { return $this->default; }
 	
-	public function text() { return $this->text; }
+	public function text(): string { return $this->text; }
 	
 }

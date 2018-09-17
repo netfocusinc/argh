@@ -58,20 +58,22 @@ try
 	
 	echo "Arguments: \n" . $argh->arguments()->toString() . "\n";
 	
-	/*
-	echo "Map: \n" . $argh->mapString() . "\n";
-		
+	
+	//echo "Map: \n" . $argh->mapString() . "\n";
+	
 	echo "\$argh->debug = " . $argh->debug . "\n";
 	
 	echo "\$argh->help = " . $argh->help . "\n";
 	
 	echo "\$argh->file = " . $argh->file . "\n";
 	
+	echo "\n";
+	
 	echo $argh->usage();
 	
 	echo "\n";
 	echo "DONE";
-	*/
+	
 }
 catch(ArghException $e)
 {

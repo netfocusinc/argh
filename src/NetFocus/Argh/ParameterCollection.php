@@ -2,7 +2,7 @@
 	
 namespace NetFocus\Argh;
 
-class Parameters
+class ParameterCollection
 {	
 	//
 	// PRIVATE PROPERTIES
@@ -18,6 +18,31 @@ class Parameters
 	{
 		// Create a Parameter array
 		$this->parameters = array();
+	}
+	
+	public function exists(string $key): bool
+	{
+		foreach($this->parameters as $p)
+		{
+			if( ($key == $p->name()) || ($key == $p->flag()) )
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public function get(string $key)
+	{
+		foreach($this->parameters as $p)
+		{
+			if( ($key == $p->name()) || ($key == $p->flag()) )
+			{
+				return $p;
+			}
+		}
+		
+		throw new ArghException('Parameter \'' . $key . '\' not in collection');	
 	}
 
 	public function addParameter(Parameter $param)

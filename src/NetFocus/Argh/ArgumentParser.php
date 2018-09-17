@@ -11,7 +11,7 @@ class ArgumentParser
 		*
 	*/
 	
-	public static function parse(array $args, Language $language, Parameters $parameters)
+	public static function parse(array $args, Language $language, ParameterCollection $parameters): ArgumentCollection
 	{
 		// Parse $args using $rules and $params to create Arguments
 		$rules = $language->rules();
@@ -27,8 +27,8 @@ class ArgumentParser
 			throw new ArghException(__METHOD__ . ': Needs at least one parameter to parse arguments.');
 		}
 		
-		// Create a new Arguments instance
-		$arguments = new Arguments();
+		// Create a new ArgumentCollection instance
+		$arguments = new ArgumentCollection();
 		
 		// As parsing progresses, args will be divided into 2-sides (Left-and-Right)
 		// The Left-Hand-Side will contain args to attempt matching with rules

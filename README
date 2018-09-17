@@ -1,0 +1,2 @@
+# Run PHPUnit Tests
+% vendor/bin/phpunit --bootstrap vendor/autoload.php tests/ParameterTest.php

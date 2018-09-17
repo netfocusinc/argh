@@ -20,8 +20,8 @@ class Argh
 	
 	private $argv = null;
 	private $language = null; // Language
-	private $parameters = null; // array of Parameters
-	private $arguments = null; // array of Arguments
+	private $parameters = null; // ParameterCollection
+	private $arguments = null; // ArgumentCollection
 	private $map = null;
 	
 	//
@@ -45,8 +45,8 @@ class Argh
 			array_unshift($argv, 'garbage');
 		}
 		
-		// Create a new Parameters instance
-		$parameters = new Parameters();
+		// Create a new ParameterCollection instance
+		$parameters = new ParameterCollection();
 		
 		// Add Parameters for each elements defined in $params array
 		foreach($params as $p)
@@ -90,7 +90,7 @@ class Argh
 	// PUBLIC METHODS
 	//
 	
-	public function __construct(array $argv, Parameters $parameters)
+	public function __construct(array $argv, ParameterCollection $parameters)
 	{
 		//
 		// LANGUAGE (RULES)
@@ -158,55 +158,56 @@ class Argh
 		}		
 	}
 	
+	public function argv(int $i=null)
+	{
+		if($i !== null)
+		{
+			if( $i < count($this->argv) )
+			{
+				return $this->argv[$i];
+			}
+			else
+			{
+				throw new ArghException('Invalid index for argv');
+			}
+		}
+		else
+		{
+			return $this->argv;
+		}
+	}
+	
 	public function command()
 	{
 		return implode(' ', $this->argv);
 	}
 	
 	// Returns the value of an argument supplied on command line, or the default value from parameter definition
-	public function get($name)
+	public function get($key)
 	{
-		// check the map for parameter with name or flag =$name
-		if( array_key_exists($name, $this->map) )
+		
+		// Check the ParameterCollection for a Parameter with $key
+		if( !$this->parameters->exists($key) )
 		{
-			// retrieve the matching parameters index from the map
-			$i = $this->map[$name];
-			
-			// retrieve the value of the parameter, or the default, or null
-			if( array_key_exists('argument', $this->parameters[$i]) )
-			{
-				if( array_key_exists('value', $this->parameters[$i]['argument']) )
-				{
-					return $this->parameters[$i]['argument']['value'];
-				}
-				else
-				{
-					throw new ArghException(__METHOD__ . ': Argument \'' . $name .  '\' has no value.'); 
-				}
-			}
-			else if( array_key_exists('default', $this->parameters[$i]) )
-			{
-				return $this->parameters[$i]['default'];
-			}
-			else
-			{
-				return null;
-			}
+			throw new ArghException('Parameter \'' . $name . '\' was not defined.');
+		}
+		
+		// Check the ArgumentCollection for an Argument with this $key
+		if( $this->arguments->exists($key) )
+		{
+			// Return the Arguments value
+			return $this->arguments->get($key)->value();
 		}
 		else
 		{
-			throw new ArghException('Parameter \'' . $name . '\' was not defined.');
+			// Return the Parameters default value, if any
+			return $this->parameters->get($key)->default();
 		}
 	}
 	
 	public function parameters() { return $this->parameters; }
 	
 	public function arguments() { return $this->arguments; }
-	
-	// Returns the definition of a parameter by name
-	public function param($name)
-	{
-	}
 	
 	public function parametersString()
 	{
@@ -218,31 +219,26 @@ class Argh
 		return print_r($this->arguments, TRUE);
 	}
 	
-	public function mapString()
-	{
-		return print_r($this->map, TRUE);
-	}
-	
-	public function debugString()
-	{
-	}
-	
+	//! TODO: Accept a formatting string/array (e.g. ['-f', '--name', 'text'])
 	public function usageString()
 	{
-		$buff = "Usage: ";
-		$buff .= self::argv();
+		$buff = 'Usage: ';
+		$buff .= $this->argv(0) . "\n";
+	
+		// TODO: Sort the parameters by name
+		
+		// TODO: Determine the longest value of each parameter attribute, to make pretty columns
+		
+		foreach($this->parameters->all() as $p)
+		{
+			$buff .= '-' . $p->flag() . "\t" . $p->name() . "\t" . $p->text() . "\n";
+		}
+		
 		return $buff;
 	}
 	
-	//! TODO: Accept a formatting string/array (e.g. ['-f', '--name', 'text'])
 	// An alias for usageString()
-	public function usage() { return self::usageString(); }
-	
-	// Returns elements of the $this->argv array
-	public function argv(int $i=0)
-	{
-		return $this->argv[$i];
-	}
+	public function usage() { return $this->usageString(); }
 
 	
 }
