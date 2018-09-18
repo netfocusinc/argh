@@ -32,6 +32,30 @@ class ParameterCollection
 		return false;
 	}
 	
+	public function hasCommand(): bool
+	{
+		foreach($this->parameters as $p)
+		{
+			if( Parameter::ARGH_TYPE_COMMAND == $p->type() )
+			{
+				return true;
+			}
+		}
+		return false;		
+	}
+	
+	public function hasVariable(): bool
+	{
+		foreach($this->parameters as $p)
+		{
+			if( Parameter::ARGH_TYPE_VARIABLE == $p->type() )
+			{
+				return true;
+			}
+		}
+		return false;	
+	}
+	
 	public function get(string $key)
 	{
 		foreach($this->parameters as $p)
@@ -43,6 +67,21 @@ class ParameterCollection
 		}
 		
 		throw new ArghException('Parameter \'' . $key . '\' not in collection');	
+	}
+	
+	public function getCommands(): array
+	{
+		$commands = array();
+		
+		foreach($this->parameters as $p)
+		{
+			if( Parameter::ARGH_TYPE_COMMAND == $p->type() )
+			{
+				$commands[] = $p;
+			}
+		}
+		
+		return $commands;	
 	}
 
 	public function addParameter(Parameter $param)

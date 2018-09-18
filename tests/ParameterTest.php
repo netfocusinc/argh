@@ -23,7 +23,7 @@ class ParameterTest extends TestCase
       	Parameter::ARGH_TYPE_STRING,
       	FALSE,
       	'/default/outfile.txt',
-      	'Path to a file where output will be writter'
+      	'Path to a file where output will be written.'
       ],
       
       'Verbose'  => [

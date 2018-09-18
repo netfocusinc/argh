@@ -30,9 +30,9 @@ class ArgvPreprocessor
 		$args = array_slice($argv, 1);
 		
 		// DEBUG
-		echo "\n------- AFTER SLICING --------\n";
-		print_r($args);
-		echo "\n-------------------------------------\n\n";
+		//echo "\n------- AFTER SLICING --------\n";
+		//print_r($args);
+		//echo "\n-------------------------------------\n\n";
 		
 		//
 		// Lists
@@ -44,7 +44,7 @@ class ArgvPreprocessor
 			if( strpos($args[$i], '[') !== FALSE )
 			{
 				// Found the beginning of a list at $i
-				echo "DEBUG: Found beginning of a list at $i\n";
+				//echo "DEBUG: Found beginning of a list at $i\n";
 				
 				// Search for the end of the list; starting at the current element				
 				for($j=$i; $j<count($args); $j++)
@@ -52,7 +52,7 @@ class ArgvPreprocessor
 					if( strpos($args[$j], ']') !== FALSE )
 					{
 						// Found the end of a list at $j
-						echo "DEBUG: Found end of a list at $j\n";
+						//echo "DEBUG: Found end of a list at $j\n";
 						
 						if($j != $i)
 						{
@@ -65,7 +65,7 @@ class ArgvPreprocessor
 								$list = "";
 								for($k=$i; $k<=$j; $k++) $list .= $args[$k];
 								
-								echo "DEBUG: Replace elements $i thru $j with: $list\n";
+								//echo "DEBUG: Replace elements $i thru $j with: $list\n";
 								
 								// Replace $args from $i thru $j with $list
 								array_splice($args, $i, ($j-$i)+1, $list);
@@ -81,7 +81,7 @@ class ArgvPreprocessor
 						} // END: if($j != $i)
 						else
 						{
-							echo "DEBUG: List is already contained in a single element.\n";
+							//echo "DEBUG: List is already contained in a single element.\n";
 						}
 						
 					} // END: if( ($closeAt = strpos($args[$j], ']')) !== FALSE )
@@ -106,14 +106,14 @@ class ArgvPreprocessor
 				if( strpos($args[$i], '[') !== FALSE )
 				{
 					//! TODO: Process each item in the list separately
-					echo "DEBUG: Quoting items in a list\n";
+					//echo "DEBUG: Quoting items in a list\n";
 					
 					// Extract the items from the list; they are contained between brackets [ ]
 					$tokens = array(); // init array to capture matching tokens from preg_match()
 					
 					if( preg_match('/\[([^\]]+)\]/i', $args[$i], $tokens) )
 					{
-						echo "DEBUG: List items: " . $tokens[1] . "\n";
+						//echo "DEBUG: List items: " . $tokens[1] . "\n";
 
 						// Explode the items to an array
 						$list = explode(',', $tokens[1]);
@@ -167,9 +167,9 @@ class ArgvPreprocessor
 		} // END: for($i=0; $i<count($args); $i++)	
 		
 		// DEBUG
-		echo "\n------- AFTER PRE PROCESSING --------\n";
-		print_r($args);
-		echo "\n-------------------------------------\n\n";
+		//echo "\n------- AFTER PRE PROCESSING --------\n";
+		//print_r($args);
+		//echo "\n-------------------------------------\n\n";
 		
 		return $args;	
 	}

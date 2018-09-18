@@ -32,12 +32,13 @@ try
 			'text'			=>			'Enables debug mode.'
 		],
 		[
-			'name'			=>			'help',
-			'flag'			=>			'h',
-			'type'			=>			ARGH_TYPE_BOOLEAN,
+			'name'			=>			'cmd',
+			'flag'			=>			'x',
+			'type'			=>			ARGH_TYPE_COMMAND,
 			'required'	=>			FALSE,
-			'default'		=>			FALSE,
-			'text'			=>			'Displays help text.'
+			'default'		=>			null,
+			'text'			=>			'A command to run.',
+			'options'		=>			array('help','joke')
 		],
 		[
 			'name'			=>			'file',
@@ -46,6 +47,23 @@ try
 			'required'	=>			TRUE,
 			'default'		=>			'sample.out',
 			'text'			=>			'File to use (just an example).'
+		],
+		[
+			'name'			=>			'colors',
+			'flag'			=>			'c',
+			'type'			=>			ARGH_TYPE_LIST,
+			'required'	=>			FALSE,
+			'default'		=>			null,
+			'text'			=>			'List of colors, for fun.'
+		],
+		[
+			'name'			=>			'verbose',
+			'flag'			=>			'v',
+			'type'			=>			ARGH_TYPE_INT,
+			'required'	=>			FALSE,
+			'default'		=>			0,
+			'text'			=>			'Level of verbosity to output.',
+			'options'		=>			array(0, 1, 2, 3)
 		]
 	]);
 	
@@ -58,15 +76,36 @@ try
 	
 	echo "Arguments: \n" . $argh->arguments()->toString() . "\n";
 	
+	if( $argh->parameters()->hasVariable() )
+	{
+		echo "Variables: \n";
+		print_r($argh->variables());
+		echo "\n";
+	}
 	
-	//echo "Map: \n" . $argh->mapString() . "\n";
-	
-	echo "\$argh->debug = " . $argh->debug . "\n";
-	
-	echo "\$argh->help = " . $argh->help . "\n";
-	
-	echo "\$argh->file = " . $argh->file . "\n";
-	
+	// Show values for each parameter (exclude variables)
+	foreach($argh->parameters()->all() as $p)
+	{
+		if(ARGH_TYPE_VARIABLE != $p->type())
+		{
+			echo '$argh->' . $p->name() . ' = ';
+			
+			if( !is_array($argh->get($p->name())) )
+			{
+				echo $argh->get($p->name()) . "\n";
+			}
+			else
+			{
+				echo '[ ';
+				foreach($argh->get($p->name()) as $e)
+				{
+					echo $e . ' ';
+				}
+				echo ' ]';
+				echo "\n";
+			}
+		} // END: if(ARGH_TYPE_VARIABLE != $p->type())
+	}
 	echo "\n";
 	
 	echo $argh->usage();

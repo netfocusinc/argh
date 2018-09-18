@@ -10,7 +10,18 @@ define('ARGH_TYPE_BOOLEAN', Parameter::ARGH_TYPE_BOOLEAN, true);
 define('ARGH_TYPE_INT', Parameter::ARGH_TYPE_INT, true);
 define('ARGH_TYPE_STRING', Parameter::ARGH_TYPE_STRING, true);
 define('ARGH_TYPE_LIST', Parameter::ARGH_TYPE_LIST, true);
+define('ARGH_TYPE_COMMAND', Parameter::ARGH_TYPE_COMMAND, true);
+define('ARGH_TYPE_VARIABLE', Parameter::ARGH_TYPE_VARIABLE, true);
 
+/**
+	* The main class to be used by clients for parsing command line arguments
+	*
+	* This is the description for a DocBlock. This text may contain
+	* multiple lines
+	*
+	* @author  Benjamin Hough <benjamin@netfocusinc.com>
+	*
+	*/
 class Argh
 {
 		
@@ -18,11 +29,17 @@ class Argh
 	// PRIVATE PROPERTIES
 	//
 	
+	/** @var string A copy of the $argv array, as registered by PHP CLI */
 	private $argv = null;
+	
+	/** @var Language  */
 	private $language = null; // Language
-	private $parameters = null; // ParameterCollection
-	private $arguments = null; // ArgumentCollection
-	private $map = null;
+	
+	/** @var ParameterCollection  */
+	private $parameters = null;
+	
+	/** @var ArgumentCollection  */
+	private $arguments = null;
 	
 	//
 	// PUBLIC PROPERTIES
@@ -31,20 +48,27 @@ class Argh
 	//
 	// STATIC METHODS
 	//
-	
-	public static function parse($argv, array $params)
-	{
-		// Play nice when $argv is a string
-		if(is_string($argv))
-		{
-			// Force string into an array
-			$argv = explode(' ', $argv);
-			
-			// Prepend a placeholder element at index 0; this will be removed by constructor
-			// This mimics PHP's $argv[0] that is registered as the name of the CLI script
-			array_unshift($argv, 'garbage');
-		}
-		
+
+	/**
+		* Factory construction of an Argh instance.
+		*
+		* Use this static factory function to create a new Argh instance
+		* given an $argv array and and array of $params
+		*
+		*	@api
+		* @since 1.0
+		*		 
+		* @param array $argv Array of cli arguments as registered by PHP CLI
+		* @param array $params Multidimensional array defining the attributes of Parameters
+		*		each element should contain a nested array with elements for a Parameters attributes
+		*		e.g. $params[ 0 => ['name'=>'debug', 'type'=>ARGH_TYPE_BOOLEAN, 'default'=>FALSE] ]
+		*
+		*
+		* @return Argh An instance of Argh
+		*
+		*/
+	public static function parse(array $argv, array $params)
+	{	
 		// Create a new ParameterCollection instance
 		$parameters = new ParameterCollection();
 		
@@ -69,17 +93,30 @@ class Argh
 	//
 	
 	//public void __set ( string $name , mixed $value )
-	
-	public function __get(string $name)
+
+	/**
+		* Magic method providing access to parameter values via object properties syntax
+		*
+		* Forward requests for undefined object properties to Argh->get() method
+		*
+		*	@internal
+		* @since 1.0
+		*		 
+		* @param string $name The name (or flag) of a defined Parameter
+		*
+		* @return mixed The value of a Parameter (type depends on the Parameter's type)
+		*
+		*/	
+	public function __get(string $key)
 	{
-		if(isset($this->{$name}))
+		if(isset($this->{$key}))
 		{
-			return $this->{$name};
+			return $this->{$key};
 		}
 		else
 		{
 			// Get parameters from this instance
-			return $this->get($name);
+			return $this->get($key);
 		}
 	}
 	
@@ -89,9 +126,24 @@ class Argh
 	//
 	// PUBLIC METHODS
 	//
-	
+
+	/**
+		* Contructs an Argh instance
+		*
+		* Processes an $argv array against defined ParameterCollection
+		*
+		* @since 1.0
+		*		 
+		* @param array $argv Array of cli arguments as registered by PHP CLI
+		* @param ParameterCollection $parameters A collection of parameters used to interpret command line arguments
+		*
+		*/
 	public function __construct(array $argv, ParameterCollection $parameters)
 	{
+		// Set properties on this object
+		$this->argv = $argv;
+		$this->parameters = $parameters;
+		
 		//
 		// LANGUAGE (RULES)
 		//
@@ -107,62 +159,41 @@ class Argh
 		}
 		
 		//
-		// CHECK ARGUMENTS
-		//
-		
-		if(!isset($argv))
-		{
-			throw new ArghException('Missing required \$argv argument');
-		}
-		else if(!is_array($argv))
-		{
-			throw new ArghException('Expecting array \$argv, ' . gettype($argv) . ' given');
-		}
-		else
-		{
-			$this->argv = $argv;
-		}
-		
-		//
 		// PARSE PARAMETERS AND ARGUMENTS
 		//
 		
-		// DEBUG
-		foreach($parameters->all() as $p)
-		{
-			echo "DEBUG: Parameter: (name: " . $p->name() . ") (flag: " . $p->flag() . ")\n";
-		}
-		
 		try
 		{
-			$this->parameters = $parameters;
-			
 			// Prepare $argv for parsing
 			$args = ArgvPreprocessor::process($this->argv);
 			
+			// Parse $args into an ArgumentCollection
 			$this->arguments = ArgumentParser::parse($args, $this->language, $this->parameters);
-			
-			// Merge arguments into $parameters by key
-			//ArghParameterParser::merge($this->parameters, $this->arguments);
-			//! TODO: ? Merging NOT necessary any more, add methods on Argh to lookup a Parameters value based on existing Arguments
-			
-			// Create an index map for parameters by 'name' and 'flag'
-			//$this->map = ParameterMapper::map($this->parameters);
-			//! TODO: ? Mapping NOT necessary any more, add methods on Parameters to lookup a Parameter by key
-			//! OR: Create a ParameterMapper and Parameter->get($i) methods
-			
 		}
 		catch(ArghException $e)
 		{
 			throw $e;
 		}		
 	}
-	
+
+	/**
+		* Access elements of the original $argv array
+		*
+		* Provides access to the $argv array (and its elements) as registered by PHP CLI
+		*
+		*	@api
+		* @since 1.0
+		*		 
+		* @param int|null $i The index of an $argv element; or null to return the entire $argv array
+		*
+		* @return mixed The value of an element of the $argv array; or the entire $argv array (when param $i is null)
+		* @throws ArghException if $i is not a valid index of $argv
+		*/	
 	public function argv(int $i=null)
 	{
 		if($i !== null)
 		{
-			if( $i < count($this->argv) )
+			if( array_key_exists($i, $this->argv) )
 			{
 				return $this->argv[$i];
 			}
@@ -182,7 +213,21 @@ class Argh
 		return implode(' ', $this->argv);
 	}
 	
-	// Returns the value of an argument supplied on command line, or the default value from parameter definition
+	/**
+		* Retrieves the value of a defined Parameter.
+		*
+		* Find the value of an Parameter
+		* Either the value of an Argument, if supplied on the command line,
+		* or, the default value as defined by the arguments corresponding Parameter.
+		*
+		*	@api
+		* @since 1.0
+		*		 
+		* @param string $key The name (or flag) of a defined Parameter
+		*
+		* @return mixed The value of a Parameter (type depends on the Parameter's type)
+		* @throws ArghException if the $key is not the name of a defined Parameter.
+		*/
 	public function get($key)
 	{
 		
@@ -192,17 +237,32 @@ class Argh
 			throw new ArghException('Parameter \'' . $name . '\' was not defined.');
 		}
 		
+		// Lookup the 'name' of matching parameter; in case $key is a Parameter 'flag'
+		// The 'name' is needed to lookup the correct Argument
+		$name = $this->parameters->get($key)->name();
+		
 		// Check the ArgumentCollection for an Argument with this $key
-		if( $this->arguments->exists($key) )
+		if( $this->arguments->exists($name) )
 		{
 			// Return the Arguments value
-			return $this->arguments->get($key)->value();
+			return $this->arguments->get($name)->value();
 		}
 		else
 		{
 			// Return the Parameters default value, if any
 			return $this->parameters->get($key)->default();
 		}
+	}
+	
+	public function variables()
+	{
+		if($this->parameters->hasVariable())
+		{	
+			return $this->arguments->get('_variable')->value();
+		}
+		
+		// No ARGH_TYPE_VARIABLE Parameters in ParameterCollection
+		return FALSE;
 	}
 	
 	public function parameters() { return $this->parameters; }
@@ -223,15 +283,51 @@ class Argh
 	public function usageString()
 	{
 		$buff = 'Usage: ';
-		$buff .= $this->argv(0) . "\n";
+		$buff .= $this->argv(0) . "\n\n";
 	
 		// TODO: Sort the parameters by name
 		
 		// TODO: Determine the longest value of each parameter attribute, to make pretty columns
 		
+		// Show Commands
 		foreach($this->parameters->all() as $p)
 		{
-			$buff .= '-' . $p->flag() . "\t" . $p->name() . "\t" . $p->text() . "\n";
+			if($p->type() == ARGH_TYPE_COMMAND)
+			{
+				$buff .= 'COMMANDS:' . "\n";
+				
+				if($p->hasOptions())
+				{
+					foreach($p->options() as $o)
+					{
+							$buff .= $o . "\n";
+					} // END: foreach($p->options() as $o)
+				} // END: if($p->hasOptions())
+			} // END: if($p->type() == ARGH_TYPE_COMMAND)
+		} // END: foreach($this->parameters->all() as $p)
+		$buff .= "\n";
+		
+		$buff .= 'OPTIONS:' . "\n";
+		foreach($this->parameters->all() as $p)
+		{
+			if( ($p->type() != ARGH_TYPE_COMMAND) && ($p->type() != ARGH_TYPE_VARIABLE) )
+			{
+				$buff .= '-' . $p->flag() . "\t" . $p->name() . "\t" . $p->text();
+				
+				if($p->hasOptions())
+				{ 
+					$buff .= "\t" . '[';
+					foreach($p->options() as $o)
+					{
+						$buff .= $o . ', ';
+					}
+					$buff = substr($buff, 0, -2); // remove trailing ', '
+					$buff .= ']';
+				}
+				
+				$buff .= "\n";
+			}
+
 		}
 		
 		return $buff;

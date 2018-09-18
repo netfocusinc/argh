@@ -12,8 +12,9 @@ define('ARGH_SYNTAX_FLAGS', Rule::ARGH_SYNTAX_FLAGS, true);
 define('ARGH_SYNTAX_NAME', Rule::ARGH_SYNTAX_NAME, true);
 define('ARGH_SYNTAX_VALUE', Rule::ARGH_SYNTAX_VALUE, true);
 define('ARGH_SYNTAX_LIST', Rule::ARGH_SYNTAX_LIST, true);
-define('ARGH_SYNTAX_CMD', Rule::ARGH_SYNTAX_CMD, true);
+define('ARGH_SYNTAX_COMMAND', Rule::ARGH_SYNTAX_COMMAND, true);
 define('ARGH_SYNTAX_QUOTED', Rule::ARGH_SYNTAX_QUOTED, true);
+define('ARGH_SYNTAX_VARIABLE', Rule::ARGH_SYNTAX_VARIABLE, true);
 
 // Semantic Contants
 define('ARGH_SEMANTICS_FLAG', Rule::ARGH_SEMANTICS_FLAG, true);
@@ -21,8 +22,8 @@ define('ARGH_SEMANTICS_FLAGS', Rule::ARGH_SEMANTICS_FLAGS, true);
 define('ARGH_SEMANTICS_NAME', Rule::ARGH_SEMANTICS_NAME, true);
 define('ARGH_SEMANTICS_VALUE', Rule::ARGH_SEMANTICS_VALUE, true);
 define('ARGH_SEMANTICS_LIST', Rule::ARGH_SEMANTICS_LIST, true);
-define('ARGH_SEMANTICS_CMD', Rule::ARGH_SEMANTICS_CMD, true);
-define('ARGH_SEMANTICS_SUB', Rule::ARGH_SEMANTICS_SUB, true);
+define('ARGH_SEMANTICS_COMMAND', Rule::ARGH_SEMANTICS_COMMAND, true);
+define('ARGH_SEMANTICS_VARIABLE', Rule::ARGH_SEMANTICS_VARIABLE, true);
 
 class Language
 {	
@@ -91,13 +92,15 @@ class Language
 				[ARGH_SEMANTICS_FLAG, ARGH_SEMANTICS_VALUE]
 			);
 			
+			/*
 			// Command with Naked Subcommand
 			$this->rules[] = new Rule(
 				'Command with Naked Subcommand',
 				'cmd sub',
-				'/^(' . ARGH_SYNTAX_CMD . ')[\s]+(' . ARGH_SYNTAX_CMD . ')$/i',
-				[ARGH_SEMANTICS_CMD, ARGH_SEMANTICS_SUB]
+				'/^(' . ARGH_SYNTAX_COMMAND . ')[\s]+(' . ARGH_SYNTAX_COMMAND . ')$/i',
+				[ARGH_SEMANTICS_COMMAND, ARGH_SEMANTICS_SUB]
 			);
+			*/
 			
 			// Double Hyphenated Key with Value
 			$this->rules[] = new Rule(
@@ -131,22 +134,25 @@ class Language
 				[ARGH_SEMANTICS_FLAGS]
 			);
 			
+			/*
 			// Command with Delimited Subcommand
 			$this->rules[] = new Rule(
 				'Command with Delimited Subcommand',
 				'cmd:sub',
-				'/^(' . ARGH_SYNTAX_CMD . '):(' . ARGH_SYNTAX_CMD . ')$/i',
-				[ARGH_SEMANTICS_CMD, ARGH_SEMANTICS_SUB]
+				'/^(' . ARGH_SYNTAX_COMMAND . '):(' . ARGH_SYNTAX_COMMAND . ')$/i',
+				[ARGH_SEMANTICS_COMMAND, ARGH_SEMANTICS_SUB]
 			);
+			*/
 			
 			// Command
 			$this->rules[] = new Rule(
 				'Command',
 				'cmd',
-				'/^(' . ARGH_SYNTAX_CMD . ')$/i',
-				[ARGH_SEMANTICS_CMD]
+				'/^(' . ARGH_SYNTAX_COMMAND . ')$/i',
+				[ARGH_SEMANTICS_COMMAND]
 			);
 			
+			/*
 			// Naked Multi Flag
 			$this->rules[] = new Rule(
 				'Naked Multi Flag',
@@ -154,13 +160,14 @@ class Language
 				'/^(' . ARGH_SYNTAX_FLAGS . ')$/i',
 				[ARGH_SEMANTICS_FLAGS]
 			);
+			*/
 			
 			// Naked Variable
 			$this->rules[] = new Rule(
 				'Naked Variable',
 				'value',
-				'/^(' . ARGH_SYNTAX_VALUE . ')$/i',
-				[ARGH_SEMANTICS_VALUE]
+				'/^(' . ARGH_SYNTAX_VARIABLE . ')$/i',
+				[ARGH_SEMANTICS_VARIABLE]
 			);
 			
 			// Return singleton instance
