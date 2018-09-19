@@ -102,6 +102,14 @@ class Language
 			);
 			*/
 			
+			// Hyphenated Key with Value
+			$this->rules[] = new Rule(
+				'Hyphenated Name with Value',
+				'-key value',
+				'/^\-(' . ARGH_SYNTAX_NAME . ') (' . ARGH_SYNTAX_VALUE . ')$/i',
+				[ARGH_SEMANTICS_NAME, ARGH_SEMANTICS_VALUE]
+			);
+			
 			// Double Hyphenated Key with Value
 			$this->rules[] = new Rule(
 				'Double Hyphenated Name with Value',
@@ -115,6 +123,14 @@ class Language
 				'Double Hyphenated Boolean Key',
 				'--key',
 				'/^\-\-(' . ARGH_SYNTAX_NAME . ')$/i',
+				[ARGH_SEMANTICS_NAME]
+			);
+			
+			// Hyphenated Boolean Key
+			$this->rules[] = new Rule(
+				'Hyphenated Boolean Key',
+				'-f',
+				'/^\-(' . ARGH_SYNTAX_NAME . ')$/i',
 				[ARGH_SEMANTICS_NAME]
 			);
 			

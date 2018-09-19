@@ -143,6 +143,30 @@ class Rule
 		* @return string
 	*/
 	public function example() { return $this->example; }
+
+	/**
+		* Does this Rule match a $string
+		*
+		* Note that matching a Rule does not guarantee the Rule will result
+		* in a new Argument. Ultimately, the argument string may not meet all the 
+		* requirements of the Rule, e.g. matching defined parameter name|flag|options
+		*
+		* @param $string string A string to check for match with this Rule
+		* @param $tokens array Reference to an array, on match will contain matching elements
+		*
+		* @return bool
+	  */	
+	public function match($string, &$tokens): bool
+	{
+		if( preg_match($this->syntax(), $string, $tokens) )
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 		
 }
 	

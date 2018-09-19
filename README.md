@@ -1,6 +1,10 @@
 # Argh
 
-Parse php command line arguments with ease so you can focus on your application.
+Parse PHP command line arguments with ease so you can focus on your CLI application.
+
+# UNDER DEVELOPMENT
+
+This project is currently under active development of its initial release. Everything here (including this README) is subject to frequent change, and errors. This project should not be relied on for any production environment. 
 
 ## Getting Started
 
@@ -32,12 +36,30 @@ until finished
 
 End with an example of getting some data out of the system or using it for a little demo
 
+### Basic Usage
+
+A step by step series of examples that tell you how to use Argh
+
+Say what the step will be
+
+```
+Give the example
+```
+
+And repeat
+
+```
+until finished
+```
+
+End with an example of getting some data out of the system or using it for a little demo
+
 ## Running the tests
 
 Explain how to run the automated tests for this system
 
 ```
-% vendor/bin/phpunit --bootstrap vendor/autoload.php tests/ParameterTest.php
+$ vendor/bin/phpunit --bootstrap vendor/autoload.php tests/
 ```
 
 ### Break down into end to end tests
@@ -62,23 +84,22 @@ Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Composer](https://getcomposer.org/) - Dependency Manager for PHP
+* [PHPUnit](https://phpunit.de/) - Testing Framework
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Coming soon...
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We plan on adopting [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/benjaminhough/Argh/tags). 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Benjamin Hough** - *Initial work* - [PurpleBooth](https://github.com/BenjaminHough)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/benjaminhough/Argh/contributors) who participated in this project.
 
 ## License
 

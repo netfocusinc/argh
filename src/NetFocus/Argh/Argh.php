@@ -159,6 +159,26 @@ class Argh
 		}
 		
 		//
+		// AUTO ADD ARGH_TYPE_VARIABLE PARAMETER
+		//
+		
+		try
+		{			
+			// Create a new Parameter for ARGH_TYPE_VARIABLE
+			$this->parameters->addParameter(Parameter::createFromArray(
+					[
+						'name'			=>	Parameter::ARGH_NAME_VARIABLE,
+						'type'			=>	Parameter::ARGH_TYPE_VARIABLE
+					]
+				)
+			);
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+		
+		//
 		// PARSE PARAMETERS AND ARGUMENTS
 		//
 		
@@ -168,13 +188,15 @@ class Argh
 			$args = ArgvPreprocessor::process($this->argv);
 			
 			// Parse $args into an ArgumentCollection
-			$this->arguments = ArgumentParser::parse($args, $this->language, $this->parameters);
+			$parser = new ArgumentParser($this->language, $this->parameters);
+			$this->arguments = $parser->parse($args);
 		}
 		catch(ArghException $e)
 		{
 			throw $e;
-		}		
-	}
+		}	
+			
+	} // END: public function __construct(array $argv, ParameterCollection $parameters)
 
 	/**
 		* Access elements of the original $argv array
@@ -234,7 +256,7 @@ class Argh
 		// Check the ParameterCollection for a Parameter with $key
 		if( !$this->parameters->exists($key) )
 		{
-			throw new ArghException('Parameter \'' . $name . '\' was not defined.');
+			throw new ArghException(__CLASS__ . ': Parameter \'' . $key . '\' was not defined.');
 		}
 		
 		// Lookup the 'name' of matching parameter; in case $key is a Parameter 'flag'

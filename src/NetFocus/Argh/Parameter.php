@@ -9,13 +9,16 @@ class Parameter
 	// CONSTANTS
 	//
 	
+	// Parameter Names
+	const ARGH_NAME_VARIABLE	= '_ARGH_VARS_';
+	
 	// Parameter Data Types
 	const ARGH_TYPE_BOOLEAN		= 1;
 	const ARGH_TYPE_INT				= 2;
 	const ARGH_TYPE_STRING		= 3;
 	const ARGH_TYPE_LIST			= 4;
 	const ARGH_TYPE_COMMAND		= 5;
-	const ARGH_TYPE_VARIABLE	= 7;
+	const ARGH_TYPE_VARIABLE	= 6;
 	
 	//
 	// PUBLIC PROPERTIES
@@ -90,6 +93,15 @@ class Parameter
 			if( !in_array($type, $valid) )
 			{
 				throw new ArghException('Parameter \'' . $name . '\' has an invalid type');
+			}
+		}
+		
+		// Check ARGH_TYPE_COMMAND for required options
+		if(self::ARGH_TYPE_COMMAND == $type)
+		{
+			if( count($options) == 0 )
+			{
+				throw new ArghException(__METHOD__ . ': Command parameter missing required: \'options\'');
 			}
 		}
 		

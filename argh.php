@@ -68,50 +68,56 @@ try
 	]);
 	
 	echo "\n\n";
-	echo "\n---------------------\n\n";
 	
-	echo "Command: " . $argh->command() . "\n";
-	
-	echo "Parameters: \n" . $argh->parameters()->toString() . "\n";
-	
-	echo "Arguments: \n" . $argh->arguments()->toString() . "\n";
-	
-	if( $argh->parameters()->hasVariable() )
+	if("help" == $argh->cmd )
 	{
-		echo "Variables: \n";
-		print_r($argh->variables());
-		echo "\n";
+		echo $argh->usage() . "\n";
 	}
-	
-	// Show values for each parameter (exclude variables)
-	foreach($argh->parameters()->all() as $p)
+	else if("joke" == $argh->cmd )
 	{
-		if(ARGH_TYPE_VARIABLE != $p->type())
+		echo "Why did the chicken cross the road?\n";
+	}
+	else
+	{
+	
+		echo "Command: " . $argh->command() . "\n";
+		
+		echo "Parameters: \n" . $argh->parameters()->toString() . "\n";
+		
+		echo "Arguments: \n" . $argh->arguments()->toString() . "\n";
+		
+		if( $argh->parameters()->hasVariable() )
 		{
-			echo '$argh->' . $p->name() . ' = ';
-			
-			if( !is_array($argh->get($p->name())) )
+			echo "Variables: \n";
+			print_r($argh->variables());
+			echo "\n";
+		}
+		
+		// Show values for each parameter (exclude variables)
+		foreach($argh->parameters()->all() as $p)
+		{
+			if(ARGH_TYPE_VARIABLE != $p->type())
 			{
-				echo $argh->get($p->name()) . "\n";
-			}
-			else
-			{
-				echo '[ ';
-				foreach($argh->get($p->name()) as $e)
+				echo '$argh->' . $p->name() . ' = ';
+				
+				if( !is_array($argh->get($p->name())) )
 				{
-					echo $e . ' ';
+					echo $argh->get($p->name()) . "\n";
 				}
-				echo ' ]';
-				echo "\n";
-			}
-		} // END: if(ARGH_TYPE_VARIABLE != $p->type())
-	}
-	echo "\n";
+				else
+				{
+					echo '[ ';
+					foreach($argh->get($p->name()) as $e)
+					{
+						echo $e . ' ';
+					}
+					echo ' ]';
+					echo "\n";
+				}
+			} // END: if(ARGH_TYPE_VARIABLE != $p->type())
+		}
 	
-	echo $argh->usage();
-	
-	echo "\n";
-	echo "DONE";
+	} // END: foreach($argh->parameters()->all() as $p)
 	
 }
 catch(ArghException $e)
