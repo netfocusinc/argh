@@ -42,10 +42,6 @@ class Argh
 	private $arguments = null;
 	
 	//
-	// PUBLIC PROPERTIES
-	//
-	
-	//
 	// STATIC METHODS
 	//
 
@@ -272,7 +268,7 @@ class Argh
 		else
 		{
 			// Return the Parameters default value, if any
-			return $this->parameters->get($key)->default();
+			return $this->parameters->get($key)->defaultValue();
 		}
 	}
 	
@@ -280,7 +276,7 @@ class Argh
 	{
 		if($this->parameters->hasVariable())
 		{	
-			return $this->arguments->get('_variable')->value();
+			return $this->arguments->get(Parameter::ARGH_NAME_VARIABLE)->value();
 		}
 		
 		// No ARGH_TYPE_VARIABLE Parameters in ParameterCollection

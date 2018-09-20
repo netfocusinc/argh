@@ -216,16 +216,11 @@ class Language
 	// PUBLIC METHODS
 	//
 	
-	public function addRule(Rule $rule)
-	{
-		$this->rules[] = $rule;
-	}
-	
 	public function rules()
 	{
 		return $this->rules;
 	}
-
+	
 	
 }
 	

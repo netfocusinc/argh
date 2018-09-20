@@ -45,15 +45,15 @@ class ArgumentParser
 		*
 		*/
 	public function parse(array $args): ArgumentCollection
-	{	
+	{
+		// Create a new ArgumentCollection
+		$argumentCollection = new ArgumentCollection();
+			
 		if(count($args) == 0)
 		{
 			// Nothing to parse
-			return 0;
+			return $argumentCollection;
 		}
-		
-		// Create a new ArgumentCollection
-		$argumentCollection = new ArgumentCollection();
 		
 		// Get all Rules from Langugage
 		$rules = $this->language->rules();

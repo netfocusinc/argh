@@ -2,6 +2,15 @@
 	
 namespace NetFocus\Argh;
 
+/**
+	* Parameters define the arguments your CLI application can recieve.
+	*
+	* Parameters are pre-configured arguments that your CLI application can retrieve
+	* from command line arguments.
+	*
+	* @author  Benjamin Hough <benjamin@netfocusinc.com>
+	*
+	*/
 class Parameter
 {
 	
@@ -24,8 +33,12 @@ class Parameter
 	// PUBLIC PROPERTIES
 	//
 	
+	/** @var string The name of a Parameter. Can be used on the command line; e.g. -file  */
 	private $name = null;
+
+	/** @var string A single character flag used to refer to this Parameter. */
 	private $flag = null;
+	
 	private $type = null;
 	private $required = null;
 	private $default = null;
@@ -46,7 +59,7 @@ class Parameter
 			$flag = null;
 			$type = self::ARGH_TYPE_BOOLEAN;
 			$required = FALSE;
-			$default = FALSE;
+			$default = null;
 			$text = null;
 			$options = null;
 			
@@ -54,7 +67,7 @@ class Parameter
 			if( array_key_exists('flag', $p) ) $flag = $p['flag'];
 			if( array_key_exists('type', $p) ) $type = $p['type'];
 			if( array_key_exists('required', $p) ) $required = $p['required'];
-			if( array_key_exists('default', $p) && (!empty($p['default']))) $default = $p['default'];
+			if( array_key_exists('default', $p) ) $default = $p['default'];
 			if( array_key_exists('text', $p) ) $text = $p['text'];
 			if( array_key_exists('options', $p) ) $options = $p['options'];
 			
@@ -74,7 +87,7 @@ class Parameter
 	// PUBLIC METHODS
 	//
 	
-	public function __construct(string $name, string $flag=null, int $type=self::ARGH_TYPE_BOOLEAN, bool $required=FALSE, bool $default=FALSE, string $text=null, array $options=null)
+	public function __construct(string $name, string $flag=null, int $type=self::ARGH_TYPE_BOOLEAN, bool $required=FALSE, $default=null, string $text=null, array $options=null)
 	{
 		
 		//echo "new Parameter(name=$name, flag=$flag, type=$type, required=$required, default=$default, text=$text)\n";
@@ -90,6 +103,7 @@ class Parameter
 		{
 			// Check for valid $type
 			$valid = array(self::ARGH_TYPE_BOOLEAN, self::ARGH_TYPE_INT, self::ARGH_TYPE_STRING, self::ARGH_TYPE_LIST, self::ARGH_TYPE_COMMAND, self::ARGH_TYPE_VARIABLE);
+			
 			if( !in_array($type, $valid) )
 			{
 				throw new ArghException('Parameter \'' . $name . '\' has an invalid type');
@@ -121,6 +135,10 @@ class Parameter
 				// Assign literal TRUE for boolean defaults
 				$default = TRUE;
 			}	
+			else
+			{
+				$default = FALSE;
+			}
 		}
 		
 		// Set properties on this object

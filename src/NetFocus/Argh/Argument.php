@@ -10,17 +10,18 @@ class Argument
 	//
 	
 	private $key = null;
-	private $type = null; // Argument inherits the type of its Parameter
 	private $value = null;
+	private $type = null;
 	
 	//
 	// PUBLIC METHODS
 	//
 	
-	public function __contruct($key=null, $value=null)
+	public function __construct($key=null, $value=null, $type=null)
 	{
 		$this->key = $key;
 		$this->value = $value;
+		$this->type = $type;
 	}
 	
 	// GETTERS/SETTERS
