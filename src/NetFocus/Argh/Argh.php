@@ -268,7 +268,7 @@ class Argh
 		else
 		{
 			// Return the Parameters default value, if any
-			return $this->parameters->get($key)->defaultValue();
+			return $this->parameters->get($key)->default();
 		}
 	}
 	

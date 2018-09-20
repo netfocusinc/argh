@@ -40,6 +40,31 @@ class Rule
 	// STATIC FUNCTIONS
 	//
 	
+	/*
+	public static function createFromArray(array $r): Rule
+	{
+		try
+		{
+			// Defaults
+			$name = null;
+			$example = null;
+			$syntax = null;
+			$semantics = null;
+			
+			if( array_key_exists('name', $r) ) $name = $r['name'];
+			if( array_key_exists('example', $r) ) $example = $r['example'];
+			if( array_key_exists('syntax', $r) ) $syntax = $r['syntax'];
+			if( array_key_exists('semantics', $r) ) $semantics = $r['semantics'];
+			
+			return new self($name, $example, $syntax, $sematics);
+		}
+		catch(Exception $e)
+		{
+			throw($e);
+		}
+	}
+	*/
+	
 	public static function semanticsToString($semantics)
 	{
 		switch($semantics)
@@ -50,7 +75,6 @@ class Rule
 			case self::ARGH_SEMANTICS_VALUE:		return 'VALUE';
 			case self::ARGH_SEMANTICS_LIST:			return 'LIST';
 			case self::ARGH_SEMANTICS_COMMAND:	return 'COMMAND';
-			//case self::ARGH_SEMANTICS_SUB:			return 'SUB';
 			case self::ARGH_SEMANTICS_VARIABLE:	return 'VARIABLE';
 			default:														return '*invalid*';
 		}
@@ -60,53 +84,20 @@ class Rule
 	// PUBLIC METHODS
 	//
 	
-	public function __construct($name, $example, $syntax, $semantics)
+	public function __construct(string $name, string $example, string $syntax, array $semantics)
 	{
 		
-			// Make sure the rule contains all required elements
-		if( empty($name) )
+		// Validate the syntax regular expression
+		// Suppress error messages
+		if( @preg_match($syntax, '') === FALSE )
 		{
-			throw new ArghException('Rule is missing required name');
+			throw new ArghException('Rule \'' . $name . '\' syntax \'' . $syntax .  '\' is not a valid regular expression');
 		}
 		
-		if( empty($example) )
+		// Confirm count(semantics) matches number of parenthesized subpatterns defined by the syntax regular expression
+		if( substr_count($syntax, '(') != count($semantics) )
 		{
-			throw new ArghException('Rule \'' . $name . '\' is missing required example');
-		}
-		
-		if( empty($syntax) )
-		{
-			throw new ArghException('Rule \'' . $name . '\' is missing required syntax');
-		}
-		else
-		{
-			// Validate the syntax regular expression
-			// Suppress error messages
-			if( @preg_match($syntax, '') === FALSE )
-			{
-				throw new ArghException('Rule \'' . $name . '\' syntax \'' . $syntax .  '\' is not a valid regular expression');
-			}
-		}
-		
-		if( empty($semantics) )
-		{
-			throw new ArghException('Rule \'' . $name . '\' is missing required semantics');
-		}
-		else
-		{
-			if( !is_array($semantics) )
-			{
-				throw new ArghException('Expecting array for rule \'' . $name . '\' semantics, ' . gettype($semantics) . ' given');
-			}
-			else
-			{
-				// Confirm count(semantics) matches number of parenthesized subpatterns defined by the syntax regular expression
-				if( substr_count($syntax, '(') != count($semantics) )
-				{
-					throw new ArghException('Rule \'' . $name . '\' syntax defines ' . substr_count($syntax, '(') . ' sub-patterns, but semantics defines ' . count($semantics));
-				}
-				
-			}
+			throw new ArghException('Rule \'' . $name . '\' syntax defines ' . substr_count($syntax, '(') . ' sub-patterns, but semantics defines ' . count($semantics));
 		}
 		
 		// Set properties on this instance
@@ -121,28 +112,28 @@ class Rule
 		*
 		* @return string
 	*/
-	public function name() { return $this->name; }
+	public function name(): string { return $this->name; }
 
 	/**
 		* Gets the 'syntax' property of this Rule
 		*
 		* @return string
 	*/
-	public function syntax() { return $this->syntax; }
+	public function syntax(): string { return $this->syntax; }
 	
 	/**
 		* Gets the 'semantics' property of this Rule
 		*
 		* @return string
 	*/
-	public function semantics() { return $this->semantics; }
+	public function semantics(): array { return $this->semantics; }
 	
 	/**
 		* Gets the 'sample' of this Rule
 		*
 		* @return string
 	*/
-	public function example() { return $this->example; }
+	public function example(): string { return $this->example; }
 
 	/**
 		* Does this Rule match a $string
@@ -156,7 +147,7 @@ class Rule
 		*
 		* @return bool
 	  */	
-	public function match($string, &$tokens): bool
+	public function match($string, &$tokens=array()): bool
 	{
 		if( preg_match($this->syntax(), $string, $tokens) )
 		{

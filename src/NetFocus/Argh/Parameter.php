@@ -88,26 +88,14 @@ class Parameter
 	//
 	
 	public function __construct(string $name, string $flag=null, int $type=self::ARGH_TYPE_BOOLEAN, bool $required=FALSE, $default=null, string $text=null, array $options=null)
-	{
+	{	
+
+		// Check for valid $type
+		$valid = array(self::ARGH_TYPE_BOOLEAN, self::ARGH_TYPE_INT, self::ARGH_TYPE_STRING, self::ARGH_TYPE_LIST, self::ARGH_TYPE_COMMAND, self::ARGH_TYPE_VARIABLE);
 		
-		//echo "new Parameter(name=$name, flag=$flag, type=$type, required=$required, default=$default, text=$text)\n";
-		
-		// Check for required $name
-		if( empty($name) )
+		if( !in_array($type, $valid) )
 		{
-			throw new ArghException('Parameter is missing required name');
-		}
-		
-		// Check for optional $type
-		if( !empty($type) )
-		{
-			// Check for valid $type
-			$valid = array(self::ARGH_TYPE_BOOLEAN, self::ARGH_TYPE_INT, self::ARGH_TYPE_STRING, self::ARGH_TYPE_LIST, self::ARGH_TYPE_COMMAND, self::ARGH_TYPE_VARIABLE);
-			
-			if( !in_array($type, $valid) )
-			{
-				throw new ArghException('Parameter \'' . $name . '\' has an invalid type');
-			}
+			throw new ArghException('Parameter \'' . $name . '\' has an invalid type');
 		}
 		
 		// Check ARGH_TYPE_COMMAND for required options
