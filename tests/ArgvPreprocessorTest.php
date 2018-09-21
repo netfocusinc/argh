@@ -12,38 +12,10 @@ class ArgvPreprocessorTest extends TestCase
 	//
 	// LIFE CYCLE
 	//
-	
-	public static function setUpBeforeClass()
-	{
-		//fwrite(STDOUT, __METHOD__ . "\n");
-	}
 
   protected function setUp()
   {	
   }
-  
-  protected function assertPreConditions()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-  
-  protected function tearDown()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-
-  public static function tearDownAfterClass()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-
-	/*
-  protected function onNotSuccessfulTest(Exception $e)
-  {
-    fwrite(STDOUT, __METHOD__ . "\n");
-    throw $e;
-  }
-  */
   
   //
   // TEST CASES
@@ -101,7 +73,7 @@ class ArgvPreprocessorTest extends TestCase
 	  	[
 	  		array('my.php', '--msgs=[Hi,', 'Hey,', 'Hello World!]'),
 	  		array('--msgs=[Hi,Hey,"Hello World!"]'),
-	  	],
+	  	]
 	  
 	  ];
 	}

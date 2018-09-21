@@ -49,45 +49,45 @@ class Parameter
 	// STATIC METHODS
 	//
 	
-	public static function createFromArray(array $p): Parameter
-	{
+	public static function createFromArray(array $attributes): Parameter
+	{		
+		// Init defaults
+		$name = null; // required
+		$flag = ''; // default
+		$type = Parameter::ARGH_TYPE_BOOLEAN; // default
+		$required = FALSE; // default
+		$default = FALSE; // default
+		$text = ''; // default
+		$options = array(); // default
 		
-		try
-		{	
-			// Defaults
-			$name = null;
-			$flag = null;
-			$type = self::ARGH_TYPE_BOOLEAN;
-			$required = FALSE;
-			$default = null;
-			$text = null;
-			$options = null;
-			
-			if( array_key_exists('name', $p) ) $name = $p['name'];
-			if( array_key_exists('flag', $p) ) $flag = $p['flag'];
-			if( array_key_exists('type', $p) ) $type = $p['type'];
-			if( array_key_exists('required', $p) ) $required = $p['required'];
-			if( array_key_exists('default', $p) ) $default = $p['default'];
-			if( array_key_exists('text', $p) ) $text = $p['text'];
-			if( array_key_exists('options', $p) ) $options = $p['options'];
-			
-			// Create a new Parameter instance
-			// Throws an Exception if arguments are invalid
-			$parameter = new self($name, $flag, $type, $required, $default, $text, $options);
-			
-			return $parameter;
-		}
-		catch(Exception $e)
+		// Extract parameter attributes from array
+		if( array_key_exists('name', $attributes) ) $name = $attributes['name'];
+		if( array_key_exists('flag', $attributes) ) $flag = $attributes['flag'];
+		if( array_key_exists('type', $attributes) ) $type = $attributes['type'];
+		if( array_key_exists('required', $attributes) ) $required = $attributes['required'];
+		if( array_key_exists('default', $attributes) ) $default = $attributes['default'];
+		if( array_key_exists('text', $attributes) ) $text = $attributes['text'];
+		if( array_key_exists('options', $attributes) ) $options = $attributes['options'];
+		
+		// Check for required 'name'
+		if(empty($name)) throw(new ArghException(__METHOD__ . ': $attributes missing required \'name\''));
+		
+		// Check for required 'options' for ARGH_TYPE_COMMANDs
+		if( (Parameter::ARGH_TYPE_COMMAND==$type) && ( (empty($options)) || (!is_array($options)) || (count($options)<1)  ) )
 		{
-			throw($e);
+			throw(new ArghException(__METHOD__ . ': Command parameter \'' . $name . '\' missing required \'options.\''));
 		}
+		
+		// Return a new Parameter instance
+		return new self($name, $flag, $type, $required, $default, $text, $options);
+
 	}
 	
 	//
 	// PUBLIC METHODS
 	//
 	
-	public function __construct(string $name, string $flag=null, int $type=self::ARGH_TYPE_BOOLEAN, bool $required=FALSE, $default=null, string $text=null, array $options=null)
+	public function __construct(string $name, string $flag, int $type=self::ARGH_TYPE_BOOLEAN, bool $required=FALSE, $default=null, string $text='', array $options=null)
 	{	
 
 		// Check for valid $type

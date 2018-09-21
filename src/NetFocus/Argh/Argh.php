@@ -77,7 +77,7 @@ class Argh
 			}
 			catch(Exception $e)
 			{
-				throw($e);
+				throw(new ArghException(__CLASS__ . ': ' . $e->getMessage()));
 			}
 		}
 		

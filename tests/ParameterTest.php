@@ -58,7 +58,7 @@ class ParameterTest extends TestCase
   
   public function testCreateFromArrayMissingName(): void
   {
-     $this->expectException(TypeError::class);
+     $this->expectException(ArghException::class);
       
      $parameter = Parameter::createFromArray(
      	[
