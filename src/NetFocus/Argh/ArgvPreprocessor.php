@@ -23,6 +23,11 @@ class ArgvPreprocessor
 	
 	public static function process(array $argv)
 	{
+		if(count($argv) < 1)
+		{
+			throw(new ArghException(__CLASS__ . ': $argv is empty'));
+		}
+		
 		//
 		// Remove first element from $argv, it contains the name of the php script
 		//

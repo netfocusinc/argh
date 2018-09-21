@@ -8,7 +8,8 @@ class ParameterCollection
 	// PRIVATE PROPERTIES
 	//
 	
-	private $parameters = null; // (array) Parameter
+	/** @var array An array of Parameters */
+	private $parameters = null;
 		
 	//
 	// PUBLIC METHODS
