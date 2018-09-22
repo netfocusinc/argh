@@ -126,10 +126,10 @@ class Language
 				[ARGH_SEMANTICS_NAME]
 			);
 			
-			// Hyphenated Boolean Key
+			// Hyphenated Boolean Name
 			$this->rules[] = new Rule(
 				'Hyphenated Boolean Key',
-				'-f',
+				'-key',
 				'/^\-(' . ARGH_SYNTAX_NAME . ')$/i',
 				[ARGH_SEMANTICS_NAME]
 			);
