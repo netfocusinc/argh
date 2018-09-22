@@ -34,16 +34,17 @@ class Parameter
 	//
 	
 	/** @var string The name of a Parameter. Can be used on the command line; e.g. -file  */
-	private $name = null;
+	private $name;
 
 	/** @var string A single character flag used to refer to this Parameter. */
-	private $flag = null;
+	private $flag;
 	
-	private $type = null;
-	private $required = null;
-	private $default = null;
-	private $text = null;
-	private $options = null;
+	private $type;
+	private $required;
+	private $default;
+	private $text;
+	private $options;
+	private $value;
 		
 	//
 	// STATIC METHODS
@@ -137,6 +138,7 @@ class Parameter
 		$this->default = $default;
 		$this->text = $text;
 		$this->options = $options;
+		$this->value = null;
 	}
 	
 	//
@@ -156,6 +158,8 @@ class Parameter
 	public function text() { return $this->text; }
 	
 	public function	options(): array { return $this->options; }
+	
+	public function value() { return $this->value; }
 	
 	public function hasOptions(): bool
 	{
@@ -187,5 +191,85 @@ class Parameter
 			return FALSE;
 		}
 	}
+	
+	public function setValue($value): void
+	{
+		switch($this->type)
+		{
+			case ARGH_TYPE_BOOLEAN:
+			
+				if(!is_bool($value))
+				{
+					// Convert value to boolean
+					$value = boolval($value);
+				}
+				
+				break;
+			
+			case ARGH_TYPE_INT:
+			
+				if(!is_int($value))
+				{
+					if(is_numeric($value))
+					{
+						// Convert value to int
+						$value = intval($value);
+					}
+					else
+					{
+						throw(new ArghException(__CLASS__ . ': Parameter \'' . $this->name . '\' expects int value, \'' . gettype($value) . '\' given.'));
+					}
+				}
+				
+				break;
+			
+			case ARGH_TYPE_STRING:
+			
+				if(!is_string($value))
+				{
+					// Convert value to string
+					$value = strval($value);
+				}
+			
+			case ARGH_TYPE_LIST:
+			
+				if(!is_array($value))
+				{
+					// Force $value into an array
+					$value = array($value);
+				}
+			
+			case ARGH_TYPE_COMMAND:
+			
+				if(!is_string($value))
+				{
+					// Convert value to string
+					$value = strval($value);
+				}
+				
+				// Confirm valid option
+				if( !$this->isOption($value) )
+				{
+					throw(new ArghException(__CLASS__ . ': Invalid option for \'' . $this->name . '\'.'));
+				}
+				
+				break;
+			
+			case ARGH_TYPE_VARIABLE:
+			
+				if(!is_string($value))
+				{
+					// Convert value to string
+					$value = strval($value);
+				}
+				
+				break;
+
+		} // END: switch($this->type)
+		
+		// Set this objects 'value' property
+		$this->value = $value;
+		
+	} // END: function setValue()
 	
 }

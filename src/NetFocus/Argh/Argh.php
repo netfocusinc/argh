@@ -38,9 +38,6 @@ class Argh
 	/** @var ParameterCollection  */
 	private $parameters = null;
 	
-	/** @var ArgumentCollection  */
-	private $arguments = null;
-	
 	//
 	// STATIC METHODS
 	//
@@ -85,7 +82,7 @@ class Argh
 	}
 	
 	//
-	// PROPERTY OVERLOADING
+	// MAGIC METHODS
 	//
 	
 	//public void __set ( string $name , mixed $value )
@@ -183,9 +180,14 @@ class Argh
 			// Prepare $argv for parsing
 			$args = ArgvPreprocessor::process($this->argv);
 			
-			// Parse $args into an ArgumentCollection
+			// Create an new ArgumentCollection instance
 			$parser = new ArgumentParser($this->language, $this->parameters);
-			$this->arguments = $parser->parse($args);
+			
+			// Parse $args into an array of Arguments
+			$arguments = $parser->parse($args);
+			
+			// Merge Arguments into Parameters
+			$this->parameters->mergeArguments($arguments);
 		}
 		catch(ArghException $e)
 		{
@@ -254,16 +256,12 @@ class Argh
 		{
 			throw new ArghException(__CLASS__ . ': Parameter \'' . $key . '\' was not defined.');
 		}
-		
-		// Lookup the 'name' of matching parameter; in case $key is a Parameter 'flag'
-		// The 'name' is needed to lookup the correct Argument
-		$name = $this->parameters->get($key)->name();
-		
-		// Check the ArgumentCollection for an Argument with this $key
-		if( $this->arguments->exists($name) )
+	
+		// Check if the Parameter has a value defined by an Argument
+		if( $this->parameters->get($key)->value() )
 		{
-			// Return the Arguments value
-			return $this->arguments->get($name)->value();
+			// Return the Parameters value
+			return $this->parameters->get($key)->value();
 		}
 		else
 		{
@@ -290,11 +288,6 @@ class Argh
 	public function parametersString()
 	{
 		return print_r($this->parameters, TRUE);
-	}
-	
-	public function argumentsString()
-	{
-		return print_r($this->arguments, TRUE);
 	}
 	
 	//! TODO: Accept a formatting string/array (e.g. ['-f', '--name', 'text'])

@@ -11,17 +11,15 @@ class Argument
 	
 	private $key = null;
 	private $value = null;
-	private $type = null;
 	
 	//
 	// PUBLIC METHODS
 	//
 	
-	public function __construct($key=null, $value=null, $type=null)
+	public function __construct($key=null, $value=null)
 	{
 		$this->key = $key;
 		$this->value = $value;
-		$this->type = $type;
 	}
 	
 	// GETTERS/SETTERS
@@ -35,17 +33,6 @@ class Argument
 		
 		return $this->key;
 	}
-
-	public function type($type=null)
-	{ 
-		if( $type !== null )
-		{
-			$this->type = $type;
-		}
-		
-		return $this->type;
-	}	
-	
 	
 	public function value($value=null)
 	{

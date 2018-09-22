@@ -35,24 +35,23 @@ class ArgumentParser
 	/**
 		* Summary.
 		*
-		* Parse $args to create Arguments and add them to an ArgumentCollection
+		* Parse $args to create an array of Arguments
 		*
-		* @param
-		* @param
+		* @param array $args A pre-processed $argv array
 		*
-		* @return int Number of Arguments yielded by this method
+		* @return Argument[]
 		* @throws
 		*
 		*/
-	public function parse(array $args): ArgumentCollection
+	public function parse(array $args): array
 	{
-		// Create a new ArgumentCollection
-		$argumentCollection = new ArgumentCollection();
+		// Init an array of Arguments
+		$arguments = array();
 			
 		if(count($args) == 0)
 		{
 			// Nothing to parse
-			return $argumentCollection;
+			return $arguments;
 		}
 		
 		// Get all Rules from Langugage
@@ -141,36 +140,40 @@ class ArgumentParser
 						// Remove (shift) matching elements from $args
 						// These arguments have been consumed by the parser and are no longer needed
 						for($i=0; $i<$count; $i++) array_shift($args);
-						
- 						//! IMPORTANT
+ 						
  						//
- 						//! TODO: instead of throwing an exception, always allow the next Rule to process
- 						// rethink this algoritm to improve this process, and make this all more natural
- 						// consider moving this logic into another class
- 						// this method should focus on Rule matching, another specialized class, or another function, should implement this
- 						//
- 						// A new method (? new class) should now process the matched $rule and $tokens and return an array of new Arguments
- 						// to add to the ArgumentCollection
+ 						// Try yielding Arguments from this Rule
+ 						// If this Rule does not yield any Arguments, continue checking the next Rule
  						//
  						
- 						$arguments = $this->yieldArgumentsFromRule($rule, $tokens);
+ 						$yield = $this->yieldArgumentsFromRule($rule, $tokens);
 						
-	 					if( count($arguments) > 0 )
+	 					if( count($yield) > 0 )
 	 					{
+		 					/*
 	 						// Add the new Argument(s) (from array) to Arguments
-	 						foreach($arguments as &$a)
+	 						foreach($yield as $a)
 	 						{
 			 					try
 			 					{
+				 					//! TODO: Move argument validation to a new class (? ParameterValidator)
+				 					// and perform either (1) during argument merger with parameter, or (2) after argument merger is complete
+				 					
 				 					// Validate arguments before adding to the ArgumentCollection
 				 					// Invalid arguments will cause an ArghException
 				 					
 				 					//! TODO: Only send the Parameter corresponding to this Argument
-			 						ArgumentValidator::validate($a, $this->parameterCollection);
+			 						//ArgumentValidator::validate($a, $this->parameterCollection);
 			 						
 			 						// Merge ARGH_TYPE_VARIABLE Argument values
 			 						// e.g. their should only ever be one single ARGH_NAME_VARIABLE Argument
 			 						// multiple values for this Argument should be saved in an array
+			 						
+			 						
+				 					//
+				 					//! TODO: ParameterCollection->mergeArguments() will handle this
+				 					// or, pass responsibility to Parameter->mergeArgument()
+				 					//
 			 						if( (Parameter::ARGH_TYPE_VARIABLE == $a->type()) && ($argumentCollection->exists(Parameter::ARGH_NAME_VARIABLE)) )
 			 						{
 				 						// Retrieve existing ARGH_NAME_VARIABLE Argument
@@ -189,15 +192,21 @@ class ArgumentParser
 			 						{
 			 							$argumentCollection->addArgument($a);
 			 						}
+			 						
 			 					}
 			 					catch(ArghException $e)
 			 					{
 				 					throw $e;
 				 				}
 		 					} // END: foreach($argument as &$a)
+		 					*/
+		 					
+		 					// Add the new Arguments yielded from this Rule
+		 					foreach($yield as $y) $arguments[] = $y;
 	 						
-	 						// Stop checking Rules
+	 						// !IMPORTANT! Stop checking Rules
 	 						break; 
+	 						
 	 					} // END: if(count($argument) > 0)
 	 					else
 	 					{
@@ -232,7 +241,8 @@ class ArgumentParser
 		} // END: do
 		while( count($args) > 0 );
 		
-		return $argumentCollection;
+		// Return Arguments array
+		return $arguments;
 		
 	} // END: public static function parse()
 	
@@ -270,18 +280,9 @@ class ArgumentParser
 				case ARGH_SEMANTICS_FLAG:
 				
 					if( $this->parameterCollection->exists($token) )
-					{
-						// Retrieve matching parameter
-						$p = $this->parameterCollection->get($token);
-						
+					{	
 						// This Rule will create a single Argument
-						if(count($argument)==0) $argument[0] = new Argument();
-							
-						// Use the parameters 'name' for this argument's 'key'
-						$argument[0]->key($p->name());
-							
-						// Argument inherits the 'type' of its parameter
-						$argument[0]->type($p->type());		 								
+						if(count($argument)==0) $argument[0] = new Argument($token);								
 					}
 					
 					break;
@@ -294,17 +295,8 @@ class ArgumentParser
 					
 						if( $this->parameterCollection->exists( $token{$j} ) )
 						{
-							// Retrieve matching parameter
-							$p = $this->parameterCollection->get($token{$j});
-							
 							// Create new Argument for each flag
-							if( !array_key_exists($j, $argument) ) $argument[$j] = new Argument();
-								
-							// Use the parameters 'name' for this argument's 'key'
-							$argument[$j]->key($p->name());
-								
-							// Argument inherits the 'type' of its parameter
-							$argument[$j]->type($p->type());		
+							if( !array_key_exists($j, $argument) ) $argument[$j] = new Argument($token{$j});
 						}
 						else
 						{
@@ -321,25 +313,20 @@ class ArgumentParser
 			
 					if( $this->parameterCollection->exists($token) )
 					{
-						// Retrieve matching parameter
-						$p = $this->parameterCollection->get($token);
-						
 						// This Rule will create a single Argument
-						if(count($argument)==0) $argument[0] = new Argument();
-							
-						// Use the parameters 'name' for this argument's 'key'
-						$argument[0]->key($p->name());
-							
-						// Argument inherits the 'type' of its parameter
-						$argument[0]->type($p->type());		 								
+						if(count($argument)==0) $argument[0] = new Argument($token); 								
 					}
 			
 					break;			
 					
 				case ARGH_SEMANTICS_VALUE:
 				
+					// Usually, the Argument will have already been created by another token in this Rule
+				
 					// If no new Argument created by this Rule yet, create one now
 					if(count($argument)==0) $argument[0] = new Argument();
+					
+					// The new Argument's 'key' should be set by another token in this Rule
 				
 					// Use this $token as the 'value' for all new Arguments created by this Rule
 					// Usually, this will only apply to a single Argument, unless this Rule contains ARGH_SEMANTICS_FLAGS
@@ -348,6 +335,8 @@ class ArgumentParser
 					break;
 					
 				case ARGH_SEMANTICS_LIST:
+				
+					// Usually, the Argument will have already been created by another token in this Rule
 				
 					// If no new Argument created by this Rule yet, create one now
 					if(count($argument)==0) $argument[0] = new Argument();
@@ -381,16 +370,7 @@ class ArgumentParser
 									// $token matches an option of this ARGH_TYPE_COMMAND Parameter	
 									
 				 					// If no new Argument created by this Rule yet, create one now
-				 					if(count($argument)==0) $argument[0] = new Argument();
-				 					
-				 					// Argument is assigned ARGH_TYPE_COMMAND type
-				 					$argument[0]->type(Parameter::ARGH_TYPE_COMMAND);
-									
-									// Use the parameters 'name' for this argument's 'key'
-									$argument[0]->key($p->name());
-									
-									// Use the $token for the Arguments value
-									$argument[0]->value($token);	
+				 					if(count($argument)==0) $argument[0] = new Argument($p->name(), $token);
 									
 									// Stop searching this Parameters options
 									break;
@@ -407,16 +387,7 @@ class ArgumentParser
 				case ARGH_SEMANTICS_VARIABLE:
 					
 					// Create a new Argument to hold values
-					$argument[0] = new Argument();
-					
-					// Argument gets name ARGH_KEY_VARIABLES
-					$argument[0]->key(Parameter::ARGH_NAME_VARIABLE);
-					
-					// Argument gets type ARGH_TYPE_LIST
-					$argument[0]->type(Parameter::ARGH_TYPE_VARIABLE);
-					
-					// Init empty array for Argument value
-					$argument[0]->value(array($token));
+					$argument[0] = new Argument(Parameter::ARGH_NAME_VARIABLE, array($token));
 					
 					break;
 					
@@ -427,6 +398,39 @@ class ArgumentParser
 			
 		} // END: for($j=1; $j<count($matches); $j++)
 		
+		// Set boolean values
+		foreach($argument as &$a)
+		{
+			if( ARGH_TYPE_BOOLEAN == $this->parameterCollection->get($a->key())->type() )
+			{
+				// null (no value) considered TRUE (this is how flags work)
+				// PHP 'Falsey' values should be considered to mean FALSE
+				// Certain character values should be considered to mean FALSE
+				// Everything else considered TRUE
+					
+				if( null === $a->value() )
+				{
+ 					$a->value(TRUE);
+ 				}
+ 				else if( FALSE == $a->value() )
+ 				{
+	 				// 'Falsey' (boolean) FALSE, (int) 0, (float 0.0), (string) '0', (string) '', NULL
+	 				$a->value(FALSE);
+	 			}
+				else if( in_array($a->value(), array('0', 'false', 'False', 'FALSE', 'off', 'Off', 'OFF')) )
+				{
+ 					$a->value(FALSE);
+ 				}
+ 				else
+ 				{
+	 				$a->value(TRUE);
+	 			}
+	 			
+			} // END: if( ARGH_TYPE_BOOLEAN == $this->parameterCollection->get($a->key())->type() )
+			
+		} // END: foreach($argument as &$a)
+		
+		// Return an array of Arguments yielded by this Rule
 		return $argument;
 		
 	} // END: yieldArgumentsFromRule(Rule $rule, array $tokens): array

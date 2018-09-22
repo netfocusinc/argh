@@ -2,6 +2,9 @@
 	
 namespace NetFocus\Argh;
 
+use NetFocus\Argh\Argument;
+use NetFocus\Argh\Parameter;
+
 class ParameterCollection
 {	
 	//
@@ -9,7 +12,19 @@ class ParameterCollection
 	//
 	
 	/** @var array An array of Parameters */
-	private $parameters = null;
+	private $parameters;
+	
+	/** @var array A map from Parameter keys to their index in the $parameters array */
+	private $map;
+	
+	//
+	// Magic Methods
+	//
+	
+	public function __toString()
+	{
+		return $this->toString();
+	}
 		
 	//
 	// PUBLIC METHODS
@@ -19,17 +34,18 @@ class ParameterCollection
 	{
 		// Create a Parameter array
 		$this->parameters = array();
+		
+		// Create a 'map' array for quick lookup of Parameters by index
+		$this->map = array();
 	}
 	
 	public function exists(string $key): bool
 	{
-		foreach($this->parameters as $p)
+		if( array_key_exists($key, $this->map) )
 		{
-			if( ($key == $p->name()) || ($key == $p->flag()) )
-			{
-				return true;
-			}
+			return true;
 		}
+		
 		return false;
 	}
 	
@@ -57,17 +73,18 @@ class ParameterCollection
 		return false;	
 	}
 	
-	public function get(string $key)
+	public function get(string $key): Parameter
 	{
-		foreach($this->parameters as $p)
+		if($this->exists($key))
 		{
-			if( ($key == $p->name()) || ($key == $p->flag()) )
-			{
-				return $p;
-			}
+			$index = $this->map[$key];
+			
+			return $this->parameters[$index];
 		}
-		
-		throw new ArghException('Parameter \'' . $key . '\' not in collection');	
+		else
+		{
+			throw new ArghException('Parameter \'' . $key . '\' not in collection');
+		}	
 	}
 	
 	public function getCommands(): array
@@ -87,7 +104,70 @@ class ParameterCollection
 
 	public function addParameter(Parameter $param)
 	{
-		$this->parameters[] = $param;
+		if( !$this->exists($param->name()) )
+		{
+			// Add $param to $parameters array
+			$this->parameters[] = $param;
+			
+			// Map the new parameter's 'name' to its corresponding index in the $parameters array
+			$this->map[$param->name()] = count($this->parameters)-1;
+			
+			// Map the new parameter's 'flag' to its corresponding index in the $parameters array
+			if(!empty($param->flag())) $this->map[$param->flag()] = count($this->parameters)-1;
+		}
+		else
+		{
+			throw(new ArghException(__CLASS__ . ': Parameter \'' . $param->name() . '\' cannot be redefined.'));
+		}
+	}
+	
+	public function mergeArguments(array $arguments): void
+	{
+		
+		foreach($arguments as $a)
+		{
+			
+			if( $this->exists($a->key()) )
+			{
+				//! TODO: Enforce limitations of Parameters
+				// 1. Do NOT allow value to be redefined
+				// 2. For ARGH_TYPE_VARIABLE, append values to any already existing
+				
+				if( Parameter::ARGH_TYPE_VARIABLE == $this->parameters[$this->map[$a->key()]]->type() )
+				{
+					//
+					// For ARGH_TYPE_VARIABLE, append values to any already existing
+					//
+					
+					// Get existing 'value' array from ARGH_TYPE_VARIABLE Parameter
+					$variables = $this->parameters[$this->map[$a->key()]]->value();
+					
+					// Add new values $existingValues array
+					array_push($variables, $a->value());
+					
+					// Update the Parameter's value in the collection
+					$this->parameters[$this->map[$a->key()]]->value($variables);
+				}
+				else if( null !== $this->parameters[$this->map[$a->key()]]->value() )
+				{
+					//
+					// Do NOT allow a Parameter's value to be redefined
+					//
+					
+					throw(new ArghException(__CLASS__ . ': Parameter \'' . $a->key() . '\' value cannot be redefined.'));
+				}
+				else
+				{
+					// Set Parameter value	
+					$this->parameters[$this->map[$a->key()]]->setValue($a->value());
+				}
+			}
+			else
+			{
+				throw(new ArghException(__CLASS__ . ': Cannot merge Argument \'' . $a->key() . '\'. Parameter not defined.'));
+			}
+			
+		} // END: foreach($arguments as $a)
 	}
 	
 	public function all()
