@@ -274,7 +274,7 @@ class Argh
 	{
 		if($this->parameters->hasVariable())
 		{	
-			return $this->arguments->get(Parameter::ARGH_NAME_VARIABLE)->value();
+			return $this->parameters->get(Parameter::ARGH_NAME_VARIABLE)->value();
 		}
 		
 		// No ARGH_TYPE_VARIABLE Parameters in ParameterCollection

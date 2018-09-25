@@ -84,8 +84,6 @@ try
 		
 		echo "Parameters: \n" . $argh->parameters()->toString() . "\n";
 		
-		echo "Arguments: \n" . $argh->arguments()->toString() . "\n";
-		
 		if( $argh->parameters()->hasVariable() )
 		{
 			echo "Variables: \n";
