@@ -1,6 +1,6 @@
 <?php
 	
-namespace NetFocus\Argh;
+namespace netfocusinc\argh;
 
 class Rule
 {

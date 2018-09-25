@@ -1,9 +1,9 @@
 <?php
 	
-namespace NetFocus\Argh;
+namespace netfocusinc\argh;
 
-use NetFocus\Argh\Argument;
-use NetFocus\Argh\Parameter;
+use netfocusinc\argh\Argument;
+use netfocusinc\argh\Parameter;
 
 class ParameterCollection
 {	

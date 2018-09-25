@@ -10,7 +10,7 @@
     ],
     "autoload": {
 	  	"psr-4": {
-		  	"NetFocus\\" : "src/NetFocus/"
+		  	"netfocusinc\\" : "src/netfocusinc/"
 		  }
 	  },
     "require": {},

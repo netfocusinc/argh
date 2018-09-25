@@ -1,6 +1,6 @@
 <?php
 	
-namespace NetFocus\Argh;
+namespace netfocusinc\argh;
 
 /**
 	* Parameters define the arguments your CLI application can recieve.

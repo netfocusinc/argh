@@ -8,8 +8,8 @@
 
 require "vendor/autoload.php";
 
-use NetFocus\Argh\Argh;
-use NetFocus\Argh\ArghException;
+use netfocusinc\argh\Argh;
+use netfocusinc\argh\ArghException;
 
 /*
 // Init memory
