@@ -126,7 +126,7 @@ class ParameterCollection
 		
 		foreach($arguments as $a)
 		{
-			
+			// Check for a Parameter with this Arguments key
 			if( $this->exists($a->key()) )
 			{
 				//! TODO: Enforce limitations of Parameters
@@ -137,16 +137,24 @@ class ParameterCollection
 				{
 					//
 					// For ARGH_TYPE_VARIABLE, append values to any already existing
-					//
+					// Note: Argument value will always be an array
 					
 					// Get existing 'value' array from ARGH_TYPE_VARIABLE Parameter
-					$variables = $this->parameters[$this->map[$a->key()]]->value();
+					$value = $this->parameters[$this->map[$a->key()]]->value();
 					
-					// Add new values $existingValues array
-					array_push($variables, $a->value());
+					if($value === null)
+					{
+						// No variables have been set yet
+						$value = $a->value();						
+					}
+					else if(is_array($value))
+					{
+						// Add new values to existint array
+						foreach($a->value() as $e) $value[] = $e;
+					}
 					
 					// Update the Parameter's value in the collection
-					$this->parameters[$this->map[$a->key()]]->value($variables);
+					$this->parameters[$this->map[$a->key()]]->setValue($value);
 				}
 				else if( null !== $this->parameters[$this->map[$a->key()]]->value() )
 				{

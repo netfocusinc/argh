@@ -230,6 +230,8 @@ class Parameter
 					// Convert value to string
 					$value = strval($value);
 				}
+				
+				break;
 			
 			case ARGH_TYPE_LIST:
 			
@@ -238,6 +240,8 @@ class Parameter
 					// Force $value into an array
 					$value = array($value);
 				}
+				
+				break;
 			
 			case ARGH_TYPE_COMMAND:
 			
@@ -257,12 +261,9 @@ class Parameter
 			
 			case ARGH_TYPE_VARIABLE:
 			
-				if(!is_string($value))
-				{
-					// Convert value to string
-					$value = strval($value);
-				}
-				
+				// Can contain any type of parameter value
+				// including string or array
+
 				break;
 
 		} // END: switch($this->type)
