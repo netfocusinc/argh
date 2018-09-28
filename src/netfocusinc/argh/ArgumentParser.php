@@ -365,12 +365,12 @@ class ArgumentParser
 						{
 							if($p->hasOptions())
 							{
-								if( in_array($token, $p->options()) )
+								if( in_array($token, $p->getOptions()) )
 								{
 									// $token matches an option of this ARGH_TYPE_COMMAND Parameter	
 									
 				 					// If no new Argument created by this Rule yet, create one now
-				 					if(count($argument)==0) $argument[0] = new Argument($p->name(), $token);
+				 					if(count($argument)==0) $argument[0] = new Argument($p->getName(), $token);
 									
 									// Stop searching this Parameters options
 									break;
@@ -397,38 +397,6 @@ class ArgumentParser
 			}
 			
 		} // END: for($j=1; $j<count($matches); $j++)
-		
-		// Set boolean values
-		foreach($argument as &$a)
-		{
-			if( ARGH_TYPE_BOOLEAN == $this->parameterCollection->get($a->key())->type() )
-			{
-				// null (no value) considered TRUE (this is how flags work)
-				// PHP 'Falsey' values should be considered to mean FALSE
-				// Certain character values should be considered to mean FALSE
-				// Everything else considered TRUE
-					
-				if( null === $a->value() )
-				{
- 					$a->value(TRUE);
- 				}
- 				else if( FALSE == $a->value() )
- 				{
-	 				// 'Falsey' (boolean) FALSE, (int) 0, (float 0.0), (string) '0', (string) '', NULL
-	 				$a->value(FALSE);
-	 			}
-				else if( in_array($a->value(), array('0', 'false', 'False', 'FALSE', 'off', 'Off', 'OFF')) )
-				{
- 					$a->value(FALSE);
- 				}
- 				else
- 				{
-	 				$a->value(TRUE);
-	 			}
-	 			
-			} // END: if( ARGH_TYPE_BOOLEAN == $this->parameterCollection->get($a->key())->type() )
-			
-		} // END: foreach($argument as &$a)
 		
 		// Return an array of Arguments yielded by this Rule
 		return $argument;

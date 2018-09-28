@@ -10,8 +10,15 @@ All notable changes to this project will be documented in this file.
 - New additions go here ...
 
 ### Changed
+- Parameters re-factored with subclasses for each Parameter type
+- Language is no longer Singleton, constructor is now public
+- bin/argh.php updated to match new Argh interface
+
 ### Deprecated
+
 ### Removed
+- ArgumentParser
+
 ### Fixed
 ### Security
 

@@ -10,8 +10,10 @@ namespace netfocusinc\argh;
 	*
 	* @author  Benjamin Hough <benjamin@netfocusinc.com>
 	*
+	* @since 1.0.0
+	*
 	*/
-class Parameter
+abstract class Parameter
 {
 	
 	//
@@ -39,105 +41,77 @@ class Parameter
 	/** @var string A single character flag used to refer to this Parameter. */
 	private $flag;
 	
-	private $type;
+	/** @var bool Is the Parameter required? */
 	private $required;
+	
+	/** @var mixed The default value of the Parameter */
 	private $default;
-	private $text;
+	
+	/** @var string Descriptive text to print with 'usage' */
+	private $description;
+	
+	/** @var array A list limiting the options for this Parameters value */
 	private $options;
-	private $value;
+	
+	/** 
+		* @var mixed The value of this parameter.
+		*
+		* Null indicates no Argument was supplied on the command line.
+		* 
+		* Each Parameter may have its own type of value (e.g. int, string, array)
+		*/
+	protected $value;
 		
 	//
 	// STATIC METHODS
 	//
 	
-	public static function createFromArray(array $attributes): Parameter
-	{		
-		// Init defaults
-		$name = null; // required
-		$flag = ''; // default
-		$type = Parameter::ARGH_TYPE_BOOLEAN; // default
-		$required = FALSE; // default
-		$default = FALSE; // default
-		$text = ''; // default
-		$options = array(); // default
+	public static function createWithAttributes(array $attributes): Parameter
+	{
+		
+		// Init default attributes for a new Parameter
+		$name = null;
+		$flag = null;
+		$required = null;
+		$default = null;
+		$description = null;
+		$options = array();
 		
 		// Extract parameter attributes from array
 		if( array_key_exists('name', $attributes) ) $name = $attributes['name'];
 		if( array_key_exists('flag', $attributes) ) $flag = $attributes['flag'];
-		if( array_key_exists('type', $attributes) ) $type = $attributes['type'];
 		if( array_key_exists('required', $attributes) ) $required = $attributes['required'];
 		if( array_key_exists('default', $attributes) ) $default = $attributes['default'];
-		if( array_key_exists('text', $attributes) ) $text = $attributes['text'];
+		if( array_key_exists('description', $attributes) ) $text = $attributes['description'];
 		if( array_key_exists('options', $attributes) ) $options = $attributes['options'];
 		
-		// Check for required 'name'
-		if(empty($name)) throw(new ArghException(__METHOD__ . ': $attributes missing required \'name\''));
-		
-		// Check for required 'options' for ARGH_TYPE_COMMANDs
-		if( (Parameter::ARGH_TYPE_COMMAND==$type) && ( (empty($options)) || (!is_array($options)) || (count($options)<1)  ) )
-		{
-			throw(new ArghException(__METHOD__ . ': Command parameter \'' . $name . '\' missing required \'options.\''));
-		}
-		
-		// Return a new Parameter instance
-		return new self($name, $flag, $type, $required, $default, $text, $options);
-
+		// Construct a new Parameter instance
+		// Late static binding results in new instance of (calling) subclass
+		//? TODO: What if this is called on abstract Parameter
+		return new static($name, $flag, $required, $default, $description, $options);
 	}
 	
 	//
 	// PUBLIC METHODS
 	//
 	
-	public function __construct(string $name, string $flag, int $type=self::ARGH_TYPE_BOOLEAN, bool $required=FALSE, $default=null, string $text='', array $options=null)
-	{	
-
-		// Check for valid $type
-		$valid = array(self::ARGH_TYPE_BOOLEAN, self::ARGH_TYPE_INT, self::ARGH_TYPE_STRING, self::ARGH_TYPE_LIST, self::ARGH_TYPE_COMMAND, self::ARGH_TYPE_VARIABLE);
-		
-		if( !in_array($type, $valid) )
+	public function __construct(string $name, string $flag=null, bool $required=FALSE, $default=null, string $description=null, array $options=array())
+	{
+		// Required a non-empty 'name'
+		if(empty($name))
 		{
-			throw new ArghException('Parameter \'' . $name . '\' has an invalid type');
-		}
-		
-		// Check ARGH_TYPE_COMMAND for required options
-		if(self::ARGH_TYPE_COMMAND == $type)
-		{
-			if( count($options) == 0 )
-			{
-				throw new ArghException(__METHOD__ . ': Command parameter missing required: \'options\'');
-			}
-		}
-		
-		// Check for optional $required
-		if( !empty($required) )
-		{
-			// Assign literal TRUE
-			$required = TRUE;
-		}
-		
-		// Check default value for booleans
-		if(self::ARGH_TYPE_BOOLEAN == $type)
-		{
-			// Interpret any non-empty value as TRUE
-			if( !empty($default) )
-			{
-				// Assign literal TRUE for boolean defaults
-				$default = TRUE;
-			}	
-			else
-			{
-				$default = FALSE;
-			}
+			throw(new ArghException('Parameter must have a name'));
 		}
 		
 		// Set properties on this object
 		$this->name = $name;
 		$this->flag = $flag;
-		$this->type = $type;
 		$this->required = $required;
 		$this->default = $default;
-		$this->text = $text;
+		$this->description = $description;
 		$this->options = $options;
+		
+		// New Parameters ALWAYS have null value
 		$this->value = null;
 	}
 	
@@ -145,21 +119,17 @@ class Parameter
 	// GETTERS
 	//
 	
-	public function name(): string { return $this->name; }
+	public function getName(): string { return $this->name; }
 	
-	public function flag() { return $this->flag; }
+	public function getFlag() { return $this->flag; }
 	
-	public function type(): int { return $this->type; }
+	public function isRequired(): bool { return $this->required; }
 	
-	public function required(): bool { return $this->required; }
+	public function getDefault() { return $this->default; }
 	
-	public function default() { return $this->default; }
+	public function getDescription() { return $this->description; }
 	
-	public function text() { return $this->text; }
-	
-	public function	options(): array { return $this->options; }
-	
-	public function value() { return $this->value; }
+	public function	getOptions(): array { return $this->options; }
 	
 	public function hasOptions(): bool
 	{
@@ -175,16 +145,9 @@ class Parameter
 	
 	public function isOption($value): bool
 	{
-		if($this->hasOptions())
+		if( in_array($value, $this->options) )
 		{
-			if( in_array($value, $this->options) )
-			{
-				return TRUE;
-			}
-			else
-			{
-				return FALSE;
-			}
+			return TRUE;
 		}
 		else
 		{
@@ -192,85 +155,17 @@ class Parameter
 		}
 	}
 	
-	public function setValue($value): void
+	public function getValue()
 	{
-		switch($this->type)
-		{
-			case ARGH_TYPE_BOOLEAN:
-			
-				if(!is_bool($value))
-				{
-					// Convert value to boolean
-					$value = boolval($value);
-				}
-				
-				break;
-			
-			case ARGH_TYPE_INT:
-			
-				if(!is_int($value))
-				{
-					if(is_numeric($value))
-					{
-						// Convert value to int
-						$value = intval($value);
-					}
-					else
-					{
-						throw(new ArghException(__CLASS__ . ': Parameter \'' . $this->name . '\' expects int value, \'' . gettype($value) . '\' given.'));
-					}
-				}
-				
-				break;
-			
-			case ARGH_TYPE_STRING:
-			
-				if(!is_string($value))
-				{
-					// Convert value to string
-					$value = strval($value);
-				}
-				
-				break;
-			
-			case ARGH_TYPE_LIST:
-			
-				if(!is_array($value))
-				{
-					// Force $value into an array
-					$value = array($value);
-				}
-				
-				break;
-			
-			case ARGH_TYPE_COMMAND:
-			
-				if(!is_string($value))
-				{
-					// Convert value to string
-					$value = strval($value);
-				}
-				
-				// Confirm valid option
-				if( !$this->isOption($value) )
-				{
-					throw(new ArghException(__CLASS__ . ': Invalid option for \'' . $this->name . '\'.'));
-				}
-				
-				break;
-			
-			case ARGH_TYPE_VARIABLE:
-			
-				// Can contain any type of parameter value
-				// including string or array
-
-				break;
-
-		} // END: switch($this->type)
-		
-		// Set this objects 'value' property
-		$this->value = $value;
-		
-	} // END: function setValue()
+		return $this->value;
+	}
+	
+	//
+	// ABSTRACT METHODS
+	//
+	
+	abstract public function getParameterType(): int;
+	
+	abstract public function setValue($value);
 	
 }

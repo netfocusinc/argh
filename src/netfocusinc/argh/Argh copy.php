@@ -24,7 +24,7 @@ define('ARGH_TYPE_VARIABLE', Parameter::ARGH_TYPE_VARIABLE, true);
 	*/
 class Argh
 {
-	
+		
 	//
 	// PRIVATE PROPERTIES
 	//
@@ -41,28 +41,51 @@ class Argh
 	//
 	// STATIC METHODS
 	//
-	
+
 	/**
+		* Factory construction of an Argh instance.
 		*
-		* @api
+		* Use this static factory function to create a new Argh instance
+		* given an $argv array and and array of $params
 		*
-		* @since 1.0.0
+		*	@api
+		* @since 1.0
+		*		 
+		* @param array $argv Array of cli arguments as registered by PHP CLI
+		* @param array $params Multidimensional array defining the attributes of Parameters
+		*		each element should contain a nested array with elements for a Parameters attributes
+		*		e.g. $params[ 0 => ['name'=>'debug', 'type'=>ARGH_TYPE_BOOLEAN, 'default'=>FALSE] ]
 		*
-		* @param array $argv
-		* @param array $parameters Array of Parameters
+		*
+		* @return Argh An instance of Argh
+		*
 		*/
-	public static function parseWithParameters(array $argv, array $parameters)
-	{
-		$argh = new Argh($parameters);
+	public static function parse(array $argv, array $params)
+	{	
+		// Create a new ParameterCollection instance
+		$parameters = new ParameterCollection();
 		
-		$argh->parse($argv);
+		// Add Parameters for each elements defined in $params array
+		foreach($params as $p)
+		{	
+			try
+			{
+				$parameters->addParameter(Parameter::createFromArray($p));
+			}
+			catch(Exception $e)
+			{
+				throw(new ArghException(__CLASS__ . ': ' . $e->getMessage()));
+			}
+		}
 		
-		return $argh;
+		return new Argh($argv, $parameters);
 	}
 	
 	//
 	// MAGIC METHODS
 	//
+	
+	//public void __set ( string $name , mixed $value )
 
 	/**
 		* Magic method providing access to parameter values via object properties syntax
@@ -90,26 +113,8 @@ class Argh
 		}
 	}
 	
-	/**
-		* 
-		*
-		*
-		*/
-	public function __isset (string $key): bool
-	{
-		if(isset($this->{$key}))
-		{
-			return TRUE;
-		}
-		else if( $this->parameters->exists($key) )
-		{
-			return TRUE;		
-		}		
-		else
-		{
-			return FALSE;
-		}
-	}
+	//public bool __isset ( string $name )
+	//public void __unset ( string $name )
 	
 	//
 	// PUBLIC METHODS
@@ -118,46 +123,64 @@ class Argh
 	/**
 		* Contructs an Argh instance
 		*
-		* @api
+		* Processes an $argv array against defined ParameterCollection
 		*
 		* @since 1.0
 		*		 
 		* @param array $argv Array of cli arguments as registered by PHP CLI
-		* @param array $parameters An array of Parameters to use for interpreting command line arguments
+		* @param ParameterCollection $parameters A collection of parameters used to interpret command line arguments
 		*
 		*/
-	public function __construct(array $parameters)
-	{
-		// Init Language
-		$this->language = Language::createWithRules();
-		
-		// Init ParameterCollection
-		$this->parameters = new ParameterCollection();
-		
-		// Add Parameters to the ParameterCollection
-		foreach($parameters as $p)
-		{
-			$this->parameters->addParameter($p);
-		}
-		
-	} // END: public function __construct()
-	
-	/**
-		*
-		*
-		*
-		*/
-	public function parse($argv)
+	public function __construct(array $argv, ParameterCollection $parameters)
 	{
 		// Set properties on this object
 		$this->argv = $argv;
+		$this->parameters = $parameters;
+		
+		//
+		// LANGUAGE (RULES)
+		//
+				
+		try
+		{
+			// Get a reference to the Language (singleton instance)
+			$this->language = Language::instance();
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+		
+		//
+		// AUTO ADD ARGH_TYPE_VARIABLE PARAMETER
+		//
+		
+		try
+		{			
+			// Create a new Parameter for ARGH_TYPE_VARIABLE
+			$this->parameters->addParameter(Parameter::createFromArray(
+					[
+						'name'			=>	Parameter::ARGH_NAME_VARIABLE,
+						'type'			=>	Parameter::ARGH_TYPE_VARIABLE
+					]
+				)
+			);
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+		
+		//
+		// PARSE PARAMETERS AND ARGUMENTS
+		//
 		
 		try
 		{
 			// Prepare $argv for parsing
 			$args = ArgvPreprocessor::process($this->argv);
 			
-			// Create an new ArgumentParser instance
+			// Create an new ArgumentCollection instance
 			$parser = new ArgumentParser($this->language, $this->parameters);
 			
 			// Parse $args into an array of Arguments
@@ -169,8 +192,9 @@ class Argh
 		catch(ArghException $e)
 		{
 			throw $e;
-		}
-	}
+		}	
+			
+	} // END: public function __construct(array $argv, ParameterCollection $parameters)
 
 	/**
 		* Access elements of the original $argv array
@@ -234,15 +258,15 @@ class Argh
 		}
 	
 		// Check if the Parameter has a value defined by an Argument
-		if( $this->parameters->get($key)->getValue() )
+		if( $this->parameters->get($key)->value() )
 		{
 			// Return the Parameters value
-			return $this->parameters->get($key)->getValue();
+			return $this->parameters->get($key)->value();
 		}
 		else
 		{
 			// Return the Parameters default value, if any
-			return $this->parameters->get($key)->getDefault();
+			return $this->parameters->get($key)->default();
 		}
 	}
 	
@@ -250,7 +274,7 @@ class Argh
 	{
 		if($this->parameters->hasVariable())
 		{	
-			return $this->parameters->get(Parameter::ARGH_NAME_VARIABLE)->getValue();
+			return $this->parameters->get(Parameter::ARGH_NAME_VARIABLE)->value();
 		}
 		
 		// No ARGH_TYPE_VARIABLE Parameters in ParameterCollection

@@ -10,6 +10,13 @@ require "vendor/autoload.php";
 
 use netfocusinc\argh\Argh;
 use netfocusinc\argh\ArghException;
+use netfocusinc\argh\ParameterBoolean;
+use netfocusinc\argh\ParameterCommand;
+use netfocusinc\argh\ParameterInteger;
+use netfocusinc\argh\ParameterList;
+use netfocusinc\argh\ParameterString;
+use netfocusinc\argh\ParameterVariable;
+
 
 /*
 // Init memory
@@ -22,50 +29,60 @@ echo "---------------------\n\n";
 
 try
 {
-	$argh = Argh::parse($argv, [
+	$argh = new Argh(
 		[
-			'name'			=>			'debug',
-			'flag'			=>			'd',
-			'type'			=>			ARGH_TYPE_BOOLEAN,
-			'required'	=>			FALSE,
-			'default'		=>			FALSE,
-			'text'			=>			'Enables debug mode.'
-		],
-		[
-			'name'			=>			'cmd',
-			'flag'			=>			'x',
-			'type'			=>			ARGH_TYPE_COMMAND,
-			'required'	=>			FALSE,
-			'default'		=>			null,
-			'text'			=>			'A command to run.',
-			'options'		=>			array('help','joke')
-		],
-		[
-			'name'			=>			'file',
-			'flag'			=>			'f',
-			'type'			=>			ARGH_TYPE_STRING,
-			'required'	=>			TRUE,
-			'default'		=>			'sample.out',
-			'text'			=>			'File to use (just an example).'
-		],
-		[
-			'name'			=>			'colors',
-			'flag'			=>			'c',
-			'type'			=>			ARGH_TYPE_LIST,
-			'required'	=>			FALSE,
-			'default'		=>			null,
-			'text'			=>			'List of colors, for fun.'
-		],
-		[
-			'name'			=>			'verbose',
-			'flag'			=>			'v',
-			'type'			=>			ARGH_TYPE_INT,
-			'required'	=>			FALSE,
-			'default'		=>			0,
-			'text'			=>			'Level of verbosity to output.',
-			'options'		=>			array(0, 1, 2, 3)
+			ParameterBoolean::createWithAttributes(
+				[
+					'name'				=>	'debug',
+					'flag'				=>	'd',
+					'required'		=>	FALSE,
+					'default'			=>	FALSE,
+					'description'	=>	'Enables debug mode.'					
+				]
+			),
+			ParameterCommand::createWithAttributes(
+				[
+					'name'				=>	'cmd',
+					'flag'				=>	'x',
+					'required'		=>	FALSE,
+					'default'			=>	null,
+					'description'	=>	'A command to run.',
+					'options'			=>	array('help','joke')				
+				]
+			),
+			ParameterString::createWithAttributes(
+				[
+					'name'				=>	'file',
+					'flag'				=>	'f',
+					'required'		=>	TRUE,
+					'default'			=>	'sample.out',
+					'description'	=>	'File to use (just an example).'				
+				]
+			),
+			ParameterList::createWithAttributes(
+				[
+					'name'				=>	'colors',
+					'flag'				=>	'c',
+					'required'		=>	FALSE,
+					'default'			=>	null,
+					'description'	=>	'List of colors, for fun.'			
+				]
+			),
+			ParameterInteger::createWithAttributes(
+				[
+					'name'				=>	'verbose',
+					'flag'				=>	'v',
+					'type'				=>	ARGH_TYPE_INT,
+					'required'		=>	FALSE,
+					'default'			=>	0,
+					'description'	=>	'Level of verbosity to output.',
+					'options'			=>	array(0, 1, 2, 3)			
+				]
+			)			
 		]
-	]);
+	);
+	
+	$argh->parse($argv);
 	
 	echo "\n\n";
 	
@@ -94,18 +111,18 @@ try
 		// Show values for each parameter (exclude variables)
 		foreach($argh->parameters()->all() as $p)
 		{
-			if(ARGH_TYPE_VARIABLE != $p->type())
+			if(ARGH_TYPE_VARIABLE != $p->getParameterType())
 			{
-				echo '$argh->' . $p->name() . ' = ';
+				echo '$argh->' . $p->getName() . ' = ';
 				
-				if( !is_array($argh->get($p->name())) )
+				if( !is_array($argh->get($p->getName())) )
 				{
-					echo $argh->get($p->name()) . "\n";
+					echo $argh->get($p->getName()) . "\n";
 				}
 				else
 				{
 					echo '[ ';
-					foreach($argh->get($p->name()) as $e)
+					foreach($argh->get($p->getName()) as $e)
 					{
 						echo $e . ' ';
 					}

@@ -53,7 +53,7 @@ class ParameterCollection
 	{
 		foreach($this->parameters as $p)
 		{
-			if( Parameter::ARGH_TYPE_COMMAND == $p->type() )
+			if( Parameter::ARGH_TYPE_COMMAND == $p->getParameterType() )
 			{
 				return true;
 			}
@@ -65,7 +65,7 @@ class ParameterCollection
 	{
 		foreach($this->parameters as $p)
 		{
-			if( Parameter::ARGH_TYPE_VARIABLE == $p->type() )
+			if( Parameter::ARGH_TYPE_VARIABLE == $p->getParameterType() )
 			{
 				return true;
 			}
@@ -93,7 +93,7 @@ class ParameterCollection
 		
 		foreach($this->parameters as $p)
 		{
-			if( Parameter::ARGH_TYPE_COMMAND == $p->type() )
+			if( Parameter::ARGH_TYPE_COMMAND == $p->getParameterType() )
 			{
 				$commands[] = $p;
 			}
@@ -104,16 +104,16 @@ class ParameterCollection
 
 	public function addParameter(Parameter $param)
 	{
-		if( !$this->exists($param->name()) )
+		if( !$this->exists($param->getName()) )
 		{
 			// Add $param to $parameters array
 			$this->parameters[] = $param;
 			
 			// Map the new parameter's 'name' to its corresponding index in the $parameters array
-			$this->map[$param->name()] = count($this->parameters)-1;
+			$this->map[$param->getName()] = count($this->parameters)-1;
 			
 			// Map the new parameter's 'flag' to its corresponding index in the $parameters array
-			if(!empty($param->flag())) $this->map[$param->flag()] = count($this->parameters)-1;
+			if(!empty($param->getFlag())) $this->map[$param->getFlag()] = count($this->parameters)-1;
 		}
 		else
 		{
@@ -133,14 +133,14 @@ class ParameterCollection
 				// 1. Do NOT allow value to be redefined
 				// 2. For ARGH_TYPE_VARIABLE, append values to any already existing
 				
-				if( Parameter::ARGH_TYPE_VARIABLE == $this->parameters[$this->map[$a->key()]]->type() )
+				if( Parameter::ARGH_TYPE_VARIABLE == $this->parameters[$this->map[$a->key()]]->getParameterType() )
 				{
 					//
 					// For ARGH_TYPE_VARIABLE, append values to any already existing
 					// Note: Argument value will always be an array
 					
 					// Get existing 'value' array from ARGH_TYPE_VARIABLE Parameter
-					$value = $this->parameters[$this->map[$a->key()]]->value();
+					$value = $this->parameters[$this->map[$a->key()]]->getValue();
 					
 					if($value === null)
 					{
@@ -156,7 +156,7 @@ class ParameterCollection
 					// Update the Parameter's value in the collection
 					$this->parameters[$this->map[$a->key()]]->setValue($value);
 				}
-				else if( null !== $this->parameters[$this->map[$a->key()]]->value() )
+				else if( null !== $this->parameters[$this->map[$a->key()]]->getValue() )
 				{
 					//
 					// Do NOT allow a Parameter's value to be redefined
