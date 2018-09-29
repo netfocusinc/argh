@@ -279,7 +279,7 @@ class Argh
 		// Show Commands
 		foreach($this->parameters->all() as $p)
 		{
-			if($p->type() == ARGH_TYPE_COMMAND)
+			if($p->getParameterType() == ARGH_TYPE_COMMAND)
 			{
 				$buff .= 'COMMANDS:' . "\n";
 				
@@ -297,7 +297,7 @@ class Argh
 		$buff .= 'OPTIONS:' . "\n";
 		foreach($this->parameters->all() as $p)
 		{
-			if( ($p->type() != ARGH_TYPE_COMMAND) && ($p->type() != ARGH_TYPE_VARIABLE) )
+			if( ($p->getParameterType() != ARGH_TYPE_COMMAND) && ($p->getParameterType() != ARGH_TYPE_VARIABLE) )
 			{
 				$buff .= '-' . $p->flag() . "\t" . $p->name() . "\t" . $p->text();
 				

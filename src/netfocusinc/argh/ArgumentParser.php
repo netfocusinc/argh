@@ -150,56 +150,7 @@ class ArgumentParser
 						
 	 					if( count($yield) > 0 )
 	 					{
-		 					/*
-	 						// Add the new Argument(s) (from array) to Arguments
-	 						foreach($yield as $a)
-	 						{
-			 					try
-			 					{
-				 					//! TODO: Move argument validation to a new class (? ParameterValidator)
-				 					// and perform either (1) during argument merger with parameter, or (2) after argument merger is complete
-				 					
-				 					// Validate arguments before adding to the ArgumentCollection
-				 					// Invalid arguments will cause an ArghException
-				 					
-				 					//! TODO: Only send the Parameter corresponding to this Argument
-			 						//ArgumentValidator::validate($a, $this->parameterCollection);
-			 						
-			 						// Merge ARGH_TYPE_VARIABLE Argument values
-			 						// e.g. their should only ever be one single ARGH_NAME_VARIABLE Argument
-			 						// multiple values for this Argument should be saved in an array
-			 						
-			 						
-				 					//
-				 					//! TODO: ParameterCollection->mergeArguments() will handle this
-				 					// or, pass responsibility to Parameter->mergeArgument()
-				 					//
-			 						if( (Parameter::ARGH_TYPE_VARIABLE == $a->type()) && ($argumentCollection->exists(Parameter::ARGH_NAME_VARIABLE)) )
-			 						{
-				 						// Retrieve existing ARGH_NAME_VARIABLE Argument
-				 						$variableArgument = $argumentCollection->get(Parameter::ARGH_NAME_VARIABLE);
-				 						
-				 						// Retrieve existing Argument value (array)
-				 						$variableArgumentValue = $variableArgument->value();
-				 						
-				 						// Append new elements to existing array
-				 						array_push($variableArgumentValue, $a->value());
-				 						
-				 						// Update the Arguments value
-				 						$variableArgument->value($variableArgumentValue);
-				 					}
-			 						else
-			 						{
-			 							$argumentCollection->addArgument($a);
-			 						}
-			 						
-			 					}
-			 					catch(ArghException $e)
-			 					{
-				 					throw $e;
-				 				}
-		 					} // END: foreach($argument as &$a)
-		 					*/
+		 					//? TODO: Validate Arguments before adding them to the Arguments array?
 		 					
 		 					// Add the new Arguments yielded from this Rule
 		 					foreach($yield as $y) $arguments[] = $y;
