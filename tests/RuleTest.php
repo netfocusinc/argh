@@ -2,10 +2,10 @@
 
 use PHPUnit\Framework\TestCase;
 
-use NetFocus\Argh\Argh;
-use NetFocus\Argh\ArghException;
-use NetFocus\Argh\Parameter;
-use NetFocus\Argh\Rule;
+use netfocusinc\argh\Argh;
+use netfocusinc\argh\ArghException;
+use netfocusinc\argh\Parameter;
+use netfocusinc\argh\Rule;
 
 class RuleTest extends TestCase
 {
@@ -62,7 +62,7 @@ class RuleTest extends TestCase
 				[Rule::ARGH_SEMANTICS_FLAG, Rule::ARGH_SEMANTICS_VALUE]
       ],
       
-       [
+      [
       	'Double Hyphenated Name with Value',
 				'--foo=bar', 
 				'/^\-\-(' . Rule::ARGH_SYNTAX_NAME . ')=(' . Rule::ARGH_SYNTAX_VALUE . ')$/i',
@@ -78,6 +78,27 @@ class RuleTest extends TestCase
      
     ];
   }
+  
+  /**
+	  * @dataProvider ruleAttributeProvider
+	  */
+  public function testCreateWithAttributes($name, $example, $syntax, $semantics): void
+  {
+	  
+		$rule = Rule::createWithAttributes(
+			[
+				"name"=>$name,
+				"example"=>$example,
+				"syntax"=>$syntax,
+				"semantics"=>$semantics
+			]
+		);
+    
+    $this->assertSame($name, $rule->name());
+    $this->assertSame($example, $rule->example());
+    $this->assertSame($syntax, $rule->syntax());
+    $this->assertSame($semantics, $rule->semantics());
+	}
   
   /**
 	  * @dataProvider ruleAttributeProvider

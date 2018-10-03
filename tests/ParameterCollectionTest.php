@@ -2,10 +2,13 @@
 
 use PHPUnit\Framework\TestCase;
 
-use NetFocus\Argh\Argh;
-use NetFocus\Argh\ArghException;
-use NetFocus\Argh\Parameter;
-use NetFocus\Argh\ParameterCollection;
+use netfocusinc\argh\Argh;
+use netfocusinc\argh\ArghException;
+use netfocusinc\argh\ParameterBoolean;
+use netfocusinc\argh\ParameterCommand;
+use netfocusinc\argh\ParameterString;
+use netfocusinc\argh\ParameterVariable;
+use netfocusinc\argh\ParameterCollection;
 
 class ParameterCollectionTest extends TestCase
 {
@@ -15,11 +18,6 @@ class ParameterCollectionTest extends TestCase
 	//
 	// LIFE CYCLE
 	//
-	
-	public static function setUpBeforeClass()
-	{
-		//fwrite(STDOUT, __METHOD__ . "\n");
-	}
 
   protected function setUp()
   {	
@@ -27,40 +25,16 @@ class ParameterCollectionTest extends TestCase
 
   }
   
-  protected function assertPreConditions()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-  
-  protected function tearDown()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-
-  public static function tearDownAfterClass()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-
-	/*
-  protected function onNotSuccessfulTest(Exception $e)
-  {
-    fwrite(STDOUT, __METHOD__ . "\n");
-    throw $e;
-  }
-  */
-  
   //
   // TEST CASES
   //
   
   public function testExists(): void
   {
-	  $this->collection->addParameter(Parameter::createFromArray(
+	  $this->collection->addParameter(ParameterBoolean::createWithAttributes(
 	  	[
 				'name'			=>			'debug',
 				'flag'			=>			'd',
-				'type'			=>			Parameter::ARGH_TYPE_BOOLEAN,
 				'required'	=>			FALSE,
 				'default'		=>			FALSE,
 				'text'			=>			'Enables debug mode.'
@@ -76,11 +50,10 @@ class ParameterCollectionTest extends TestCase
   { 
 	  $this->assertFalse($this->collection->hasCommand());
 	  
-	  $this->collection->addParameter(Parameter::createFromArray(
+	  $this->collection->addParameter(ParameterCommand::createWithAttributes(
 	  	[
 				'name'			=>			'cmd',
 				'flag'			=>			'x',
-				'type'			=>			Parameter::ARGH_TYPE_COMMAND,
 				'required'	=>			FALSE,
 				'default'		=>			null,
 				'text'			=>			'A command to run.',
@@ -95,15 +68,13 @@ class ParameterCollectionTest extends TestCase
   { 
 	  $this->assertFalse($this->collection->hasVariable());
 	  
-	  $this->collection->addParameter(Parameter::createFromArray(
+	  $this->collection->addParameter(ParameterVariable::createWithAttributes(
 	  	[
 				'name'			=>			'variable',
 				'flag'			=>			'x',
-				'type'			=>			Parameter::ARGH_TYPE_VARIABLE,
 				'required'	=>			FALSE,
 				'default'		=>			0,
-				'text'			=>			'For Testing Purposes',
-				'options'		=>			null
+				'text'			=>			'For Testing Purposes'
 			]
 		));
 	  
@@ -120,18 +91,19 @@ class ParameterCollectionTest extends TestCase
 	public function testGet(): void
 	{
 
-	  $this->collection->addParameter(Parameter::createFromArray(
+	  $this->collection->addParameter(ParameterString::createWithAttributes(
 	  	[
 				'name'			=>			'file',
 				'flag'			=>			'f',
-				'type'			=>			Parameter::ARGH_TYPE_STRING,
 				'required'	=>			TRUE,
 				'default'		=>			'sample.out',
 				'text'			=>			'File to use (just an example).'
 			]
 		));
 		
-		$this->assertInstanceOf(Parameter::class, $this->collection->get('f'));
+		$this->assertInstanceOf(ParameterString::class, $this->collection->get('f'));
+		
+		$this->assertInstanceOf(ParameterString::class, $this->collection->get('file'));
 		
 	}
 	
@@ -141,11 +113,10 @@ class ParameterCollectionTest extends TestCase
 		
 		$this->assertSame(0, count($this->collection->getCommands()));
 		
-	  $this->collection->addParameter(Parameter::createFromArray(
+	  $this->collection->addParameter(ParameterCommand::createWithAttributes(
 	  	[
 				'name'			=>			'cmd',
 				'flag'			=>			'x',
-				'type'			=>			Parameter::ARGH_TYPE_COMMAND,
 				'required'	=>			FALSE,
 				'default'		=>			null,
 				'text'			=>			'A command to run.',
@@ -154,6 +125,8 @@ class ParameterCollectionTest extends TestCase
 		));
 	  
 	  $this->assertSame(1, count($this->collection->getCommands()));
+	  
+	  $this->assertInstanceOf(ParameterCommand::class, $this->collection->get('cmd'));
 		
 	}
 

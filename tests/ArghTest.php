@@ -2,66 +2,216 @@
 
 use PHPUnit\Framework\TestCase;
 
-use NetFocus\Argh\Argh;
-use NetFocus\Argh\ArghException;
-use NetFocus\Argh\ArgvPreprocessor;
+use netfocusinc\argh\Argh;
+use netfocusinc\argh\ArghException;
+use netfocusinc\argh\ArgvPreprocessor;
+use netfocusinc\argh\ParameterBoolean;
+use netfocusinc\argh\ParameterString;
 
 class ArghTest extends TestCase
 {
-		
-	//
-	// LIFE CYCLE
-	//
 	
-	public static function setUpBeforeClass()
-	{
-		//fwrite(STDOUT, __METHOD__ . "\n");
-	}
-
-  protected function setUp()
-  {	
-  }
-  
-  protected function assertPreConditions()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-  
-  protected function tearDown()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-
-  public static function tearDownAfterClass()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-
-	/*
-  protected function onNotSuccessfulTest(Exception $e)
-  {
-    fwrite(STDOUT, __METHOD__ . "\n");
-    throw $e;
-  }
-  */
-  
   //
   // TEST CASES
   //
   
-	public function testParseException(): void
+	public function testParseWithParameters(): void
+	{		// Simulate $argv array
+		$argv = array('myscript.php', '--debug');
+		
+		// Create parameters array
+		$parameters = [
+			ParameterBoolean::createWithAttributes(
+				[
+					'name'	=>	'debug'
+				]
+			)
+		];		
+		
+		// Parse with Parameters
+		$argh = Argh::parseWithParameters( $argv, $parameters );
+		
+		$this->assertTrue($argh->get('debug'));
+		// Simulate $argv array
+		$argv = array('myscript.php', '--debug');
+		
+		// Create parameters array
+		$parameters = [
+			ParameterBoolean::createWithAttributes(
+				[
+					'name'	=>	'debug'
+				]
+			)
+		];		
+		
+		// Parse with Parameters
+		$argh = Argh::parseWithParameters( $argv, $parameters );
+		
+		$this->assertTrue($argh->get('debug'));
+	}
+	
+	public function testParseStringWithParameters(): void
 	{
+		// Simulate $argv array
+		$args = 'myscript.php --debug';
+		
+		// Create parameters array
+		$parameters = [
+			ParameterBoolean::createWithAttributes(
+				[
+					'name'	=>	'debug'
+				]
+			)
+		];		
+		
+		// Parse with Parameters
+		$argh = Argh::parseStringWithParameters( $args, $parameters );
+		
+		$this->assertTrue($argh->get('debug'));
+	}
+	
+	public function testMagicGet()
+	{
+		// Simulate $argv array
+		$args = 'myscript.php -m Hello';
+		
+		// Create parameters array
+		$parameters = [
+			ParameterString::createWithAttributes(
+				[
+					'name'	=>	'message',
+					'flag'	=>	'm'
+				]
+			)
+		];		
+		
+		// Parse with Parameters
+		$argh = Argh::parseStringWithParameters( $args, $parameters );
+		
+		$this->assertSame('Hello', $argh->message);
+		$this->assertSame('Hello', $argh->m);	
+	}
+	
+	public function testMagicIsSet()
+	{
+		// Simulate $argv array
+		$args = 'myscript.php -m Hello';
+		
+		// Create parameters array
+		$parameters = [
+			ParameterString::createWithAttributes(
+				[
+					'name'	=>	'message',
+					'flag'	=>	'm'
+				]
+			)
+		];		
+		
+		// Parse with Parameters
+		$argh = Argh::parseStringWithParameters( $args, $parameters );
+		
+		$this->assertTrue(isset($argh->message));
+		$this->assertFalse(isset($argh->nope));	
+	}
+	
+	public function testArgv()
+	{
+		// Simulate $argv array
+		$args = 'myscript.php --debug';
+		
+		// Create parameters array
+		$parameters = [
+			ParameterBoolean::createWithAttributes(
+				[
+					'name'	=>	'debug'
+				]
+			)
+		];		
+		
+		// Parse with Parameters
+		$argh = Argh::parseStringWithParameters( $args, $parameters );
+		
+		$this->assertSame('myscript.php', $argh->argv(0));
+		$this->assertSame('--debug', $argh->argv(1));
+		
+		$this->assertTrue( is_array($argh->argv()) );
+		
 		$this->expectException(ArghException::class);
 		
+		$argh->argv(9);
+				
+	}
+	
+	public function testGetUndefined()
+	{
+		// Simulate $argv array
+		$args = 'myscript.php -m Bar';
+		
+		// Create parameters array
 		$parameters = [
+			ParameterString::createWithAttributes(
+				[
+					'name'		=>	'message',
+					'flag'		=>	'm',
+					'default'	=>	'Foo'
+				]
+			)
+		];		
 		
-			[
-				'name'=>''
-			]
+		// Parse with Parameters
+		$argh = Argh::parseStringWithParameters( $args, $parameters );
 		
-		];
+		$this->expectException(ArghException::class);
 		
-		Argh::parse( array('my.php'), $parameters );
+		$argh->get('nope');
+	}
+	
+	public function testGetDefault()
+	{
+		// Simulate $argv array
+		$args = 'myscript.php';
+		
+		// Create parameters array
+		$parameters = [
+			ParameterString::createWithAttributes(
+				[
+					'name'		=>	'message',
+					'flag'		=>	'm',
+					'default'	=>	'Foo'
+				]
+			)
+		];		
+		
+		// Parse with Parameters
+		$argh = Argh::parseStringWithParameters( $args, $parameters );
+		
+		// Default Value
+		$this->assertSame('Foo', $argh->get('message'));
+		$this->assertSame('Foo', $argh->get('m'));
+	}
+	
+	public function testGet()
+	{
+		// Simulate $argv array
+		$args = 'myscript.php -m Bar';
+		
+		// Create parameters array
+		$parameters = [
+			ParameterString::createWithAttributes(
+				[
+					'name'		=>	'message',
+					'flag'		=>	'm',
+					'default'	=>	'Foo'
+				]
+			)
+		];		
+		
+		// Parse with Parameters
+		$argh = Argh::parseStringWithParameters( $args, $parameters );
+		
+		// Default Value
+		$this->assertSame('Bar', $argh->get('message'));
+		$this->assertSame('Bar', $argh->get('m'));
 	}
   
  

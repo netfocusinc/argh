@@ -2,49 +2,13 @@
 
 use PHPUnit\Framework\TestCase;
 
-use NetFocus\Argh\Argh;
-use NetFocus\Argh\ArghException;
-use NetFocus\Argh\Argument;
-use NetFocus\Argh\Parameter;
+use netfocusinc\argh\Argh;
+use netfocusinc\argh\ArghException;
+use netfocusinc\argh\Argument;
+use netfocusinc\argh\Parameter;
 
 class ArgumentTest extends TestCase
 {
-	
-	//
-	// LIFE CYCLE
-	//
-	
-	public static function setUpBeforeClass()
-	{
-		//fwrite(STDOUT, __METHOD__ . "\n");
-	}
-
-  protected function setUp()
-  {
-  }
-  
-  protected function assertPreConditions()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-  
-  protected function tearDown()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-
-  public static function tearDownAfterClass()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-
-	/*
-  protected function onNotSuccessfulTest(Exception $e)
-  {
-    fwrite(STDOUT, __METHOD__ . "\n");
-    throw $e;
-  }
-  */
   
   //
   // TEST CASES
@@ -55,10 +19,10 @@ class ArgumentTest extends TestCase
   {
     return [
 	    
-      ['foo', 'bar', Parameter::ARGH_TYPE_STRING],
-      ['dim', TRUE, Parameter::ARGH_TYPE_BOOLEAN],
-      ['yin', 17, Parameter::ARGH_TYPE_INT],
-      ['colors', array('red','blue','green'), Parameter::ARGH_TYPE_LIST]
+      ['foo', 'bar'],
+      ['dim', TRUE],
+      ['yin', 17],
+      ['colors', array('red','blue','green')]
       
     ];
   }
@@ -66,14 +30,13 @@ class ArgumentTest extends TestCase
   /**
 	  * @dataProvider argumentProvider
 	  */
-  public function testArguments($key, $value, $type): void
+  public function testArguments($key, $value): void
   {
 	  
-		$argument = new Argument($key, $value, $type);
+		$argument = new Argument($key, $value);
     
-    $this->assertSame($key, $argument->key());
-    $this->assertSame($value, $argument->value());
-    $this->assertSame($type, $argument->type());
+    $this->assertSame($key, $argument->getKey());
+    $this->assertSame($value, $argument->getValue());
 
 	}
 	
@@ -86,18 +49,18 @@ class ArgumentTest extends TestCase
 	
 	public function testIsArray(): void
 	{
-		$argument = new Argument('array', array('spaghetti','lasagne'), Parameter::ARGH_TYPE_LIST);
+		$argument = new Argument('array', array('spaghetti','lasagne'));
 		
 		$this->assertTrue($argument->isArray());
 	}
 	
 	public function testArray(): void
 	{
-		$argument = new Argument('array', array('spaghetti','tacos'), Parameter::ARGH_TYPE_LIST);
+		$argument = new Argument('array', array('spaghetti','tacos'));
 		
 		$this->assertTrue($argument->isArray());
-		$this->assertSame(2, count($argument->value()));
-		$this->assertSame('tacos', $argument->value()[1]);
+		$this->assertSame(2, count($argument->getValue()));
+		$this->assertSame('tacos', $argument->getValue()[1]);
 	}
 
 }

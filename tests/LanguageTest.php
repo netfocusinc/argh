@@ -2,75 +2,66 @@
 
 use PHPUnit\Framework\TestCase;
 
-use NetFocus\Argh\Argh;
-use NetFocus\Argh\ArghException;
-use NetFocus\Argh\Language;
-use NetFocus\Argh\Parameter;
-use NetFocus\Argh\Rule;
+use netfocusinc\argh\Argh;
+use netfocusinc\argh\ArghException;
+use netfocusinc\argh\Language;
+use netfocusinc\argh\Parameter;
+use netfocusinc\argh\Rule;
 
 class LanguageTest extends TestCase
 {
-	
-	//
-	// LIFE CYCLE
-	//
-	
-	public static function setUpBeforeClass()
-	{
-		//fwrite(STDOUT, __METHOD__ . "\n");
-	}
-
-  protected function setUp()
-  {
-  }
-  
-  protected function assertPreConditions()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-  
-  protected function tearDown()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-
-  public static function tearDownAfterClass()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-
-	/*
-  protected function onNotSuccessfulTest(Exception $e)
-  {
-    fwrite(STDOUT, __METHOD__ . "\n");
-    throw $e;
-  }
-  */
   
   //
   // TEST CASES
   //
-
-  public function testSingleton(): void
+  
+  public function testCreateWithRules()
   {
-	  $this->expectException(Error::class);
+	  $language = Language::createWithRules();
+	  
+	  $rules = $language->rules();
+	  
+	  $this->assertTrue(is_array($rules));
+	  
+	  $this->assertSame(13, count($rules));
+	  
+	  $this->assertInstanceOf(Rule::class, $rules[0]);
+	}
+	
+	public function testConstruction()
+	{
 		$language = new Language();
+		
+		$rules = $language->rules();
+		
+		$this->assertTrue(is_array($rules));
+		
+		$this->assertSame(0, count($rules));
 	}
 	
-	public function testSingletonInstance(): void
+	public function testAddRule()
 	{
-		$language = Language::instance();
+		$language = new Language();
 		
-		$this->assertInstanceOf(Language::class, $language);
-	}
-	
-	public function testRules()
-	{
-		$language = Language::instance();
+		$rules = $language->rules();
 		
-		$this->assertTrue(is_array($language->rules()));
-		$this->assertTrue(count($language->rules()) > 0);
-		$this->assertInstanceOf(Rule::class, $language->rules()[0]);
+		$this->assertTrue(is_array($rules));
+		
+		$this->assertSame(0, count($rules));
+		
+		$language->addRule(Rule::createWithAttributes(
+				[
+      		'name'			=>'Hyphenated Flag with Value',
+					'example' 	=> '-f value', 
+					'syntax'		=> '/^\-(' . Rule::ARGH_SYNTAX_FLAG . ')[\s]+(' . Rule::ARGH_SYNTAX_VALUE . ')$/i',
+					'semantics'	=>[Rule::ARGH_SEMANTICS_FLAG, Rule::ARGH_SEMANTICS_VALUE]
+				]
+			)
+     );
+     
+     $rules = $language->rules();
+     
+     $this->assertSame(1, count($rules));
 	}
 
 }

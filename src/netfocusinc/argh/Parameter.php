@@ -72,7 +72,7 @@ abstract class Parameter
 		// Init default attributes for a new Parameter
 		$name = null;
 		$flag = null;
-		$required = null;
+		$required = FALSE;
 		$default = null;
 		$description = null;
 		$options = array();
@@ -82,12 +82,14 @@ abstract class Parameter
 		if( array_key_exists('flag', $attributes) ) $flag = $attributes['flag'];
 		if( array_key_exists('required', $attributes) ) $required = $attributes['required'];
 		if( array_key_exists('default', $attributes) ) $default = $attributes['default'];
-		if( array_key_exists('description', $attributes) ) $text = $attributes['description'];
+		if( array_key_exists('description', $attributes) ) $description = $attributes['description'];
 		if( array_key_exists('options', $attributes) ) $options = $attributes['options'];
 		
 		// Construct a new Parameter instance
 		// Late static binding results in new instance of (calling) subclass
-		//? TODO: What if this is called on abstract Parameter
+		
+		//! TODO: What if this is called on abstract Parameter
+		
 		return new static($name, $flag, $required, $default, $description, $options);
 	}
 	

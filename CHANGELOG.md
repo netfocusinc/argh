@@ -7,17 +7,23 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New additions go here ...
+- Parameter subclasses: ParameterBoolean, ParameterCommand, ParameterInteger, ParameterList, ParameterString, ParameterVariable
 
 ### Changed
 - Parameters re-factored with subclasses for each Parameter type
 - Language is no longer Singleton, constructor is now public
+- Argument drops hybrid getter/setter for distinct getters and setters
+- Argument drops $type property
+- Updated and expanded PHPUnit tests
 - bin/argh.php updated to match new Argh interface
 
 ### Deprecated
 
 ### Removed
-- ArgumentParser
+- ArgumentValidator
+- tests/ArgumentCollectionTest (ArgumentCollection was previously removed)
+- Argh::command()
+- Argh::parameterString()
 
 ### Fixed
 ### Security
@@ -28,3 +34,14 @@ All notable changes to this project will be documented in this file.
 - Initial development release
 - Adopt Keep a Changelog standards [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Adpot Semantic Versioning [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+
+# End
+
+# Section Template
+## [x.y.x] - yyyy-mm-dd
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security

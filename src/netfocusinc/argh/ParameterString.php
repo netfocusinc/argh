@@ -45,7 +45,7 @@ class ParameterString extends Parameter
 		*/
 	public function setValue($value)
 	{		
-		if(is_array())
+		if(is_array($value))
 		{
 			throw(new ArghException('ParameterString values cannot be set to an array'));
 		}

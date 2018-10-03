@@ -96,8 +96,6 @@ try
 	}
 	else
 	{
-	
-		echo "Command: " . $argh->command() . "\n";
 		
 		echo "Parameters: \n" . $argh->parameters()->toString() . "\n";
 		

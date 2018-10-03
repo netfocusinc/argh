@@ -281,7 +281,7 @@ class ArgumentParser
 				
 					// Use this $token as the 'value' for all new Arguments created by this Rule
 					// Usually, this will only apply to a single Argument, unless this Rule contains ARGH_SEMANTICS_FLAGS
-					foreach($argument as &$a) $a->value($token);
+					foreach($argument as &$a) $a->setValue($token);
 					
 					break;
 					
@@ -300,7 +300,7 @@ class ArgumentParser
 					
 					// Use the $elements array as the 'value' for all new Argument created by this Rule
 					// Usually, this will only apply to a single Argument, unless this Rule contains ARGH_SEMANTICS_FLAGS
-					foreach($argument as &$a) $a->value($elements);
+					foreach($argument as &$a) $a->setValue($elements);
 				
 					break;
 					
@@ -338,7 +338,7 @@ class ArgumentParser
 				case ARGH_SEMANTICS_VARIABLE:
 					
 					// Create a new Argument to hold values
-					$argument[0] = new Argument(Parameter::ARGH_NAME_VARIABLE, array($token));
+					$argument[0] = new Argument(Parameter::ARGH_NAME_VARIABLE, $token);
 					
 					break;
 					

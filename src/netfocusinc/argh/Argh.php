@@ -60,6 +60,29 @@ class Argh
 		return $argh;
 	}
 	
+	/**
+		*
+		* @api
+		*
+		* @since 1.0.0
+		*
+		* @param string $args A string simulating command line entry
+		* @param array $parameters Array of Parameters
+		*/
+	public static function parseStringWithParameters(string $args, array $parameters)
+	{
+		// Force $args into an array
+		$argv = explode(' ', $args);
+		
+		// Create a new Argh instance
+		$argh = new Argh($parameters);
+		
+		// Parse
+		$argh->parse($argv);
+		
+		return $argh;
+	}
+	
 	//
 	// MAGIC METHODS
 	//
@@ -79,15 +102,8 @@ class Argh
 		*/	
 	public function __get(string $key)
 	{
-		if(isset($this->{$key}))
-		{
-			return $this->{$key};
-		}
-		else
-		{
-			// Get parameters from this instance
-			return $this->get($key);
-		}
+		// Get parameters from this instance
+		return $this->get($key);
 	}
 	
 	/**
@@ -95,16 +111,12 @@ class Argh
 		*
 		*
 		*/
-	public function __isset (string $key): bool
+	public function __isset(string $key): bool
 	{
-		if(isset($this->{$key}))
-		{
-			return TRUE;
-		}
-		else if( $this->parameters->exists($key) )
+		if( $this->parameters->exists($key) )
 		{
 			return TRUE;		
-		}		
+		}
 		else
 		{
 			return FALSE;
@@ -204,11 +216,6 @@ class Argh
 		}
 	}
 	
-	public function command()
-	{
-		return implode(' ', $this->argv);
-	}
-	
 	/**
 		* Retrieves the value of a defined Parameter.
 		*
@@ -234,6 +241,9 @@ class Argh
 		}
 	
 		// Check if the Parameter has a value defined by an Argument
+		
+		//! TODO: Replace with Parameter::getValueOrDefault()
+		
 		if( $this->parameters->get($key)->getValue() )
 		{
 			// Return the Parameters value
@@ -259,13 +269,6 @@ class Argh
 	
 	public function parameters() { return $this->parameters; }
 	
-	public function arguments() { return $this->arguments; }
-	
-	public function parametersString()
-	{
-		return print_r($this->parameters, TRUE);
-	}
-	
 	//! TODO: Accept a formatting string/array (e.g. ['-f', '--name', 'text'])
 	public function usageString()
 	{
@@ -285,7 +288,7 @@ class Argh
 				
 				if($p->hasOptions())
 				{
-					foreach($p->options() as $o)
+					foreach($p->getOptions() as $o)
 					{
 							$buff .= $o . "\n";
 					} // END: foreach($p->options() as $o)
@@ -299,12 +302,12 @@ class Argh
 		{
 			if( ($p->getParameterType() != ARGH_TYPE_COMMAND) && ($p->getParameterType() != ARGH_TYPE_VARIABLE) )
 			{
-				$buff .= '-' . $p->flag() . "\t" . $p->name() . "\t" . $p->text();
+				$buff .= '-' . $p->getFlag() . "\t" . $p->getName() . "\t" . $p->getDescription();
 				
 				if($p->hasOptions())
 				{ 
 					$buff .= "\t" . '[';
-					foreach($p->options() as $o)
+					foreach($p->getOptions() as $o)
 					{
 						$buff .= $o . ', ';
 					}

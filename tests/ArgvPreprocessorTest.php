@@ -2,9 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-use NetFocus\Argh\Argh;
-use NetFocus\Argh\ArghException;
-use NetFocus\Argh\ArgvPreprocessor;
+use netfocusinc\argh\Argh;
+use netfocusinc\argh\ArghException;
+use netfocusinc\argh\ArgvPreprocessor;
 
 class ArgvPreprocessorTest extends TestCase
 {

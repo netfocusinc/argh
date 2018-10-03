@@ -40,30 +40,22 @@ class Rule
 	// STATIC FUNCTIONS
 	//
 	
-	/*
-	public static function createFromArray(array $r): Rule
+	public static function createWithAttributes(array $attributes): Rule
 	{
-		try
-		{
-			// Defaults
-			$name = null;
-			$example = null;
-			$syntax = null;
-			$semantics = null;
-			
-			if( array_key_exists('name', $r) ) $name = $r['name'];
-			if( array_key_exists('example', $r) ) $example = $r['example'];
-			if( array_key_exists('syntax', $r) ) $syntax = $r['syntax'];
-			if( array_key_exists('semantics', $r) ) $semantics = $r['semantics'];
-			
-			return new self($name, $example, $syntax, $sematics);
-		}
-		catch(Exception $e)
-		{
-			throw($e);
-		}
+		// Defaults
+		$name = null;
+		$example = null;
+		$syntax = null;
+		$semantics = null;
+		
+		if( array_key_exists('name', $attributes) ) $name = $attributes['name'];
+		if( array_key_exists('example', $attributes) ) $example = $attributes['example'];
+		if( array_key_exists('syntax', $attributes) ) $syntax = $attributes['syntax'];
+		if( array_key_exists('semantics', $attributes) ) $semantics = $attributes['semantics'];
+		
+		return new self($name, $example, $syntax, $semantics);
+
 	}
-	*/
 	
 	public static function semanticsToString($semantics)
 	{

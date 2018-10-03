@@ -2,197 +2,71 @@
 
 use PHPUnit\Framework\TestCase;
 
-use NetFocus\Argh\Argh;
-use NetFocus\Argh\ArghException;
-use NetFocus\Argh\Parameter;
+use netfocusinc\argh\Argh;
+use netfocusinc\argh\ArghException;
+use netfocusinc\argh\Parameter;
+use netfocusinc\argh\ParameterString;
 
 class ParameterTest extends TestCase
-{
-	
-	//
-	// LIFE CYCLE
-	//
-	
-	public static function setUpBeforeClass()
-	{
-		//fwrite(STDOUT, __METHOD__ . "\n");
-	}
-
-  protected function setUp()
-  {
-  }
-  
-  protected function assertPreConditions()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-  
-  protected function tearDown()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-
-  public static function tearDownAfterClass()
-  {
-    //fwrite(STDOUT, __METHOD__ . "\n");
-  }
-
-	/*
-  protected function onNotSuccessfulTest(Exception $e)
-  {
-    fwrite(STDOUT, __METHOD__ . "\n");
-    throw $e;
-  }
-  */
-  
+{ 
   //
   // TEST CASES
   //
-
-  public function testCreateFromArrayTypeError(): void
-  {
-     $this->expectException(TypeError::class);
-      
-     $parameter = Parameter::createFromArray('string');
-  }
   
-  public function testCreateFromArrayMissingName(): void
-  {
-     $this->expectException(ArghException::class);
-      
-     $parameter = Parameter::createFromArray(
+  public function testCreateWithAttributes(): void
+  {      
+     $parameter = ParameterString::createWithAttributes(
      	[
-       	'name'=>null
+       	'name'				=>	'test',
+       	'flag'				=>	't',
+       	'required'		=>	FALSE,
+       	'default'			=>	FALSE,
+       	'description'	=>	'Test Description'
       ]
      );
-  }
-  
-  public function testCreateFromArrayInvalidType(): void
-  {
-     $this->expectException(ArghException::class);
-      
-     $parameter = Parameter::createFromArray(
-     	[
-       	'name'=>'notempty',
-       	'type'=>-1
-      ]
-     );
-  }
-  
-  public function testBooleanDefaultFalse(): void
-  {
-      
-     $parameter = Parameter::createFromArray(
-		 	[
-      	'name'		=>	'test',
-      	'type'		=>	Parameter::ARGH_TYPE_BOOLEAN			]
-     );
      
-     $this->assertFalse($parameter->default());
+     $this->assertInstanceOf(ParameterString::class, $parameter);
+     $this->assertInstanceOf(Parameter::class, $parameter);
+     $this->assertSame('test', $parameter->getName());
+     $this->assertSame('t', $parameter->getFlag());
+     $this->assertFalse($parameter->isRequired());
+     $this->assertFalse($parameter->getDefault());
+     $this->assertSame('Test Description', $parameter->getDescription());
+     $this->assertFalse($parameter->hasOptions());
      
   }
   
-  public function testBooleanDefaultTrue(): void
+  public function testCreateWithAttributesEmptyName()
   {
-      
-     $parameter = Parameter::createFromArray(
-		 	[
-      	'name'		=>	'test',
-      	'type'		=>	Parameter::ARGH_TYPE_BOOLEAN,
-				'default'	=>	'notempty'	
-			]
-     );
-     
-     $this->assertTrue($parameter->default());
-  }
-  
-	public function testCommandMissingOptions(): void
-	{
-		
-		$this->expectException(ArghException::class);
-		
-   $parameter = Parameter::createFromArray(
-	 	[
-    	'name'		=>	'test',
-    	'type'		=>	Parameter::ARGH_TYPE_COMMAND			]
-   );
-     		
+	  $this->expectException(ArghException::class);
+	  
+		$parameter = ParameterString::createWithAttributes(
+			[
+		 		'name'				=>	'',
+		 		'flag'				=>	't',
+		 		'required'		=>	FALSE,
+		 		'default'			=>	FALSE,
+		 		'description'	=>	'Test Description'
+		 	]
+		);	
+		  
 	}
-  
-	public function parameterAttributeProvider()
-  {
-    return [
-	    
-      'Outfile'  => [
-      	'outfile',
-      	'o',
-      	Parameter::ARGH_TYPE_STRING,
-      	FALSE,
-      	'/default/outfile.txt',
-      	'Path to a file where output will be written.'
-      ],
-      
-      'Verbose'  => [
-      	'verbose',
-      	'v',
-      	Parameter::ARGH_TYPE_BOOLEAN,
-      	FALSE,
-      	TRUE,
-      	'Include extra output.'
-      ],
-      
-      'Debug Mode'  => [
-      	'debug',
-      	'd',
-      	Parameter::ARGH_TYPE_BOOLEAN,
-      	FALSE,
-      	TRUE,
-      	'Run program in DEBUG mode.'
-      ],
-      
-      'Limit'  => [
-      	'limit',
-      	'm',
-      	Parameter::ARGH_TYPE_INT,
-      	TRUE,
-      	FALSE,
-      	'Maximum number of operations to complete.'
-      ]
-      
-    ];
-  }
-  
-  /**
-	  * @dataProvider parameterAttributeProvider
-	  */
-  public function testParameterAttributes($name, $flag, $type, $required, $default, $text): void
+	
+  public function testConstruction()
   {
 	  
-		$parameter = Parameter::createFromArray(
-			[
-				'name'			=>	$name,
-				'flag'			=>	$flag,
-				'type'			=>	$type,
-				'required'	=>	$required,
-				'default'		=>	$default,
-				'text'			=>	$text	
-			]
-    );
-    
-    $this->assertSame($name, $parameter->name());
-    $this->assertSame($flag, $parameter->flag());
-    $this->assertSame($required, $parameter->required());
-    $this->assertSame($default, $parameter->default());
-    $this->assertSame($text, $parameter->text());
-    	  
+		$parameter = new ParameterString('foo', 't', TRUE, 'bar', 'Foo Bar');
+		
+		$this->assertInstanceOf(ParameterString::class, $parameter);
+		
+		$this->assertInstanceOf(Parameter::class, $parameter);   
 	}
 	
 	public function testNoOptions(): void
 	{
-		$parameter = Parameter::createFromArray(
+		$parameter = ParameterString::createWithAttributes(
 			[
-				'name'			=>	'no-options',
-				'type'			=>	Parameter::ARGH_TYPE_STRING
+				'name'	=>	'no-options'
 			]
     );
     
@@ -201,10 +75,9 @@ class ParameterTest extends TestCase
 	
 	public function testHasOptions(): void
 	{
-		$parameter = Parameter::createFromArray(
+		$parameter = ParameterString::createWithAttributes(
 			[
 				'name'			=>	'has-options',
-				'type'			=>	Parameter::ARGH_TYPE_STRING,
 				'options'		=>	array('one', 'two', 'three')
 			]
     );
@@ -214,41 +87,19 @@ class ParameterTest extends TestCase
 	
 	public function testOptions(): void
 	{
-		$parameter = Parameter::createFromArray(
+		$parameter = ParameterString::createWithAttributes(
 			[
 				'name'			=>	'test-options',
-				'type'			=>	Parameter::ARGH_TYPE_STRING,
 				'options'		=>	array('one', 'two', 'three')
 			]
     );
     
-    $this->assertSame(3, count($parameter->options()));
-	}
-	
-	public function testIsOption(): void
-	{
-		$parameter = Parameter::createFromArray(
-			[
-				'name'			=>	'has-options',
-				'type'			=>	Parameter::ARGH_TYPE_STRING,
-				'options'		=>	array('one', 'two', 'three')
-			]
-    );
+    $this->assertSame(3, count($parameter->getOptions()));
     
     $this->assertTrue($parameter->isOption('two'));
-	}
-	
-	public function testIsNotOption(): void
-	{
-		$parameter = Parameter::createFromArray(
-			[
-				'name'			=>	'has-options',
-				'type'			=>	Parameter::ARGH_TYPE_STRING,
-				'options'		=>	array('one', 'two', 'three')
-			]
-    );
     
-    $this->assertFalse($parameter->isOption('four'));
+    $this->assertFalse($parameter->isOption('purple'));
+    
 	}
 
 }

@@ -24,24 +24,24 @@ class Argument
 	
 	// GETTERS/SETTERS
 	
-	public function key($key=null)
+	public function getKey()
 	{ 
-		if( $key !== null)
-		{
-			$this->key = $key;
-		}
-		
 		return $this->key;
 	}
 	
-	public function value($value=null)
-	{
-		if( $value !== null )
-		{
-			$this->value = $value;
-		}
-		
+	public function getValue()
+	{	
 		return $this->value;
+	}
+	
+	public function setKey(string $key)
+	{ 
+		$this->key = $key;
+	}
+	
+	public function setValue(string $value)
+	{
+		$this->value = $value;
 	}
 	
 	public function isArray()

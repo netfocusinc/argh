@@ -127,52 +127,34 @@ class ParameterCollection
 		foreach($arguments as $a)
 		{
 			// Check for a Parameter with this Arguments key
-			if( $this->exists($a->key()) )
-			{
-				//! TODO: Enforce limitations of Parameters
+			if( $this->exists($a->getKey()) )
+			{	
+				// Enforce limitations of Parameters
 				// 1. Do NOT allow value to be redefined
-				// 2. For ARGH_TYPE_VARIABLE, append values to any already existing
+				// 2. ARGH_TYPE_VARIABLE (ParameterVariable) can have values appended
 				
-				if( Parameter::ARGH_TYPE_VARIABLE == $this->parameters[$this->map[$a->key()]]->getParameterType() )
+				if( Parameter::ARGH_TYPE_VARIABLE == $this->parameters[$this->map[$a->getKey()]]->getParameterType() )
 				{
-					//
-					// For ARGH_TYPE_VARIABLE, append values to any already existing
-					// Note: Argument value will always be an array
-					
-					// Get existing 'value' array from ARGH_TYPE_VARIABLE Parameter
-					$value = $this->parameters[$this->map[$a->key()]]->getValue();
-					
-					if($value === null)
-					{
-						// No variables have been set yet
-						$value = $a->value();						
-					}
-					else if(is_array($value))
-					{
-						// Add new values to existint array
-						foreach($a->value() as $e) $value[] = $e;
-					}
-					
-					// Update the Parameter's value in the collection
-					$this->parameters[$this->map[$a->key()]]->setValue($value);
+					// Call ParameterVariables::addValue() method
+					$this->parameters[$this->map[$a->key()]]->addValue($a->getValue());
 				}
-				else if( null !== $this->parameters[$this->map[$a->key()]]->getValue() )
+				else if( null !== $this->parameters[$this->map[$a->getKey()]]->getValue() )
 				{
 					//
 					// Do NOT allow a Parameter's value to be redefined
 					//
 					
-					throw(new ArghException(__CLASS__ . ': Parameter \'' . $a->key() . '\' value cannot be redefined.'));
+					throw(new ArghException(__CLASS__ . ': Parameter \'' . $a->getKey() . '\' value cannot be redefined.'));
 				}
 				else
 				{
 					// Set Parameter value	
-					$this->parameters[$this->map[$a->key()]]->setValue($a->value());
+					$this->parameters[$this->map[$a->getKey()]]->setValue($a->getValue());
 				}
 			}
 			else
 			{
-				throw(new ArghException(__CLASS__ . ': Cannot merge Argument \'' . $a->key() . '\'. Parameter not defined.'));
+				throw(new ArghException(__CLASS__ . ': Cannot merge Argument \'' . $a->getKey() . '\'. Parameter not defined.'));
 			}
 			
 		} // END: foreach($arguments as $a)
