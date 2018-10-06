@@ -18,6 +18,7 @@ class Argument
 	
 	public function __construct($key=null, $value=null)
 	{
+		echo __CLASS__ . ': Constructing new Argument(' . $key . ', ' . $value . ')' . "\n";
 		$this->key = $key;
 		$this->value = $value;
 	}
@@ -39,7 +40,7 @@ class Argument
 		$this->key = $key;
 	}
 	
-	public function setValue(string $value)
+	public function setValue($value)
 	{
 		$this->value = $value;
 	}

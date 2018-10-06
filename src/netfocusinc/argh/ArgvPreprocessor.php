@@ -34,11 +34,6 @@ class ArgvPreprocessor
 		
 		$args = array_slice($argv, 1);
 		
-		// DEBUG
-		//echo "\n------- AFTER SLICING --------\n";
-		//print_r($args);
-		//echo "\n-------------------------------------\n\n";
-		
 		//
 		// Lists
 		//
@@ -172,9 +167,9 @@ class ArgvPreprocessor
 		} // END: for($i=0; $i<count($args); $i++)	
 		
 		// DEBUG
-		//echo "\n------- AFTER PRE PROCESSING --------\n";
-		//print_r($args);
-		//echo "\n-------------------------------------\n\n";
+		echo "\n------- AFTER PRE PROCESSING --------\n";
+		print_r($args);
+		echo "\n-------------------------------------\n\n";
 		
 		return $args;	
 	}

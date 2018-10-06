@@ -125,7 +125,7 @@ class ParameterCollection
 	{
 		
 		foreach($arguments as $a)
-		{
+		{	
 			// Check for a Parameter with this Arguments key
 			if( $this->exists($a->getKey()) )
 			{	
@@ -136,7 +136,7 @@ class ParameterCollection
 				if( Parameter::ARGH_TYPE_VARIABLE == $this->parameters[$this->map[$a->getKey()]]->getParameterType() )
 				{
 					// Call ParameterVariables::addValue() method
-					$this->parameters[$this->map[$a->key()]]->addValue($a->getValue());
+					$this->parameters[$this->map[$a->getKey()]]->addValue($a->getValue());
 				}
 				else if( null !== $this->parameters[$this->map[$a->getKey()]]->getValue() )
 				{

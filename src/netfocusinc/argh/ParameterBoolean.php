@@ -66,9 +66,8 @@ class ParameterBoolean extends Parameter
 		* @return int
 		*/
 	public function setValue($value)
-	{	
-		echo "DEBUG: ParameterBoolean::setValue(): \$value=$value\n";
-		
+	{
+				
 		if( null === $value )
 		{
 			// null (no value) considered TRUE (this is how flags work; e.g. the presence of a boolean flag -x without value means TRUE)

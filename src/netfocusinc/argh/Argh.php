@@ -152,6 +152,17 @@ class Argh
 			$this->parameters->addParameter($p);
 		}
 		
+		//! TODO: Replace this; Accept FLAGS argument to enable naked variables (Rule selection)
+		// ... ? require client to add 'variable' parameter
+		$this->parameters->addParameter(ParameterVariable::createWithAttributes(
+				[
+					'name'	=>	Parameter::ARGH_NAME_VARIABLE
+				]
+			)
+		);
+			
+		
+				
 	} // END: public function __construct()
 	
 	/**
@@ -165,12 +176,12 @@ class Argh
 		$this->argv = $argv;
 		
 		try
-		{
-			// Prepare $argv for parsing
-			$args = ArgvPreprocessor::process($this->argv);
-			
+		{	
 			// Create an new ArgumentParser instance
 			$parser = new ArgumentParser($this->language, $this->parameters);
+			
+			// Prepare $argv for parsing
+			$args = ArgvPreprocessor::process($this->argv);
 			
 			// Parse $args into an array of Arguments
 			$arguments = $parser->parse($args);

@@ -181,7 +181,7 @@ class ArgumentParser
 					if( count($argsL) == 0 )
 					{
 						// There was no match, and there are no arguments left to pop from $argsL
-						throw new ArghException(__METHOD__ . ': Syntax Error: ' . $arg);
+						throw new ArghException(__METHOD__ . ': Syntax Error: ' . $argsS);
 					}
 					
 				} // END: if( count($tokens) == 0 )
@@ -224,7 +224,7 @@ class ArgumentParser
 			$token = $tokens[$i];
 			$semantics = $rule->semantics()[$i-1];
 
-			//echo "DEBUG: token: $token (" . Rule::semanticsToString($semantics) . ")\n";
+			echo "DEBUG: token: $token (" . Rule::semanticsToString($semantics) . ")\n";
 
 			switch( $semantics )
 			{ 
@@ -234,6 +234,12 @@ class ArgumentParser
 					{	
 						// This Rule will create a single Argument
 						if(count($argument)==0) $argument[0] = new Argument($token);								
+					}
+					else
+					{
+						// This token does NOT match the flag of any defined parameter
+						// This Rule will NOT yield any arguments
+						break 2; // Break from this switch and for loop
 					}
 					
 					break;
@@ -246,8 +252,12 @@ class ArgumentParser
 					
 						if( $this->parameterCollection->exists( $token{$j} ) )
 						{
-							// Create new Argument for each flag
-							if( !array_key_exists($j, $argument) ) $argument[$j] = new Argument($token{$j});
+							// This Rule can only apply to ARGH_TYPE_BOOLEAN Parameters
+							if( ARGH_TYPE_BOOLEAN == $this->parameterCollection->get($token{$j})->getParameterType() )
+							{
+								// Create new Argument for each flag
+								if( !array_key_exists($j, $argument) ) $argument[$j] = new Argument($token{$j});
+							}
 						}
 						else
 						{
@@ -267,6 +277,12 @@ class ArgumentParser
 						// This Rule will create a single Argument
 						if(count($argument)==0) $argument[0] = new Argument($token); 								
 					}
+					else
+					{
+						// This token does NOT match the flag of any defined parameter
+						// This Rule will NOT yield any arguments
+						break 2; // Break from this switch and for loop
+					}
 			
 					break;			
 					
@@ -278,10 +294,7 @@ class ArgumentParser
 					if(count($argument)==0) $argument[0] = new Argument();
 					
 					// The new Argument's 'key' should be set by another token in this Rule
-				
-					// Use this $token as the 'value' for all new Arguments created by this Rule
-					// Usually, this will only apply to a single Argument, unless this Rule contains ARGH_SEMANTICS_FLAGS
-					foreach($argument as &$a) $a->setValue($token);
+					$argument[0]->setValue($token);
 					
 					break;
 					
@@ -348,6 +361,10 @@ class ArgumentParser
 			}
 			
 		} // END: for($j=1; $j<count($matches); $j++)
+		
+		
+		//echo 'Yielded Arguments:' . "\n";
+		//print_r($argument);
 		
 		// Return an array of Arguments yielded by this Rule
 		return $argument;

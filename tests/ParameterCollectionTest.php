@@ -13,7 +13,7 @@ use netfocusinc\argh\ParameterCollection;
 class ParameterCollectionTest extends TestCase
 {
 	
-	protected $collection;
+	protected $parameters;
 	
 	//
 	// LIFE CYCLE
@@ -21,7 +21,7 @@ class ParameterCollectionTest extends TestCase
 
   protected function setUp()
   {	
-	  $this->collection = new ParameterCollection();
+	  $this->parameters = new ParameterCollection();
 
   }
   
@@ -31,26 +31,26 @@ class ParameterCollectionTest extends TestCase
   
   public function testExists(): void
   {
-	  $this->collection->addParameter(ParameterBoolean::createWithAttributes(
+	  $this->parameters->addParameter(ParameterBoolean::createWithAttributes(
 	  	[
-				'name'			=>			'debug',
-				'flag'			=>			'd',
-				'required'	=>			FALSE,
-				'default'		=>			FALSE,
-				'text'			=>			'Enables debug mode.'
+				'name'				=>	'debug',
+				'flag'				=>	'd',
+				'required'		=>	FALSE,
+				'default'			=>	FALSE,
+				'description'	=>	'Enables debug mode.'
 			]
 		));
 	  
-	  $this->assertFalse($this->collection->exists('nope'));
+	  $this->assertFalse($this->parameters->exists('nope'));
 	  
-	  $this->assertTrue($this->collection->exists('debug'));
+	  $this->assertTrue($this->parameters->exists('debug'));
 	}
 	
   public function testHasCommand(): void
   { 
-	  $this->assertFalse($this->collection->hasCommand());
+	  $this->assertFalse($this->parameters->hasCommand());
 	  
-	  $this->collection->addParameter(ParameterCommand::createWithAttributes(
+	  $this->parameters->addParameter(ParameterCommand::createWithAttributes(
 	  	[
 				'name'			=>			'cmd',
 				'flag'			=>			'x',
@@ -61,14 +61,14 @@ class ParameterCollectionTest extends TestCase
 			]
 		));
 	  
-	  $this->assertTrue($this->collection->hasCommand());
+	  $this->assertTrue($this->parameters->hasCommand());
 	}
 	
   public function testHasVariable(): void
   { 
-	  $this->assertFalse($this->collection->hasVariable());
+	  $this->assertFalse($this->parameters->hasVariable());
 	  
-	  $this->collection->addParameter(ParameterVariable::createWithAttributes(
+	  $this->parameters->addParameter(ParameterVariable::createWithAttributes(
 	  	[
 				'name'			=>			'variable',
 				'flag'			=>			'x',
@@ -78,20 +78,20 @@ class ParameterCollectionTest extends TestCase
 			]
 		));
 	  
-	  $this->assertTrue($this->collection->hasVariable());
+	  $this->assertTrue($this->parameters->hasVariable());
 	}
 	
 	public function testGetUndefined(): void
 	{
 		$this->expectException(ArghException::class);
 		
-		$this->collection->get('nope');
+		$this->parameters->get('nope');
 	}
 	
 	public function testGet(): void
 	{
 
-	  $this->collection->addParameter(ParameterString::createWithAttributes(
+	  $this->parameters->addParameter(ParameterString::createWithAttributes(
 	  	[
 				'name'			=>			'file',
 				'flag'			=>			'f',
@@ -101,19 +101,19 @@ class ParameterCollectionTest extends TestCase
 			]
 		));
 		
-		$this->assertInstanceOf(ParameterString::class, $this->collection->get('f'));
+		$this->assertInstanceOf(ParameterString::class, $this->parameters->get('f'));
 		
-		$this->assertInstanceOf(ParameterString::class, $this->collection->get('file'));
+		$this->assertInstanceOf(ParameterString::class, $this->parameters->get('file'));
 		
 	}
 	
 	public function testGetCommands(): void
 	{
-		$this->assertTrue(is_array($this->collection->getCommands()));
+		$this->assertTrue(is_array($this->parameters->getCommands()));
 		
-		$this->assertSame(0, count($this->collection->getCommands()));
+		$this->assertSame(0, count($this->parameters->getCommands()));
 		
-	  $this->collection->addParameter(ParameterCommand::createWithAttributes(
+	  $this->parameters->addParameter(ParameterCommand::createWithAttributes(
 	  	[
 				'name'			=>			'cmd',
 				'flag'			=>			'x',
@@ -124,9 +124,9 @@ class ParameterCollectionTest extends TestCase
 			]
 		));
 	  
-	  $this->assertSame(1, count($this->collection->getCommands()));
+	  $this->assertSame(1, count($this->parameters->getCommands()));
 	  
-	  $this->assertInstanceOf(ParameterCommand::class, $this->collection->get('cmd'));
+	  $this->assertInstanceOf(ParameterCommand::class, $this->parameters->get('cmd'));
 		
 	}
 

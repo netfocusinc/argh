@@ -119,12 +119,16 @@ try
 				}
 				else
 				{
-					echo '[ ';
-					foreach($argh->get($p->getName()) as $e)
+					$buff = '[';
+					for($i=0; $i<count($argh->get($p->getName())); $i++)
 					{
-						echo $e . ' ';
+						$e = $argh->get($p->getName())[$i];
+						$buff .= $e . ', ';
 					}
-					echo ' ]';
+					$buff = substr($buff, 0, -2); // remove trailing ', '
+					$buff .= ']';
+					
+					echo $buff;
 					echo "\n";
 				}
 			} // END: if(ARGH_TYPE_VARIABLE != $p->type())

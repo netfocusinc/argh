@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 - The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
-- This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+- This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
@@ -32,8 +32,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Initial development release
-- Adopt Keep a Changelog standards [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
-- Adpot Semantic Versioning [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+- Adopt [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) standards
+- Adopt [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 # End
 

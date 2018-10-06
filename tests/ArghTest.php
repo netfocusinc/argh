@@ -132,6 +132,7 @@ class ArghTest extends TestCase
 		$argh = Argh::parseStringWithParameters( $args, $parameters );
 		
 		$this->assertSame('myscript.php', $argh->argv(0));
+		
 		$this->assertSame('--debug', $argh->argv(1));
 		
 		$this->assertTrue( is_array($argh->argv()) );
