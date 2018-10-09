@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 use netfocusinc\argh\Argh;
 use netfocusinc\argh\ArghException;
 use netfocusinc\argh\Parameter;
-use netfocusinc\argh\ParameterString;
+use netfocusinc\argh\StringParameter;
 
 class ParameterTest extends TestCase
 { 
@@ -15,7 +15,7 @@ class ParameterTest extends TestCase
   
   public function testCreateWithAttributes(): void
   {      
-     $parameter = ParameterString::createWithAttributes(
+     $parameter = StringParameter::createWithAttributes(
      	[
        	'name'				=>	'test',
        	'flag'				=>	't',
@@ -25,7 +25,7 @@ class ParameterTest extends TestCase
       ]
      );
      
-     $this->assertInstanceOf(ParameterString::class, $parameter);
+     $this->assertInstanceOf(StringParameter::class, $parameter);
      $this->assertInstanceOf(Parameter::class, $parameter);
      $this->assertSame('test', $parameter->getName());
      $this->assertSame('t', $parameter->getFlag());
@@ -40,7 +40,7 @@ class ParameterTest extends TestCase
   {
 	  $this->expectException(ArghException::class);
 	  
-		$parameter = ParameterString::createWithAttributes(
+		$parameter = StringParameter::createWithAttributes(
 			[
 		 		'name'				=>	'',
 		 		'flag'				=>	't',
@@ -55,16 +55,16 @@ class ParameterTest extends TestCase
   public function testConstruction()
   {
 	  
-		$parameter = new ParameterString('foo', 't', TRUE, 'bar', 'Foo Bar');
+		$parameter = new StringParameter('foo', 't', TRUE, 'bar', 'Foo Bar');
 		
-		$this->assertInstanceOf(ParameterString::class, $parameter);
+		$this->assertInstanceOf(StringParameter::class, $parameter);
 		
 		$this->assertInstanceOf(Parameter::class, $parameter);   
 	}
 	
 	public function testNoOptions(): void
 	{
-		$parameter = ParameterString::createWithAttributes(
+		$parameter = StringParameter::createWithAttributes(
 			[
 				'name'	=>	'no-options'
 			]
@@ -75,7 +75,7 @@ class ParameterTest extends TestCase
 	
 	public function testHasOptions(): void
 	{
-		$parameter = ParameterString::createWithAttributes(
+		$parameter = StringParameter::createWithAttributes(
 			[
 				'name'			=>	'has-options',
 				'options'		=>	array('one', 'two', 'three')
@@ -87,7 +87,7 @@ class ParameterTest extends TestCase
 	
 	public function testOptions(): void
 	{
-		$parameter = ParameterString::createWithAttributes(
+		$parameter = StringParameter::createWithAttributes(
 			[
 				'name'			=>	'test-options',
 				'options'		=>	array('one', 'two', 'three')

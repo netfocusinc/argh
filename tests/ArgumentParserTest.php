@@ -6,9 +6,9 @@ use netfocusinc\argh\Argh;
 use netfocusinc\argh\ArghException;
 use netfocusinc\argh\ArgvPreprocessor;
 use netfocusinc\argh\ArgumentParser;
-use netfocusinc\argh\ParameterBoolean;
+use netfocusinc\argh\BooleanParameter;
 use netfocusinc\argh\ParameterCollection;
-use netfocusinc\argh\ParameterString;
+use netfocusinc\argh\StringParameter;
 use netfocusinc\argh\Language;
 
 class ArgumentParserTest extends TestCase
@@ -28,7 +28,7 @@ class ArgumentParserTest extends TestCase
 	  
 	  $collection = new ParameterCollection();
 	  
-	  $collection->addParameter(ParameterBoolean::createWithAttributes(
+	  $collection->addParameter(BooleanParameter::createWithAttributes(
 	  	[
 				'name'			=>			'debug',
 				'flag'			=>			'd',

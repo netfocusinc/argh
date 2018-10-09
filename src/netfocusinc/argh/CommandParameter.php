@@ -9,7 +9,7 @@ use netfocusinc\argh\Parameter;
 	*
 	* @since 1.0.0
 	*/
-class ParameterCommand extends Parameter
+class CommandParameter extends Parameter
 {
 	
 	//
@@ -22,7 +22,7 @@ class ParameterCommand extends Parameter
 	//
 	
 	/**
-		* Construct a new ParameterCommand.
+		* Construct a new CommandParameter.
 		*
 		* Overrides Parameter constructor to enforce required 'options'
 		*
@@ -35,7 +35,7 @@ class ParameterCommand extends Parameter
 		// Required a non-empty 'options'
 		if( count($options) < 1 )
 		{
-			throw(new ArghException('ParameterCommand must have options'));
+			throw(new ArghException('CommandParameter must have options'));
 		}
 		
 		// Call Parameter (Parent) Constructor
@@ -64,7 +64,7 @@ class ParameterCommand extends Parameter
 	{		
 		if(is_array($value))
 		{
-			throw(new ArghException('ParameterCommand values cannot be set to an array'));
+			throw(new ArghException('CommandParameter values cannot be set to an array'));
 		}
 		
 		$this->value = strval($value);

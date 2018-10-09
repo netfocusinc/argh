@@ -11,7 +11,7 @@ use netfocusinc\argh\Parameter;
 	*
 	* @since 1.0.0
 	*/
-class ParameterInteger extends Parameter
+class IntegerParameter extends Parameter
 {
 	
 	//
@@ -47,7 +47,7 @@ class ParameterInteger extends Parameter
 	{		
 		if(!is_numeric($value))
 		{
-			throw(new ArghException('ParameterInteger values must be numeric'));
+			throw(new ArghException('IntegerParameter values must be numeric'));
 		}
 		
 		$this->value = intval($value);

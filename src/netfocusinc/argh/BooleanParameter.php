@@ -9,7 +9,7 @@ use netfocusinc\argh\Parameter;
 	*
 	* @since 1.0.0
 	*/
-class ParameterBoolean extends Parameter
+class BooleanParameter extends Parameter
 {
 	
 	//

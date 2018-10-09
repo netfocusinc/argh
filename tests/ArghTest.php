@@ -5,8 +5,8 @@ use PHPUnit\Framework\TestCase;
 use netfocusinc\argh\Argh;
 use netfocusinc\argh\ArghException;
 use netfocusinc\argh\ArgvPreprocessor;
-use netfocusinc\argh\ParameterBoolean;
-use netfocusinc\argh\ParameterString;
+use netfocusinc\argh\BooleanParameter;
+use netfocusinc\argh\StringParameter;
 
 class ArghTest extends TestCase
 {
@@ -21,7 +21,7 @@ class ArghTest extends TestCase
 		
 		// Create parameters array
 		$parameters = [
-			ParameterBoolean::createWithAttributes(
+			BooleanParameter::createWithAttributes(
 				[
 					'name'	=>	'debug'
 				]
@@ -37,7 +37,7 @@ class ArghTest extends TestCase
 		
 		// Create parameters array
 		$parameters = [
-			ParameterBoolean::createWithAttributes(
+			BooleanParameter::createWithAttributes(
 				[
 					'name'	=>	'debug'
 				]
@@ -57,7 +57,7 @@ class ArghTest extends TestCase
 		
 		// Create parameters array
 		$parameters = [
-			ParameterBoolean::createWithAttributes(
+			BooleanParameter::createWithAttributes(
 				[
 					'name'	=>	'debug'
 				]
@@ -77,7 +77,7 @@ class ArghTest extends TestCase
 		
 		// Create parameters array
 		$parameters = [
-			ParameterString::createWithAttributes(
+			StringParameter::createWithAttributes(
 				[
 					'name'	=>	'message',
 					'flag'	=>	'm'
@@ -99,7 +99,7 @@ class ArghTest extends TestCase
 		
 		// Create parameters array
 		$parameters = [
-			ParameterString::createWithAttributes(
+			StringParameter::createWithAttributes(
 				[
 					'name'	=>	'message',
 					'flag'	=>	'm'
@@ -121,7 +121,7 @@ class ArghTest extends TestCase
 		
 		// Create parameters array
 		$parameters = [
-			ParameterBoolean::createWithAttributes(
+			BooleanParameter::createWithAttributes(
 				[
 					'name'	=>	'debug'
 				]
@@ -150,7 +150,7 @@ class ArghTest extends TestCase
 		
 		// Create parameters array
 		$parameters = [
-			ParameterString::createWithAttributes(
+			StringParameter::createWithAttributes(
 				[
 					'name'		=>	'message',
 					'flag'		=>	'm',
@@ -174,7 +174,7 @@ class ArghTest extends TestCase
 		
 		// Create parameters array
 		$parameters = [
-			ParameterString::createWithAttributes(
+			StringParameter::createWithAttributes(
 				[
 					'name'		=>	'message',
 					'flag'		=>	'm',
@@ -198,7 +198,7 @@ class ArghTest extends TestCase
 		
 		// Create parameters array
 		$parameters = [
-			ParameterString::createWithAttributes(
+			StringParameter::createWithAttributes(
 				[
 					'name'		=>	'message',
 					'flag'		=>	'm',

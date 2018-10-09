@@ -5,11 +5,11 @@ use PHPUnit\Framework\TestCase;
 use netfocusinc\argh\Argh;
 use netfocusinc\argh\ArghException;
 use netfocusinc\argh\ArgvPreprocessor;
-use netfocusinc\argh\ParameterBoolean;
-use netfocusinc\argh\ParameterCommand;
-use netfocusinc\argh\ParameterInteger;
-use netfocusinc\argh\ParameterList;
-use netfocusinc\argh\ParameterString;
+use netfocusinc\argh\BooleanParameter;
+use netfocusinc\argh\CommandParameter;
+use netfocusinc\argh\IntegerParameter;
+use netfocusinc\argh\ListParameter;
+use netfocusinc\argh\StringParameter;
 
 class Trials extends TestCase
 {
@@ -24,7 +24,7 @@ class Trials extends TestCase
   {	
 	  $this->argh = new Argh(
 			[
-				ParameterCommand::createWithAttributes(
+				CommandParameter::createWithAttributes(
 					[
 						'name'				=>	'cmd',
 						'flag'				=>	'x',
@@ -34,7 +34,7 @@ class Trials extends TestCase
 						'options'			=>	array('help','joke')				
 					]
 				),
-				ParameterList::createWithAttributes(
+				ListParameter::createWithAttributes(
 					[
 						'name'				=>	'colors',
 						'flag'				=>	'c',
@@ -43,7 +43,7 @@ class Trials extends TestCase
 						'description'	=>	'List of colors, for fun.'			
 					]
 				),
-				ParameterBoolean::createWithAttributes(
+				BooleanParameter::createWithAttributes(
 					[
 						'name'				=>	'debug',
 						'flag'				=>	'd',
@@ -52,7 +52,7 @@ class Trials extends TestCase
 						'description'	=>	'Enables debug mode.'					
 					]
 				),
-				ParameterString::createWithAttributes(
+				StringParameter::createWithAttributes(
 					[
 						'name'				=>	'file',
 						'flag'				=>	'f',
@@ -61,7 +61,7 @@ class Trials extends TestCase
 						'description'	=>	'File to use (just an example).'				
 					]
 				),
-				ParameterBoolean::createWithAttributes(
+				BooleanParameter::createWithAttributes(
 					[
 						'name'				=>	'force',
 						'flag'				=>	'F',
@@ -70,7 +70,7 @@ class Trials extends TestCase
 						'description'	=>	'Force this operation to complete.'				
 					]
 				),
-				ParameterBoolean::createWithAttributes(
+				BooleanParameter::createWithAttributes(
 					[
 						'name'				=>	'summary',
 						'flag'				=>	's',
@@ -79,7 +79,7 @@ class Trials extends TestCase
 						'description'	=>	'Show a summary of results.'				
 					]
 				),
-				ParameterBoolean::createWithAttributes(
+				BooleanParameter::createWithAttributes(
 					[
 						'name'				=>	'quiet',
 						'flag'				=>	'q',
@@ -88,7 +88,7 @@ class Trials extends TestCase
 						'description'	=>	'Suppress output.'				
 					]
 				),
-				ParameterInteger::createWithAttributes(
+				IntegerParameter::createWithAttributes(
 					[
 						'name'				=>	'verbose',
 						'flag'				=>	'v',

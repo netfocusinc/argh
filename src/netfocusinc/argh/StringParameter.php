@@ -11,7 +11,7 @@ use netfocusinc\argh\Parameter;
 	*
 	* @since 1.0.0
 	*/
-class ParameterString extends Parameter
+class StringParameter extends Parameter
 {
 	
 	//
@@ -47,7 +47,7 @@ class ParameterString extends Parameter
 	{		
 		if(is_array($value))
 		{
-			throw(new ArghException('ParameterString values cannot be set to an array'));
+			throw(new ArghException('StringParameter values cannot be set to an array'));
 		}
 		
 		$this->value = strval($value);

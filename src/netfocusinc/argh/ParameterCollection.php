@@ -131,11 +131,11 @@ class ParameterCollection
 			{	
 				// Enforce limitations of Parameters
 				// 1. Do NOT allow value to be redefined
-				// 2. ARGH_TYPE_VARIABLE (ParameterVariable) can have values appended
+				// 2. ARGH_TYPE_VARIABLE (VariableParameter) can have values appended
 				
 				if( Parameter::ARGH_TYPE_VARIABLE == $this->parameters[$this->map[$a->getKey()]]->getParameterType() )
 				{
-					// Call ParameterVariables::addValue() method
+					// Call VariableParameters::addValue() method
 					$this->parameters[$this->map[$a->getKey()]]->addValue($a->getValue());
 				}
 				else if( null !== $this->parameters[$this->map[$a->getKey()]]->getValue() )

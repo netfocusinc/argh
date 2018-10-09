@@ -4,10 +4,10 @@ use PHPUnit\Framework\TestCase;
 
 use netfocusinc\argh\Argh;
 use netfocusinc\argh\ArghException;
-use netfocusinc\argh\ParameterBoolean;
-use netfocusinc\argh\ParameterCommand;
-use netfocusinc\argh\ParameterString;
-use netfocusinc\argh\ParameterVariable;
+use netfocusinc\argh\BooleanParameter;
+use netfocusinc\argh\CommandParameter;
+use netfocusinc\argh\StringParameter;
+use netfocusinc\argh\VariableParameter;
 use netfocusinc\argh\ParameterCollection;
 
 class ParameterCollectionTest extends TestCase
@@ -31,7 +31,7 @@ class ParameterCollectionTest extends TestCase
   
   public function testExists(): void
   {
-	  $this->parameters->addParameter(ParameterBoolean::createWithAttributes(
+	  $this->parameters->addParameter(BooleanParameter::createWithAttributes(
 	  	[
 				'name'				=>	'debug',
 				'flag'				=>	'd',
@@ -50,7 +50,7 @@ class ParameterCollectionTest extends TestCase
   { 
 	  $this->assertFalse($this->parameters->hasCommand());
 	  
-	  $this->parameters->addParameter(ParameterCommand::createWithAttributes(
+	  $this->parameters->addParameter(CommandParameter::createWithAttributes(
 	  	[
 				'name'			=>			'cmd',
 				'flag'			=>			'x',
@@ -68,7 +68,7 @@ class ParameterCollectionTest extends TestCase
   { 
 	  $this->assertFalse($this->parameters->hasVariable());
 	  
-	  $this->parameters->addParameter(ParameterVariable::createWithAttributes(
+	  $this->parameters->addParameter(VariableParameter::createWithAttributes(
 	  	[
 				'name'			=>			'variable',
 				'flag'			=>			'x',
@@ -91,7 +91,7 @@ class ParameterCollectionTest extends TestCase
 	public function testGet(): void
 	{
 
-	  $this->parameters->addParameter(ParameterString::createWithAttributes(
+	  $this->parameters->addParameter(StringParameter::createWithAttributes(
 	  	[
 				'name'			=>			'file',
 				'flag'			=>			'f',
@@ -101,9 +101,9 @@ class ParameterCollectionTest extends TestCase
 			]
 		));
 		
-		$this->assertInstanceOf(ParameterString::class, $this->parameters->get('f'));
+		$this->assertInstanceOf(StringParameter::class, $this->parameters->get('f'));
 		
-		$this->assertInstanceOf(ParameterString::class, $this->parameters->get('file'));
+		$this->assertInstanceOf(StringParameter::class, $this->parameters->get('file'));
 		
 	}
 	
@@ -113,7 +113,7 @@ class ParameterCollectionTest extends TestCase
 		
 		$this->assertSame(0, count($this->parameters->getCommands()));
 		
-	  $this->parameters->addParameter(ParameterCommand::createWithAttributes(
+	  $this->parameters->addParameter(CommandParameter::createWithAttributes(
 	  	[
 				'name'			=>			'cmd',
 				'flag'			=>			'x',
@@ -126,7 +126,7 @@ class ParameterCollectionTest extends TestCase
 	  
 	  $this->assertSame(1, count($this->parameters->getCommands()));
 	  
-	  $this->assertInstanceOf(ParameterCommand::class, $this->parameters->get('cmd'));
+	  $this->assertInstanceOf(CommandParameter::class, $this->parameters->get('cmd'));
 		
 	}
 

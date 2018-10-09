@@ -11,7 +11,7 @@ use netfocusinc\argh\Parameter;
 	*
 	* @since 1.0.0
 	*/
-class ParameterVariable extends Parameter
+class VariableParameter extends Parameter
 {
 	
 	//

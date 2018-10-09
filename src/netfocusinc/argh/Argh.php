@@ -154,7 +154,7 @@ class Argh
 		
 		//! TODO: Replace this; Accept FLAGS argument to enable naked variables (Rule selection)
 		// ... ? require client to add 'variable' parameter
-		$this->parameters->addParameter(ParameterVariable::createWithAttributes(
+		$this->parameters->addParameter(VariableParameter::createWithAttributes(
 				[
 					'name'	=>	Parameter::ARGH_NAME_VARIABLE
 				]

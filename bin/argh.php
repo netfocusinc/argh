@@ -10,12 +10,12 @@ require "vendor/autoload.php";
 
 use netfocusinc\argh\Argh;
 use netfocusinc\argh\ArghException;
-use netfocusinc\argh\ParameterBoolean;
-use netfocusinc\argh\ParameterCommand;
-use netfocusinc\argh\ParameterInteger;
-use netfocusinc\argh\ParameterList;
-use netfocusinc\argh\ParameterString;
-use netfocusinc\argh\ParameterVariable;
+use netfocusinc\argh\BooleanParameter;
+use netfocusinc\argh\CommandParameter;
+use netfocusinc\argh\IntegerParameter;
+use netfocusinc\argh\ListParameter;
+use netfocusinc\argh\StringParameter;
+use netfocusinc\argh\VariableParameter;
 
 
 /*
@@ -31,7 +31,7 @@ try
 {
 	$argh = new Argh(
 		[
-			ParameterBoolean::createWithAttributes(
+			BooleanParameter::createWithAttributes(
 				[
 					'name'				=>	'debug',
 					'flag'				=>	'd',
@@ -40,7 +40,7 @@ try
 					'description'	=>	'Enables debug mode.'					
 				]
 			),
-			ParameterCommand::createWithAttributes(
+			CommandParameter::createWithAttributes(
 				[
 					'name'				=>	'cmd',
 					'flag'				=>	'x',
@@ -50,7 +50,7 @@ try
 					'options'			=>	array('help','joke')				
 				]
 			),
-			ParameterString::createWithAttributes(
+			StringParameter::createWithAttributes(
 				[
 					'name'				=>	'file',
 					'flag'				=>	'f',
@@ -59,7 +59,7 @@ try
 					'description'	=>	'File to use (just an example).'				
 				]
 			),
-			ParameterBoolean::createWithAttributes(
+			BooleanParameter::createWithAttributes(
 				[
 					'name'				=>	'force',
 					'flag'				=>	'F',
@@ -68,7 +68,7 @@ try
 					'description'	=>	'Force execution regardless of hangups.'				
 				]
 			),
-			ParameterList::createWithAttributes(
+			ListParameter::createWithAttributes(
 				[
 					'name'				=>	'colors',
 					'flag'				=>	'c',
@@ -77,7 +77,7 @@ try
 					'description'	=>	'List of colors, for fun.'			
 				]
 			),
-			ParameterInteger::createWithAttributes(
+			IntegerParameter::createWithAttributes(
 				[
 					'name'				=>	'verbose',
 					'flag'				=>	'v',
