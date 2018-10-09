@@ -59,6 +59,15 @@ try
 					'description'	=>	'File to use (just an example).'				
 				]
 			),
+			ParameterBoolean::createWithAttributes(
+				[
+					'name'				=>	'force',
+					'flag'				=>	'F',
+					'required'		=>	FALSE,
+					'default'			=>	FALSE,
+					'description'	=>	'Force execution regardless of hangups.'				
+				]
+			),
 			ParameterList::createWithAttributes(
 				[
 					'name'				=>	'colors',
