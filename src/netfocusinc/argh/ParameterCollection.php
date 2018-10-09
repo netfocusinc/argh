@@ -158,6 +158,15 @@ class ParameterCollection
 			}
 			
 		} // END: foreach($arguments as $a)
+		
+		// Check for REQUIRED Parameters without any value
+		foreach($this->parameters as $p)
+		{
+			if( ($p->isRequired() ) && (null == $p->getValue()) )
+			{
+				throw(new ArghException(__CLASS__ . ': Missing required parameter \'' . $p->getName() .  '\'.'));
+			}
+		}
 	}
 	
 	public function all()

@@ -50,6 +50,11 @@ class IntegerParameter extends Parameter
 			throw(new ArghException('IntegerParameter values must be numeric'));
 		}
 		
+		if( ($this->hasOptions()) && (!$this->isOption($value)) )
+		{
+			throw(new ArghException('Not a valid option for \'' . $this->getName() . '\''));
+		}
+		
 		$this->value = intval($value);
 	}
 	

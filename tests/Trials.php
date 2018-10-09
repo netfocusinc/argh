@@ -458,10 +458,7 @@ class Trials extends TestCase
 		$this->assertSame('blue green', $colors[2] );
 		
 	}
-	
-
-	
-	
+		
   //
   // COMPOUND ARGUMENTS
   //
@@ -500,6 +497,10 @@ class Trials extends TestCase
 		$this->assertTrue( $this->argh->debug , '--debug isn\'t TRUE');
 		$this->assertTrue( $this->argh->force , '--force isn\'t TRUE');
 	}
+	
+	//
+	// ALLOWED CHARACTERS
+	//
   
  
 }

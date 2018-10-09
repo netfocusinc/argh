@@ -64,7 +64,12 @@ class CommandParameter extends Parameter
 	{		
 		if(is_array($value))
 		{
-			throw(new ArghException('CommandParameter values cannot be set to an array'));
+			throw(new ArghException('Command value cannot be set to an array'));
+		}
+		
+		if( ($this->hasOptions()) && (!$this->isOption($value)) )
+		{
+			throw(new ArghException('Not a valid option for \'' . $this->getName() . '\''));
 		}
 		
 		$this->value = strval($value);

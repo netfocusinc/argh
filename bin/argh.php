@@ -54,7 +54,7 @@ try
 				[
 					'name'				=>	'file',
 					'flag'				=>	'f',
-					'required'		=>	TRUE,
+					'required'		=>	FALSE,
 					'default'			=>	'sample.out',
 					'description'	=>	'File to use (just an example).'				
 				]

@@ -50,6 +50,11 @@ class StringParameter extends Parameter
 			throw(new ArghException('StringParameter values cannot be set to an array'));
 		}
 		
+		if( ($this->hasOptions()) && (!$this->isOption($value)) )
+		{
+			throw(new ArghException('Not a valid option for \'' . $this->getName() . '\''));
+		}
+		
 		$this->value = strval($value);
 	}
 	
