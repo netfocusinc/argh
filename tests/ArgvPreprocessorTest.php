@@ -39,10 +39,16 @@ class ArgvPreprocessorTest extends TestCase
 	  		array('-f', 'value'),
 	  	],
 	  	
-	  	'Double Hyphenated Name with Value' =>
+	  	'Double Hyphenated Parameter Name with Value' =>
 	  	[
 	  		array('my.php', '--file=out.txt'),
 	  		array('--file=out.txt'),
+	  	],
+	  	
+	  	'Double Hyphenated Parameter Name with Quoted Value' =>
+	  	[
+	  		array('my.php', '--msg=Hello World'),
+	  		array("--msg='Hello World'"),
 	  	],
 	  	
 	  	'List with Spaces' =>
@@ -51,7 +57,7 @@ class ArgvPreprocessorTest extends TestCase
 	  		array('--file=[one,two,three]'),
 	  	],
 	  	
-	  	'Quoted Value with Sapces' =>
+	  	'Quoted Value with Spaces' =>
 	  	[
 	  		array('my.php', '-m', 'Hello World'),
 	  		array('-m', "'Hello World'"),
@@ -60,19 +66,19 @@ class ArgvPreprocessorTest extends TestCase
 	  	'Quoted Value with Spaces' =>
 	  	[
 	  		array('my.php', '-m', "Hello O'Malley" ),
-	  		array('-m', '"Hello O\'Malley"'),
+	  		array('-m', "'Hello O'Malley'"),
 	  	],
 	  	
 	  	'List with Quoted Items' =>
 	  	[
 	  		array('my.php', '--colors=[blue,', 'green,', 'blue green]'),
-	  		array("--colors=[blue,green,'blue green']"),
+	  		array("--colors=[blue,green,blue green]"),
 	  	],
 	  	
 	  	'List with Quoted Items' =>
 	  	[
 	  		array('my.php', '--msgs=[Hi,', 'Hey,', 'Hello World!]'),
-	  		array('--msgs=[Hi,Hey,"Hello World!"]'),
+	  		array('--msgs=[Hi,Hey,Hello World!]'),
 	  	]
 	  
 	  ];

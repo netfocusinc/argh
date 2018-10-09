@@ -224,7 +224,7 @@ class ArgumentParser
 			$token = $tokens[$i];
 			$semantics = $rule->semantics()[$i-1];
 
-			echo "DEBUG: token: $token (" . Rule::semanticsToString($semantics) . ")\n";
+			//echo __METHOD__ . ": token: $token (" . Rule::semanticsToString($semantics) . ")\n";
 
 			switch( $semantics )
 			{ 

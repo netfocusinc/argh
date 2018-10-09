@@ -182,7 +182,6 @@ class Language
 			)
 		);
 		
-		/*
 		// Naked Multi Flag
 		$language->addRule(new Rule(
 				'Naked Multi Flag',
@@ -191,7 +190,15 @@ class Language
 				[ARGH_SEMANTICS_FLAGS]
 			)
 		);
-		*/
+		
+		// Quoted Naked Variable
+		$language->addRule(new Rule(
+				'Quoted Naked Variable',
+				'value',
+				'/^\'(' . ARGH_SYNTAX_VARIABLE . ')\'$/i',
+				[ARGH_SEMANTICS_VARIABLE]
+			)
+		);
 		
 		// Naked Variable
 		$language->addRule(new Rule(

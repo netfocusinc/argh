@@ -18,7 +18,6 @@ class Argument
 	
 	public function __construct($key=null, $value=null)
 	{
-		echo __CLASS__ . ': Constructing new Argument(' . $key . ', ' . $value . ')' . "\n";
 		$this->key = $key;
 		$this->value = $value;
 	}

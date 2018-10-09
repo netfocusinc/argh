@@ -105,77 +105,58 @@ class ArgvPreprocessor
 				// Check if argument is a list
 				if( strpos($args[$i], '[') !== FALSE )
 				{
-					//! TODO: Process each item in the list separately
-					//echo "DEBUG: Quoting items in a list\n";
 					
-					// Extract the items from the list; they are contained between brackets [ ]
-					$tokens = array(); // init array to capture matching tokens from preg_match()
-					
-					if( preg_match('/\[([^\]]+)\]/i', $args[$i], $tokens) )
-					{
-						//echo "DEBUG: List items: " . $tokens[1] . "\n";
-
-						// Explode the items to an array
-						$list = explode(',', $tokens[1]);
-					
-						// Process each item in the list separately
-						for($j=0; $j<count($list); $j++)
-						{
-
-							if( strpos($list[$j], ' ') !== FALSE )
-							{
-								
-								// Choose single or double quotes
-									$quote = self::quoteChar($list[$j]);
-					
-								// Wrap (space containing) items quotes
-								$list[$j] = $quote . $list[$j] . $quote;
-							}
-							
-						} // END: for($j=0; $j<count($list); $j++)
-					
-						// Implode the list to a comma separated string
-						$listS = implode(",", $list);
-					
-						// Put the (processed) list string back between the brackets [ ]
-						// Replace the original argument at $args[$i] with the processed one	
-						$args[$i] = preg_replace('/\[([^\]]+)\]/i', '[' . $listS . ']', $args[$i]);
-						
-						
-						//$args[$i] = $token[1] . '[' . $listS . ']';
-						
-					}
-					else
-					{
-						throw new ArghException(__METHOD__ . ': Syntax Error: Invalid list.');
-					}
+					//
+					// DO NOT ADD QUOTES SURROUNDING ITEMS IN A LIST
+					// THEY WILL JUST HAVE TO BE STRIPPED LATER
+					//
 				
-				}
+				} // END: if( strpos($args[$i], '[') !== FALSE )	
 				else
 				{
 					//!TODO: handle --msg="Hello World"; We don't want "--msg=Hello World"
+					//! TODO: FIX. THIS IS BROKEN
 					
-					// Choose single or double quotes
-					$quote = self::quoteChar($args[$i]);
+					if( strpos($args[$i], '=') === FALSE )
+					{
+						// Wrap (space containing) argument in quotes
+						$args[$i] = "'" . $args[$i] . "'";
+					}
+					else
+					{
+						// Wrap (space containing) argument value - after '=' sign in quotes
+						
+						// Split argument into parts, delimted by '='
+						$tokens = explode('=', $args[$i]);
+						
+						$args[$i] = $tokens[0] . '=' . "'" . $tokens[1] . "'";
+					}
+
 					
-					// Wrap (space containing) argument in single quotes
-					$args[$i] = $quote . $args[$i] . $quote;
-				}				
+				}			
 				
 			} // END: if( strpos($args[$i], ' ') !== FALSE )
 			
 		} // END: for($i=0; $i<count($args); $i++)	
 		
 		// DEBUG
-		echo "\n------- AFTER PRE PROCESSING --------\n";
-		print_r($args);
-		echo "\n-------------------------------------\n\n";
+		//echo "\n------- AFTER PRE PROCESSING --------\n";
+		//print_r($args);
+		//echo "\n-------------------------------------\n\n";
 		
 		return $args;	
 	}
 	
 	private static function quoteChar($arg)
 	{
+		//! TODO: TEST THIS AND THEN REMOVE THIS FUNCTION
+		
+		/*
+		// ALWAYS USE SINGLE QUOTES
+		// THERE IS NO REASON TO USE DOUBLE QUOTES ON THE COMMAND LINE
+		// THE SHELL WOULD INTERPRET THESE FOR VARIABLE EXPANSION PRIOR TO EXECUTING PHP
+		// 
+		
 		$quote = "'"; // default
 		
 		// If certain characters are contained in the argument, it should be nested in double quotes
@@ -185,6 +166,9 @@ class ArgvPreprocessor
 		if( strpos($arg, "!") !== FALSE ) $quote = '"';
 		
 		return $quote;
+		*/
+		
+		return "'";
 		
 	}
 	

@@ -70,7 +70,7 @@ class Trials extends TestCase
 						'description'	=>	'Force this operation to complete.'				
 					]
 				),
-				ParameterString::createWithAttributes(
+				ParameterBoolean::createWithAttributes(
 					[
 						'name'				=>	'summary',
 						'flag'				=>	's',
@@ -341,33 +341,16 @@ class Trials extends TestCase
 		
 		// $ myscript.php --msg='Hello World'
 		
-		$argv = array('myscript.php', '--msg=Hello World');
+		$argv = array('myscript.php', '--file=/path with space/file.txt');
 		
 		$this->argh->parse($argv);
 	
 		// Test Results
 		
-		$this->assertSame( 'Hello World', $this->argh->msg);
+		$this->assertSame( '/path with space/file.txt', $this->argh->file);
 		
 	}
-	
-	
-	/** @test */
-	public function doubleHypenatedParameterNameWithDoubleQuotedValue(): void
-	{
-		// Double Hypenated Parameter Name with Double Quoted Value
-			
-		// $ myscript.php --msg="Hello Mr. O'Malley"
 		
-		$argv = array('myscript.php', "--msg=Hello Mr. O'Malley");
-		
-		$this->argh->parse($argv);
-	
-		// Test Results
-		
-		$this->assertSame( "Hello Mr. O'Malley", $this->argh->msg);
-	}
-	
 	/** @test */
 	public function hypenatedFlagWithSingleQuotedValue(): void
 	{
@@ -375,30 +358,13 @@ class Trials extends TestCase
 		
 		// $ myscript.php -m 'Hello World'
 		
-		$argv = array('myscript.php', '-m', 'Hello World');
+		$argv = array('myscript.php', '-f', '/path with space/file.txt');
 		
 		$this->argh->parse($argv);
 	
 		// Test Results
 		
-		$this->assertSame( 'Hello World', $this->argh->msg);
-	}
-		
-		
-	/** @test */
-	public function hypenatedFlagWithDoubleQuotedValue(): void
-	{
-		// Hypenated Flag with Double Quoted Value
-				
-		// $ myscript.php -m "Hello Mr. O'Malley"
-		
-		$argv = array('myscript.php', '-m', "Hello Mr. O'Malley");
-		
-		$this->argh->parse($argv);
-	
-		// Test Results
-		
-		$this->assertSame( "Hello Mr. O'Malley", $this->argh->msg);
+		$this->assertSame( '/path with space/file.txt', $this->argh->file);
 	}
 	
 	/** @test */
