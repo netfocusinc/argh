@@ -34,7 +34,7 @@ class BooleanParameter extends Parameter
 	{
 		// Interpret any non-empty value as TRUE
 		// Note that FALSE is considered to be empty()
-		if( !empty($this->default) )
+		if( !empty( parent::getDefault() ) )
 		{
 			return TRUE;
 		}	
