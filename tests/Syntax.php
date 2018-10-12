@@ -12,7 +12,7 @@ use netfocusinc\argh\ListParameter;
 use netfocusinc\argh\StringParameter;
 use netfocusinc\argh\VariableParameter;
 
-class Trials extends TestCase
+class Syntax extends TestCase
 {
 	
 	protected $argh;
@@ -82,7 +82,24 @@ class Trials extends TestCase
   // TEST CASES
   //
   
-	public function argumentProvider(): array
+  public function syntaxAcceptableProvider(): array
+  {
+    return [
+	  	
+	  	'Quoted Value with Valid Characters' =>
+	  	[
+	  		array('my.php', '-m', 'Acceptable slash /')
+	  	],
+	  	
+	  	'Quoted Variable with Valid Characters' =>
+	  	[
+	  		array('my.php', '/path to/somefile.txt')
+	  	]
+	  
+	  ];	  
+	}
+  
+	public function syntaxErrorProvider(): array
 	{
 		
     return [
@@ -118,7 +135,7 @@ class Trials extends TestCase
   
   /**
 	  * @test
-	  * @dataProvider argumentProvider()
+	  * @dataProvider sytaxErrorProvider()
 	  */
 	public function argumentsThatCauseSyntaxErrors($argv): void
 	{

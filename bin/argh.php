@@ -80,13 +80,20 @@ try
 			IntegerParameter::createWithAttributes(
 				[
 					'name'				=>	'verbose',
-					'flag'				=>	'v',
-					'type'				=>	ARGH_TYPE_INT,
+					'flag'				=>	'V',
 					'required'		=>	FALSE,
 					'default'			=>	0,
 					'description'	=>	'Level of verbosity to output.',
 					'options'			=>	array(0, 1, 2, 3)			
 				]
+			),
+			BooleanParameter::createWithAttributes(
+				[
+					'name'				=>	'version',
+					'flag'				=>	'v',
+					'required'		=>	FALSE,
+					'default'			=>	FALSE,
+					'description'	=>	'Display information about the version.'				]
 			)			
 		]
 	);
@@ -102,6 +109,10 @@ try
 	else if("joke" == $argh->cmd )
 	{
 		echo "Why did the chicken cross the road?\n";
+	}
+	else if($argh->version)
+	{
+		echo "Argh! 0.2.0 by Benjamin Hough, Net Focus Inc.\n";
 	}
 	else
 	{
