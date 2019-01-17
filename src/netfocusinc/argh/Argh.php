@@ -51,11 +51,11 @@ class Argh
 		* @param array $argv
 		* @param array $parameters Array of Parameters
 		*/
-	public static function parseWithParameters(array $argv, array $parameters)
+	public static function parse(array $argv, array $parameters)
 	{
 		$argh = new Argh($parameters);
 		
-		$argh->parse($argv);
+		$argh->parseArguments($argv);
 		
 		return $argh;
 	}
@@ -69,7 +69,7 @@ class Argh
 		* @param string $args A string simulating command line entry
 		* @param array $parameters Array of Parameters
 		*/
-	public static function parseStringWithParameters(string $args, array $parameters)
+	public static function parseString(string $args, array $parameters)
 	{
 		// Force $args into an array
 		$argv = explode(' ', $args);
@@ -78,7 +78,7 @@ class Argh
 		$argh = new Argh($parameters);
 		
 		// Parse
-		$argh->parse($argv);
+		$argh->parseArguments($argv);
 		
 		return $argh;
 	}
@@ -160,8 +160,6 @@ class Argh
 				]
 			)
 		);
-			
-		
 				
 	} // END: public function __construct()
 	
@@ -170,7 +168,7 @@ class Argh
 		*
 		*
 		*/
-	public function parse($argv)
+	public function parseArguments($argv)
 	{
 		// Set properties on this object
 		$this->argv = $argv;

@@ -98,7 +98,7 @@ try
 		]
 	);
 	
-	$argh->parse($argv);
+	$argh->parseArguments($argv);
 	
 	echo "\n\n";
 	

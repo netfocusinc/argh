@@ -16,6 +16,9 @@ All notable changes to this project will be documented in this file.
 - Argument drops $type property
 - Updated and expanded PHPUnit tests
 - bin/argh.php updated to match new Argh interface
+- Rename Argh::parseWithParameters() as Argh::parse()
+- Rename Argh::parseStringWithParameters() as Argh::parseString()
+- Rename Argh->parse() as Argh->parseArguments()
 
 ### Deprecated
 
