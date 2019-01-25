@@ -2,88 +2,83 @@
 
 Parse PHP command line arguments with ease so you can focus on your CLI application.
 
-# UNDER DEVELOPMENT
+Detailed information and usage examples are available at [https://www.netfocusinc.com/argh](Argh PHP Command Line Parser)
 
-This project is currently under active development of its initial release. Everything here (including this README) is subject to frequent change, and errors. This project should not be relied on for any production environment. 
+# ALPHA RELEASE
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+This project is currently under **alpha** release. Beta release will follow after the addition of more rigorous PHPUnit tests.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+This project has been developed and tested with the following (see list below), and has yet to be tested using other operating systems or versions of PHP.
 
-```
-Give examples
-```
+- PHP 7.2.14
+- CentOS 7.6
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
+There are currently two methods of installing Argh. We plan on adding a Phar (PHP Archive) distribution soon.
 
-Say what the step will be
+1. Composer
+2. Github
+
+More detailed instructions can be found at [https://www.netfocusinc.com/argh#install](Argh Installation Instructions)
+
+#### Composer Installation
+
+[https://getcomposer.org/](Composer) is the preferred method for installation.
 
 ```
-Give the example
+$ composer require netfocusinc/argh
+$ php vendor/netfocusinc/argh/bin/argh.php --about
+Argh! by Benjamin Hough, Net Focus Inc.
 ```
 
-And repeat
+#### Github Installation
+
+Releases can be downloaded from [https://github.com/netfocusinc/argh/releases](Argh's Github Releases).
+
+Alternatively, the Argh [https://github.com/netfocusinc/argh](Github repository) can be cloned.
 
 ```
-until finished
+$ git clone https://github.com/netfocusinc/argh.git
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ### Basic Usage
 
-A step by step series of examples that tell you how to use Argh
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
+Using Argh is an easy way to parse arguments to your PHP command line scripts.
+See more examples of [https://www.netfocusinc.com/argh#usage](how to use Argh) are available.
 
 ```
-until finished
+<?php
+
+	// Create a new Argh instance
+	$argh = new Argh(
+  	[
+    	StringParameter::createWithAttributes( [ 'name' => 'message' ] )		
+		]
+	);
+ 
+	// Let Argh parse PHP's $argv array
+	$argh->parse($argv);
+	
+	// Access run-time values of the arguments that were supplied to your CLI script
+	echo $argh->message;
+
+?>
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+## Running Unit Tests
 
-## Running the tests
-
-Explain how to run the automated tests for this system
+The [https://phpunit.de/index.html](PHPUnit) tests for Argh can be run like this.
 
 ```
 $ vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests/
 ```
 
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
 ## Built With
 
+* [PHP](http://php.net/) - PHP is a popular general-purpose scripting language that is especially suited to web development.
 * [Composer](https://getcomposer.org/) - Dependency Manager for PHP
 * [PHPUnit](https://phpunit.de/) - Testing Framework
 
@@ -93,20 +88,16 @@ Coming soon...
 
 ## Versioning
 
-We plan on adopting [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/benjaminhough/Argh/tags). 
+This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+
+For the versions available, see the [tags on this repository](https://github.com/benjaminhough/Argh/tags).
+
+A [Changelog](https://github.com/netfocusinc/argh/blob/master/CHANGELOG.md) is also available on Github.
 
 ## Authors
 
-* **Benjamin Hough** - *Initial work* - [PurpleBooth](https://github.com/BenjaminHough)
-
-See also the list of [contributors](https://github.com/benjaminhough/Argh/contributors) who participated in this project.
+See the list of [contributors](https://github.com/benjaminhough/Argh/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
