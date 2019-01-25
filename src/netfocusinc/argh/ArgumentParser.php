@@ -92,6 +92,7 @@ class ArgumentParser
 				//
 				// DEBUG: Show detailed contents of each variable
 				//
+						/*
 				
 						echo "\n\n";
 						echo implode(' ', $argsL) . " | " . implode(' ', $argsR) . "\n";
@@ -115,7 +116,9 @@ class ArgumentParser
 						}			
 						echo "\n\n";
 						
-						//echo "\nDEBUG: Considering: " . $argsS . " ... \n\n";
+						echo "\nDEBUG: Considering: " . $argsS . " ... \n\n";
+						
+						*/
 				
 				//
 				// END DEBUG
@@ -123,7 +126,7 @@ class ArgumentParser
 				
 				foreach($rules as $rule)
 				{
-					echo "DEBUG: Checking for match with rule: " . $rule->name() . " (" . $rule->syntax() . ")" . "\n";
+					//echo "DEBUG: Checking for match with rule: " . $rule->name() . " (" . $rule->syntax() . ")" . "\n";
 					
 					$tokens = array(); // init array to capture matching tokens from Rule->match()
 					

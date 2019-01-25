@@ -133,13 +133,13 @@ class Argh
 		* @api
 		*
 		* @since 1.0
-		*		 
+		*
 		* @param array $argv Array of cli arguments as registered by PHP CLI
 		* @param array $parameters An array of Parameters to use for interpreting command line arguments
 		*
 		*/
 	public function __construct(array $parameters)
-	{
+	{ 
 		// Init Language
 		$this->language = Language::createWithRules();
 		
@@ -153,7 +153,6 @@ class Argh
 		}
 		
 		//! TODO: Replace this; Accept FLAGS argument to enable naked variables (Rule selection)
-		// ... ? require client to add 'variable' parameter
 		$this->parameters->addParameter(VariableParameter::createWithAttributes(
 				[
 					'name'	=>	Parameter::ARGH_NAME_VARIABLE
@@ -175,11 +174,11 @@ class Argh
 		
 		try
 		{	
-			// Create an new ArgumentParser instance
-			$parser = new ArgumentParser($this->language, $this->parameters);
-			
 			// Prepare $argv for parsing
 			$args = ArgvPreprocessor::process($this->argv);
+			
+			// Create an new ArgumentParser instance
+			$parser = new ArgumentParser($this->language, $this->parameters);
 			
 			// Parse $args into an array of Arguments
 			$arguments = $parser->parse($args);
@@ -334,7 +333,6 @@ class Argh
 	
 	// An alias for usageString()
 	public function usage() { return $this->usageString(); }
-
 	
 }
 	

@@ -6,7 +6,7 @@
 ** Demonstrates the capabilities of Argh
 */
 
-require "vendor/autoload.php";
+require 'vendor/autoload.php';
 
 use netfocusinc\argh\Argh;
 use netfocusinc\argh\ArghException;
@@ -17,27 +17,17 @@ use netfocusinc\argh\ListParameter;
 use netfocusinc\argh\StringParameter;
 use netfocusinc\argh\VariableParameter;
 
-
-/*
-// Init memory
-*/
-
-echo "\n---------------------\n";
-echo "RAW \$argv:\n";
-print_r($argv);
-echo "---------------------\n\n";
-
 try
 {
-	$argh = new Argh(
-		[
+	echo "Before new Argh()\n";
+	$argh = new Argh([
 			BooleanParameter::createWithAttributes(
 				[
 					'name'				=>	'debug',
 					'flag'				=>	'd',
 					'required'		=>	FALSE,
 					'default'			=>	FALSE,
-					'description'	=>	'Enables debug mode.'					
+					'description'	=>	'Enables debug mode.'
 				]
 			),
 			CommandParameter::createWithAttributes(
@@ -47,34 +37,7 @@ try
 					'required'		=>	FALSE,
 					'default'			=>	null,
 					'description'	=>	'A command to run.',
-					'options'			=>	array('help','joke')				
-				]
-			),
-			StringParameter::createWithAttributes(
-				[
-					'name'				=>	'file',
-					'flag'				=>	'f',
-					'required'		=>	FALSE,
-					'default'			=>	'sample.out',
-					'description'	=>	'File to use (just an example).'				
-				]
-			),
-			BooleanParameter::createWithAttributes(
-				[
-					'name'				=>	'force',
-					'flag'				=>	'F',
-					'required'		=>	FALSE,
-					'default'			=>	FALSE,
-					'description'	=>	'Force execution regardless of hangups.'				
-				]
-			),
-			ListParameter::createWithAttributes(
-				[
-					'name'				=>	'colors',
-					'flag'				=>	'c',
-					'required'		=>	FALSE,
-					'default'			=>	null,
-					'description'	=>	'List of colors, for fun.'			
+					'options'			=>	array('help','version','show')
 				]
 			),
 			IntegerParameter::createWithAttributes(
@@ -84,79 +47,76 @@ try
 					'required'		=>	FALSE,
 					'default'			=>	0,
 					'description'	=>	'Level of verbosity to output.',
-					'options'			=>	array(0, 1, 2, 3)			
+					'options'			=>	array(0, 1, 2, 3)
 				]
-			),
-			BooleanParameter::createWithAttributes(
-				[
-					'name'				=>	'version',
-					'flag'				=>	'v',
-					'required'		=>	FALSE,
-					'default'			=>	FALSE,
-					'description'	=>	'Display information about the version.'				]
-			)			
+			)
 		]
 	);
 	
 	$argh->parseArguments($argv);
 	
-	echo "\n\n";
-	
-	if("help" == $argh->cmd )
+	switch($argh->cmd)
 	{
-		echo $argh->usage() . "\n";
-	}
-	else if("joke" == $argh->cmd )
-	{
-		echo "Why did the chicken cross the road?\n";
-	}
-	else if($argh->version)
-	{
-		echo "Argh! 0.2.0 by Benjamin Hough, Net Focus Inc.\n";
-	}
-	else
-	{
+		case 'help':
 		
-		echo "Parameters: \n" . $argh->parameters()->toString() . "\n";
+			echo $argh->usage() . "\n";
+			
+			break;
+			
+		case 'show':
 		
-		if( $argh->parameters()->hasVariable() )
-		{
-			echo "Variables: \n";
-			print_r($argh->variables());
-			echo "\n";
-		}
-		
-		// Show values for each parameter (exclude variables)
-		foreach($argh->parameters()->all() as $p)
-		{
-			if(ARGH_TYPE_VARIABLE != $p->getParameterType())
+			echo "Parameters: \n" . $argh->parameters()->toString() . "\n";
+			
+			if( $argh->parameters()->hasVariable() )
 			{
-				echo '$argh->' . $p->getName() . ' = ';
-				
-				if( !is_array($argh->get($p->getName())) )
+				echo "Variables: \n";
+				print_r($argh->variables());
+				echo "\n";
+			}
+			
+			// Show values for each parameter (exclude variables)
+			foreach($argh->parameters()->all() as $p)
+			{
+				if(ARGH_TYPE_VARIABLE != $p->getParameterType())
 				{
-					echo $argh->get($p->getName()) . "\n";
-				}
-				else
-				{
-					$buff = '[';
-					for($i=0; $i<count($argh->get($p->getName())); $i++)
-					{
-						$e = $argh->get($p->getName())[$i];
-						$buff .= $e . ', ';
-					}
-					$buff = substr($buff, 0, -2); // remove trailing ', '
-					$buff .= ']';
+					echo '$argh->' . $p->getName() . ' = ';
 					
-					echo $buff;
-					echo "\n";
-				}
-			} // END: if(ARGH_TYPE_VARIABLE != $p->type())
-		}
+					if( !is_array($argh->get($p->getName())) )
+					{
+						echo $argh->get($p->getName()) . "\n";
+					}
+					else
+					{
+						$buff = '[';
+						for($i=0; $i<count($argh->get($p->getName())); $i++)
+						{
+							$e = $argh->get($p->getName())[$i];
+							$buff .= $e . ', ';
+						}
+						$buff = substr($buff, 0, -2); // remove trailing ', '
+						$buff .= ']';
+						
+						echo $buff;
+						echo "\n";
+					}
+				} // END: if(ARGH_TYPE_VARIABLE != $p->type())
+		
+			} // END: foreach($argh->parameters()->all() as $p)
+			
+			break;
+		
+		case 'version':
+		
+			echo "Argh! 0.2.0 by Benjamin Hough, Net Focus Inc.\n";
+			
+			break;
+		
+		default:
+		
+			echo $argh->usage() . "\n";
+	} // switch($argh->cmd)
 	
-	} // END: foreach($argh->parameters()->all() as $p)
-	
-}
+} // try
 catch(ArghException $e)
 {
 	echo 'Exception: ' . $e->getMessage() . "\n";
