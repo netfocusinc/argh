@@ -68,7 +68,6 @@ abstract class Parameter
 	
 	public static function createWithAttributes(array $attributes): Parameter
 	{
-		echo "Entering createWithAttribute()\n";
 		// Init default attributes for a new Parameter
 		$name = null;
 		$flag = null;
@@ -89,7 +88,6 @@ abstract class Parameter
 		// Late static binding results in new instance of (calling) subclass
 		
 		//! TODO: What if this is called on abstract Parameter
-		echo "* Calling new static for: " . get_called_class() . "\n";
 		return new static($name, $flag, $required, $default, $description, $options);
 	}
 	
@@ -99,7 +97,6 @@ abstract class Parameter
 	
 	public function __construct(string $name, string $flag=null, bool $required=FALSE, $default=null, string $description=null, array $options=array())
 	{ 
-		echo "> Parameter __construct()\n";
 		// Required a non-empty 'name'
 		if(empty($name))
 		{
@@ -115,9 +112,7 @@ abstract class Parameter
 		$this->options = $options;
 		
 		// New Parameters ALWAYS have null value
-		$this->value = null;
-		
-		echo "< Parameter __construct()\n";
+		$this->value = null;		
 	}
 	
 	//
@@ -174,3 +169,5 @@ abstract class Parameter
 	abstract public function setValue($value);
 	
 }
+
+?>

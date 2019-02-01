@@ -19,7 +19,6 @@ use netfocusinc\argh\VariableParameter;
 
 try
 {
-	echo "Before new Argh()\n";
 	$argh = new Argh([
 			BooleanParameter::createWithAttributes(
 				[
