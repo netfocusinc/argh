@@ -106,7 +106,7 @@ try
 		
 		case 'version':
 		
-			echo "Argh! 0.2.0 by Benjamin Hough, Net Focus Inc.\n";
+			echo "Argh! 1.0.0-alpha by Benjamin Hough, Net Focus Inc.\n";
 			
 			break;
 		
