@@ -56,6 +56,3 @@ class StringParameter extends Parameter
 }
 
 ?>
-
-
-

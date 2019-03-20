@@ -87,6 +87,3 @@ class VariableParameter extends Parameter
 }
 
 ?>
-
-
-
