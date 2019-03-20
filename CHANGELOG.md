@@ -11,6 +11,10 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - next ... Configure Argh with option to enable/disable naked variables
+- New About.php class defines variables used by bin/argh.php to display versioning info
+
+### Changed
+- 
 
 ## [1.0.0-alpha] - 2019-01-25
 

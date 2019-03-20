@@ -8,6 +8,7 @@
 
 require 'vendor/autoload.php';
 
+use netfocusinc\argh\About;
 use netfocusinc\argh\Argh;
 use netfocusinc\argh\ArghException;
 use netfocusinc\argh\BooleanParameter;
@@ -36,7 +37,7 @@ try
 					'required'		=>	FALSE,
 					'default'			=>	null,
 					'description'	=>	'A command to run.',
-					'options'			=>	array('help','version','show')
+					'options'			=>	array('about','help','show','version')
 				]
 			),
 			IntegerParameter::createWithAttributes(
@@ -104,9 +105,10 @@ try
 			
 			break;
 		
+		case 'about':
 		case 'version':
 		
-			echo "Argh! 1.0.0-alpha by Benjamin Hough, Net Focus Inc.\n";
+			echo About::$name . ' ' . About::$version . ' by ' . About::$author . ' - ' . About::$url . "\n";
 			
 			break;
 		
