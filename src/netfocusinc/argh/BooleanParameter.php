@@ -93,6 +93,3 @@ class BooleanParameter extends Parameter
 }
 
 ?>
-
-
-

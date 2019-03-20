@@ -56,6 +56,3 @@ class IntegerParameter extends Parameter
 }
 
 ?>
-
-
-

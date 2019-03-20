@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 - The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.0.1] - 2019-03-20
+
+### Fixed
+- Fixed bug that causes extra newlines when autoloading Parameter subclasses
+
+### Added
+- next ... Configure Argh with option to enable/disable naked variables
+
 ## [1.0.0-alpha] - 2019-01-25
 
 ### Added
@@ -20,16 +28,11 @@ All notable changes to this project will be documented in this file.
 - Rename Argh::parseStringWithParameters() as Argh::parseString()
 - Rename Argh->parse() as Argh->parseArguments()
 
-### Deprecated
-
 ### Removed
 - ArgumentValidator
 - tests/ArgumentCollectionTest (ArgumentCollection was previously removed)
 - Argh::command()
 - Argh::parameterString()
-
-### Fixed
-### Security
 
 ## [0.1.0] - 2018-09-25
 
