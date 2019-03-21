@@ -21,6 +21,7 @@ use netfocusinc\argh\VariableParameter;
 try
 {
 	$argh = new Argh([
+			VariableParameter::create(),
 			BooleanParameter::createWithAttributes(
 				[
 					'name'				=>	'debug',
@@ -43,7 +44,7 @@ try
 			IntegerParameter::createWithAttributes(
 				[
 					'name'				=>	'verbose',
-					'flag'				=>	'V',
+					'flag'				=>	'v',
 					'required'		=>	FALSE,
 					'default'			=>	0,
 					'description'	=>	'Level of verbosity to output.',
@@ -59,13 +60,13 @@ try
 	{
 		case 'help':
 		
-			echo $argh->usage() . "\n";
+			echo $argh->usage() . PHP_EOL;
 			
 			break;
 			
 		case 'show':
 		
-			echo "Parameters: \n" . $argh->parameters()->toString() . "\n";
+			echo "Parameters: \n" . $argh->parameters()->toString() . PHP_EOL;
 			
 			if( $argh->parameters()->hasVariable() )
 			{
@@ -83,7 +84,7 @@ try
 					
 					if( !is_array($argh->get($p->getName())) )
 					{
-						echo $argh->get($p->getName()) . "\n";
+						echo $argh->get($p->getName()) . PHP_EOL;
 					}
 					else
 					{
@@ -97,7 +98,7 @@ try
 						$buff .= ']';
 						
 						echo $buff;
-						echo "\n";
+						echo PHP_EOL;
 					}
 				} // END: if(ARGH_TYPE_VARIABLE != $p->type())
 		
@@ -108,19 +109,19 @@ try
 		case 'about':
 		case 'version':
 		
-			echo About::$name . ' ' . About::$version . ' by ' . About::$author . ' - ' . About::$url . "\n";
+			echo About::$name . ' ' . About::$version . ' by ' . About::$author . ' - ' . About::$url . PHP_EOL;
 			
 			break;
 		
 		default:
 		
-			echo $argh->usage() . "\n";
+			echo '? Try: php bin/argh.php help' . PHP_EOL;
 	} // switch($argh->cmd)
 	
 } // try
 catch(ArghException $e)
 {
-	echo 'Exception: ' . $e->getMessage() . "\n";
+	echo 'Exception: ' . $e->getMessage() . PHP_EOL;
 }
 
 ?>

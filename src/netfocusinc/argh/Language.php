@@ -195,7 +195,7 @@ class Language
 		$language->addRule(new Rule(
 				'Quoted Naked Variable',
 				'value',
-				'/^\'(' . ARGH_SYNTAX_VARIABLE . ')\'$/i',
+				'/^\'(' . ARGH_SYNTAX_QUOTED . ')\'$/i',
 				[ARGH_SEMANTICS_VARIABLE]
 			)
 		);

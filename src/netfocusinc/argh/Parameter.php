@@ -21,7 +21,7 @@ abstract class Parameter
 	//
 	
 	// Parameter Names
-	const ARGH_NAME_VARIABLE	= '_ARGH_VARS_';
+	const ARGH_NAME_VARIABLE	= '_ARGH_VARIABLE_';
 	
 	// Parameter Data Types
 	const ARGH_TYPE_BOOLEAN		= 1;

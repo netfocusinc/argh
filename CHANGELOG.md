@@ -8,13 +8,13 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Fixed bug that causes extra newlines when autoloading Parameter subclasses
+- Fixed bug that allows erroneous matches with 'naked multiflag' rule
 
 ### Added
-- next ... Configure Argh with option to enable/disable naked variables
 - New About.php class defines variables used by bin/argh.php to display versioning info
 
 ### Changed
-- 
+- VariableParameters are no longer automatically added to Argh
 
 ## [1.0.0-alpha] - 2019-01-25
 

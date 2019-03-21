@@ -151,14 +151,6 @@ class Argh
 		{
 			$this->parameters->addParameter($p);
 		}
-		
-		//! TODO: Replace this; Accept FLAGS argument to enable naked variables (Rule selection)
-		$this->parameters->addParameter(VariableParameter::createWithAttributes(
-				[
-					'name'	=>	Parameter::ARGH_NAME_VARIABLE
-				]
-			)
-		);
 				
 	} // END: public function __construct()
 	

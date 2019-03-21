@@ -92,8 +92,8 @@ class ArgumentParser
 				//
 				// DEBUG: Show detailed contents of each variable
 				//
+						
 						/*
-				
 						echo "\n\n";
 						echo implode(' ', $argsL) . " | " . implode(' ', $argsR) . "\n";
 						
@@ -117,8 +117,8 @@ class ArgumentParser
 						echo "\n\n";
 						
 						echo "\nDEBUG: Considering: " . $argsS . " ... \n\n";
-						
 						*/
+						
 				
 				//
 				// END DEBUG
@@ -252,7 +252,6 @@ class ArgumentParser
 					// Check every character of this $token for a matching parameter 'flag'
 					for($j=0; $j<strlen($token); $j++)
 					{
-					
 						if( $this->parameterCollection->exists( $token{$j} ) )
 						{
 							// This Rule can only apply to ARGH_TYPE_BOOLEAN Parameters
@@ -265,8 +264,11 @@ class ArgumentParser
 						else
 						{
 							// A character in $token, does not match a defined Parameter flag
+							// This Rule will NOT yield any arguments
 							// Undo the creation of new Arguments under this Rule
 							$argument = array();
+							
+							break; // Break from this for loop
 						}		
 						
 					} // END: for($j=0; $j<strlen($token); $j++)

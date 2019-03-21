@@ -16,7 +16,7 @@ class Rule
 	const ARGH_SYNTAX_LIST			= '[a-z0-9_\-,\' ]+';
 	const ARGH_SYNTAX_COMMAND		= '[a-z0-9_]{2,}';
 	const ARGH_SYNTAX_QUOTED		= '[a-z0-9_\-\'\\/\. ]+';
-	const ARGH_SYNTAX_VARIABLE	= '[a-z0-9_\.\/ ]*';
+	const ARGH_SYNTAX_VARIABLE	= '[a-z0-9_\.\/]*';
 	
 	// Semantic Contants
 	const ARGH_SEMANTICS_FLAG			= 1;

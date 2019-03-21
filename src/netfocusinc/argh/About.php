@@ -8,7 +8,7 @@ class About
 	
 	public static $author = 'Benjamin Hough, Net Focus Inc.';
 	
-	public static $version = '1.0.1';
+	public static $version = '1.0.1-alpha';
 	
 	public static $url = 'https://www.netfocusinc.com/argh';
 }

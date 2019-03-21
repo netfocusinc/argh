@@ -18,6 +18,17 @@ class VariableParameter extends Parameter
 	// STATIC FUNCTIONS
 	//
 	
+	public static function create() : Parameter
+	{	
+		return parent::createWithAttributes(
+			[
+				'name' => Parameter::ARGH_NAME_VARIABLE,
+				'required' => FALSE,
+				'description' => 'Unnamed argument inputs' 
+			]
+		);
+	}
+	
 	//
 	// PUBLIC FUNCTIONS
 	//
@@ -42,7 +53,8 @@ class VariableParameter extends Parameter
 		* @since 1.0.0
 		*/
 	public function setValue($value)
-	{		
+	{	
+		echo "VariableParameter: setValue($value)" . PHP_EOL;
 		if(is_array($value))
 		{
 			$this->value = $value;
