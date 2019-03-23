@@ -2,13 +2,13 @@
 
 Parse PHP command line arguments with ease so you can focus on your CLI application.
 
-Detailed information and usage examples are available at [https://www.netfocusinc.com/argh](Argh PHP Command Line Parser)
+Detailed information and usage examples are available at [Argh PHP Command Line Parser](https://www.netfocusinc.com/argh)
 
 # ALPHA RELEASE
 
 This project is currently under **alpha** release. Beta release will follow after the addition of more rigorous PHPUnit tests.
 
-### Prerequisites
+### System Requirements
 
 This project has been developed and tested with the following (see list below), and has yet to be tested using other operating systems or versions of PHP.
 
@@ -17,27 +17,28 @@ This project has been developed and tested with the following (see list below), 
 
 ### Installing
 
-There are currently two methods of installing Argh. We plan on adding a Phar (PHP Archive) distribution soon.
+There are three methods of installing Argh. Composer is recommended.
 
 1. Composer
 2. Phar (PHP Archive)
 2. Github
 
-More detailed instructions can be found at [https://www.netfocusinc.com/argh#install](Argh Installation Instructions)
+More detailed instructions can be found at [Argh Installation Instructions](https://www.netfocusinc.com/argh#install)
 
 #### Composer Installation
 
-[https://getcomposer.org/](Composer) is the preferred method for installation.
+[Composer](https://getcomposer.org) is the preferred method for installation.
 
 ```
 $ composer require netfocusinc/argh
+$ composer update
 $ php vendor/netfocusinc/argh/bin/argh.php about
 Argh! 1.0.2-alpha by Benjamin Hough, Net Focus Inc. - https://www.netfocusinc.com/argh
 ```
 
 #### Phar (PHP Archive)
 
-Releases can be downloaded from [https://github.com/netfocusinc/argh/releases](Argh's Github Releases).
+Releases can be downloaded from [Argh's Github Releases](https://github.com/netfocusinc/argh/releases).
 
 ```
 $ php argh.phar about
@@ -46,18 +47,16 @@ Argh! 1.0.2-alpha by Benjamin Hough, Net Focus Inc. - https://www.netfocusinc.co
 
 #### Github (Source Code)
 
-Alternatively, the Argh [https://github.com/netfocusinc/argh](Github repository) can be cloned.
+Source code from Argh can be cloned from [Github repository](https://github.com/netfocusinc/argh) can be cloned.
 
 ```
 $ git clone https://github.com/netfocusinc/argh.git
-$ cd argh
-$ php bin/argh.php about
 ```
 
 ### Basic Usage
 
 Using Argh is an easy way to parse arguments to your PHP command line scripts.
-See more examples of [https://www.netfocusinc.com/argh#usage](how to use Argh) are available.
+See more examples of [how to use Argh](https://www.netfocusinc.com/argh#usage) are available.
 
 ```
 <?php
@@ -83,7 +82,7 @@ See more examples of [https://www.netfocusinc.com/argh#usage](how to use Argh) a
 
 ## Running Unit Tests
 
-The [https://phpunit.de/index.html](PHPUnit) tests for Argh can be run like this.
+The [PHPUnit](https://phpunit.de/index.html) tests for Argh can be run like this.
 
 ```
 $ vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests/
