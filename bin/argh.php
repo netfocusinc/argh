@@ -58,6 +58,12 @@ try
 	
 	switch($argh->cmd)
 	{
+		case 'about':
+		
+			echo About::$name . ' ' . About::$version . ' by ' . About::$author . ' - ' . About::$url . PHP_EOL;
+			
+			break;
+			
 		case 'help':
 		
 			echo $argh->usage() . PHP_EOL;
@@ -106,10 +112,9 @@ try
 			
 			break;
 		
-		case 'about':
 		case 'version':
 		
-			echo About::$name . ' ' . About::$version . ' by ' . About::$author . ' - ' . About::$url . PHP_EOL;
+			echo About::$version . PHP_EOL;
 			
 			break;
 		
