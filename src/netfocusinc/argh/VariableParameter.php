@@ -5,9 +5,11 @@ namespace netfocusinc\argh;
 use netfocusinc\argh\ArghException;
 use netfocusinc\argh\Parameter;
 
-
 /**
 	* A Variable Parameter.
+	*
+	* Variable Parameters are used to save unamed input (naked variables)
+	* Their value always consists of an array
 	*
 	* @since 1.0.0
 	*/
@@ -18,6 +20,13 @@ class VariableParameter extends Parameter
 	// STATIC FUNCTIONS
 	//
 	
+	/**
+		* Returns an instance of VariableParameter
+		*
+		* VariableParameters are always named with the ARGH_NAME_VARIABLE constant
+		*
+		* @since 1.0.1
+		*/
 	public static function create() : Parameter
 	{	
 		return parent::createWithAttributes(
@@ -27,6 +36,25 @@ class VariableParameter extends Parameter
 				'description' => 'Unnamed argument inputs' 
 			]
 		);
+	}
+	
+	/**
+		* Returns an instance of VariableParameter
+		*
+		* Overriding Parameter::createWithAttribute() here prevents this from being called with a custom 'name' attribute
+		* VariableParameters need to be named with ARGH_NAME_VARIABLE constant; Argh uses this 'name' to find variables
+		*
+		* @since 1.0.2
+		*/
+	public static function createWithAttributes(array $attributes) : Parameter
+	{	
+		// Force VariableParameters to use a constant name
+		if(array_key_exists('name', $attributes))
+		{
+			$attributes['name'] = Parameter::ARGH_NAME_VARIABLE;
+		}
+		
+		return parent::createWithAttributes($attributes);
 	}
 	
 	//

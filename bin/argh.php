@@ -6,7 +6,7 @@
 ** Demonstrates the capabilities of Argh
 */
 
-require 'vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use netfocusinc\argh\About;
 use netfocusinc\argh\Argh;

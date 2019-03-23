@@ -20,6 +20,7 @@ This project has been developed and tested with the following (see list below), 
 There are currently two methods of installing Argh. We plan on adding a Phar (PHP Archive) distribution soon.
 
 1. Composer
+2. Phar (PHP Archive)
 2. Github
 
 More detailed instructions can be found at [https://www.netfocusinc.com/argh#install](Argh Installation Instructions)
@@ -30,18 +31,27 @@ More detailed instructions can be found at [https://www.netfocusinc.com/argh#ins
 
 ```
 $ composer require netfocusinc/argh
-$ php vendor/netfocusinc/argh/bin/argh.php --about
-Argh! by Benjamin Hough, Net Focus Inc.
+$ php vendor/netfocusinc/argh/bin/argh.php about
+Argh! 1.0.2-alpha by Benjamin Hough, Net Focus Inc. - https://www.netfocusinc.com/argh
 ```
 
-#### Github Installation
+#### Phar (PHP Archive)
 
 Releases can be downloaded from [https://github.com/netfocusinc/argh/releases](Argh's Github Releases).
+
+```
+$ php argh.phar about
+Argh! 1.0.2-alpha by Benjamin Hough, Net Focus Inc. - https://www.netfocusinc.com/argh
+```
+
+#### Github (Source Code)
 
 Alternatively, the Argh [https://github.com/netfocusinc/argh](Github repository) can be cloned.
 
 ```
 $ git clone https://github.com/netfocusinc/argh.git
+$ cd argh
+$ php bin/argh.php about
 ```
 
 ### Basic Usage
@@ -51,6 +61,9 @@ See more examples of [https://www.netfocusinc.com/argh#usage](how to use Argh) a
 
 ```
 <?php
+
+	use netfocusinc\argh\Argh;
+	use netfocusinc\argh\StringParameter;
 
 	// Create a new Argh instance
 	$argh = new Argh(
@@ -81,6 +94,7 @@ $ vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests/
 * [PHP](http://php.net/) - PHP is a popular general-purpose scripting language that is especially suited to web development.
 * [Composer](https://getcomposer.org/) - Dependency Manager for PHP
 * [PHPUnit](https://phpunit.de/) - Testing Framework
+* [phar-composer](https://github.com/clue/phar-composer) - Simple phar creation for any project managed via composer.
 
 ## Contributing
 

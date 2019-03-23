@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 - The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.0.2-alhpa] - Coming Soon
+
+### Planned
+- Complete PHPDocumentor comments
+- Add PHPUnit tests
+
+### Fixed
+
+### Changed
+- Updated bin/argh.php test program, to be useable insider PHAR archive
+- VariableParameter overrides Parameter::createWithAttributes() to force constant name ARHG_NAME_VARIABLE
+
+### Added
+- This and all future releases will include a phar archive as a github release asset
+
 ## [1.0.1-alpha] - 2019-03-20
 
 ### Fixed
