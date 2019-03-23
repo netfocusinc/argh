@@ -23,7 +23,7 @@ class LanguageTest extends TestCase
 	  
 	  $this->assertTrue(is_array($rules));
 	  
-	  $this->assertSame(13, count($rules));
+	  $this->assertSame(15, count($rules));
 	  
 	  $this->assertInstanceOf(Rule::class, $rules[0]);
 	}

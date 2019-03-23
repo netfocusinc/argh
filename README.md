@@ -61,13 +61,15 @@ See more examples of [how to use Argh](https://www.netfocusinc.com/argh#usage) a
 ```
 <?php
 
+	include 'vendor/autoload.php';
+
 	use netfocusinc\argh\Argh;
 	use netfocusinc\argh\StringParameter;
 
 	// Create a new Argh instance
 	$argh = new Argh(
-  	[
-    	StringParameter::createWithAttributes( [ 'name' => 'message' ] )		
+  		[
+    		StringParameter::createWithAttributes( [ 'name' => 'message' ] )		
 		]
 	);
  

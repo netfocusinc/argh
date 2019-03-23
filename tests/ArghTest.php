@@ -29,7 +29,7 @@ class ArghTest extends TestCase
 		];		
 		
 		// Parse with Parameters
-		$argh = Argh::parseWithParameters( $argv, $parameters );
+		$argh = Argh::parse( $argv, $parameters );
 		
 		$this->assertTrue($argh->get('debug'));
 		// Simulate $argv array
@@ -45,7 +45,7 @@ class ArghTest extends TestCase
 		];		
 		
 		// Parse with Parameters
-		$argh = Argh::parseWithParameters( $argv, $parameters );
+		$argh = Argh::parse( $argv, $parameters );
 		
 		$this->assertTrue($argh->get('debug'));
 	}
@@ -65,7 +65,7 @@ class ArghTest extends TestCase
 		];		
 		
 		// Parse with Parameters
-		$argh = Argh::parseStringWithParameters( $args, $parameters );
+		$argh = Argh::parseString( $args, $parameters );
 		
 		$this->assertTrue($argh->get('debug'));
 	}
@@ -86,7 +86,7 @@ class ArghTest extends TestCase
 		];		
 		
 		// Parse with Parameters
-		$argh = Argh::parseStringWithParameters( $args, $parameters );
+		$argh = Argh::parseString( $args, $parameters );
 		
 		$this->assertSame('Hello', $argh->message);
 		$this->assertSame('Hello', $argh->m);	
@@ -108,7 +108,7 @@ class ArghTest extends TestCase
 		];		
 		
 		// Parse with Parameters
-		$argh = Argh::parseStringWithParameters( $args, $parameters );
+		$argh = Argh::parseString( $args, $parameters );
 		
 		$this->assertTrue(isset($argh->message));
 		$this->assertFalse(isset($argh->nope));	
@@ -129,7 +129,7 @@ class ArghTest extends TestCase
 		];		
 		
 		// Parse with Parameters
-		$argh = Argh::parseStringWithParameters( $args, $parameters );
+		$argh = Argh::parseString( $args, $parameters );
 		
 		$this->assertSame('myscript.php', $argh->argv(0));
 		
@@ -160,7 +160,7 @@ class ArghTest extends TestCase
 		];		
 		
 		// Parse with Parameters
-		$argh = Argh::parseStringWithParameters( $args, $parameters );
+		$argh = Argh::parseString( $args, $parameters );
 		
 		$this->expectException(ArghException::class);
 		
@@ -184,7 +184,7 @@ class ArghTest extends TestCase
 		];		
 		
 		// Parse with Parameters
-		$argh = Argh::parseStringWithParameters( $args, $parameters );
+		$argh = Argh::parseString( $args, $parameters );
 		
 		// Default Value
 		$this->assertSame('Foo', $argh->get('message'));
@@ -208,7 +208,7 @@ class ArghTest extends TestCase
 		];		
 		
 		// Parse with Parameters
-		$argh = Argh::parseStringWithParameters( $args, $parameters );
+		$argh = Argh::parseString( $args, $parameters );
 		
 		// Default Value
 		$this->assertSame('Bar', $argh->get('message'));
