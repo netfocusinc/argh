@@ -10,6 +10,11 @@ All notable changes to this project will be documented in this file.
 - Complete PHPDocumentor comments
 - Add more PHPUnit tests
 
+## Changed
+
+## Added
+- PHPDocumetor configuration file added
+
 ## [1.0.2-alhpa] - 2019-03-22
 
 ### Changed
@@ -63,6 +68,7 @@ All notable changes to this project will be documented in this file.
 
 # End
 
+<!---
 # Section Template
 ## [x.y.x] - yyyy-mm-dd
 ### Added
@@ -71,3 +77,4 @@ All notable changes to this project will be documented in this file.
 ### Removed
 ### Fixed
 ### Security
+-->

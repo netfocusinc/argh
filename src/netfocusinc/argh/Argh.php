@@ -19,7 +19,9 @@ define('ARGH_TYPE_VARIABLE', Parameter::ARGH_TYPE_VARIABLE, true);
 	* This is the description for a DocBlock. This text may contain
 	* multiple lines
 	*
-	* @author  Benjamin Hough <benjamin@netfocusinc.com>
+	* @author  Benjamin Hough - Net Focus, Inc.
+	*
+	* @since 1.0.0
 	*
 	*/
 class Argh
@@ -43,6 +45,9 @@ class Argh
 	//
 	
 	/**
+		* Convenience static function
+		*
+		* Instantiates a new Argh instance and parses the arguments from $argv array
 		*
 		* @api
 		*
@@ -61,6 +66,9 @@ class Argh
 	}
 	
 	/**
+		* Convenience static function
+		*
+		* Instantiates a new Argh instance and parses the arguments from $args string
 		*
 		* @api
 		*
@@ -93,12 +101,11 @@ class Argh
 		* Forward requests for undefined object properties to Argh->get() method
 		*
 		*	@internal
-		* @since 1.0
+		* @since 1.0.0
 		*		 
 		* @param string $name The name (or flag) of a defined Parameter
 		*
 		* @return mixed The value of a Parameter (type depends on the Parameter's type)
-		*
 		*/	
 	public function __get(string $key)
 	{
@@ -107,9 +114,14 @@ class Argh
 	}
 	
 	/**
-		* 
+		* Magic method checks if a parameter value has been set via object property syntax
 		*
+		* @internal
+		* @since 1.0.0
 		*
+		* @param string $key The name (of flag) of a parameter
+		*
+		* @return boolean TRUE when the named parameter exists, otherwise FALSE
 		*/
 	public function __isset(string $key): bool
 	{
@@ -134,7 +146,6 @@ class Argh
 		*
 		* @since 1.0
 		*
-		* @param array $argv Array of cli arguments as registered by PHP CLI
 		* @param array $parameters An array of Parameters to use for interpreting command line arguments
 		*
 		*/
@@ -155,11 +166,17 @@ class Argh
 	} // END: public function __construct()
 	
 	/**
+		* Parses the given $argv array using the pre-defined set of parameters
 		*
+		* @api
 		*
+		* @since 1.0.0
 		*
+		* @param array $argv An array of command line arguments to interpret
+		*
+		* @throws ArghException
 		*/
-	public function parseArguments($argv)
+	public function parseArguments(array $argv)
 	{
 		// Set properties on this object
 		$this->argv = $argv;

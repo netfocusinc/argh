@@ -61,25 +61,24 @@ See more examples of [how to use Argh](https://www.netfocusinc.com/argh#usage) a
 ```
 <?php
 
-	include 'vendor/autoload.php';
+include 'vendor/autoload.php';
 
-	use netfocusinc\argh\Argh;
-	use netfocusinc\argh\StringParameter;
+use netfocusinc\argh\Argh;
+use netfocusinc\argh\StringParameter;
 
-	// Create a new Argh instance
-	$argh = new Argh(
-  		[
-    		StringParameter::createWithAttributes( [ 'name' => 'message' ] )		
-		]
-	);
- 
-	// Let Argh parse PHP's $argv array
-	$argh->parse($argv);
-	
-	// Access run-time values of the arguments that were supplied to your CLI script
-	echo $argh->message;
+// Create a new Argh instance
+$argh = new Argh(
+  [
+    StringParameter::createWithAttributes( [ 'name' => 'message' ] )		
+  ]
+);
 
-?>
+// Let Argh parse PHP's $argv array
+$argh->parse($argv);
+
+// Access run-time values of the arguments that were supplied to your CLI script
+echo $argh->message;
+
 ```
 
 ## Running Unit Tests
@@ -105,7 +104,7 @@ Coming soon...
 
 This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
-For the versions available, see the [tags on this repository](https://github.com/benjaminhough/Argh/tags).
+For the versions available, see the [GitHub releases page](https://github.com/netfocusinc/argh/releases).
 
 A [Changelog](https://github.com/netfocusinc/argh/blob/master/CHANGELOG.md) is also available on Github.
 
