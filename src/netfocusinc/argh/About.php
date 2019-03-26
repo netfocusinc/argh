@@ -1,15 +1,19 @@
 <?php
 	
+/**
+ * This file defines the About class
+ *
+ */
+	
 namespace netfocusinc\argh;
 
 /**
- * Defines static variables to provide version information.
+ * Defines static variables used to provide version information.
  *
  * @author  Benjamin Hough - Net Focus, Inc.
  *
  * @since 1.0.2
  */
-	
 class About
 {
 	/** @var string The name of this library  */

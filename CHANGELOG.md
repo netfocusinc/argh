@@ -11,9 +11,10 @@ All notable changes to this project will be documented in this file.
 - Add more PHPUnit tests
 
 ## Changed
+- Use [PHPDocumentor](https://phpdoc.org/) style comments throughout source code
 
 ## Added
-- PHPDocumetor configuration file added
+- [PHPDocumetor](https://phpdoc.org/) configuration file added
 
 ## [1.0.2-alhpa] - 2019-03-22
 

@@ -1,5 +1,13 @@
 <?php
 	
+/**
+	* Defines the Argh class
+	*
+	* @author  Benjamin Hough - Net Focus, Inc.
+	*
+	* @since 1.0.0
+	*/ 
+	
 namespace netfocusinc\argh;
 
 //
@@ -14,10 +22,11 @@ define('ARGH_TYPE_COMMAND', Parameter::ARGH_TYPE_COMMAND, true);
 define('ARGH_TYPE_VARIABLE', Parameter::ARGH_TYPE_VARIABLE, true);
 
 /**
+	* Argument Helper
+	* 
 	* The main class to be used by clients for parsing command line arguments
 	*
-	* This is the description for a DocBlock. This text may contain
-	* multiple lines
+	* @api
 	*
 	* @author  Benjamin Hough - Net Focus, Inc.
 	*
@@ -45,9 +54,10 @@ class Argh
 	//
 	
 	/**
-		* Convenience static function
+		* Create a new Argh instance and parses the arguments from $argv array
 		*
-		* Instantiates a new Argh instance and parses the arguments from $argv array
+		* This convenience method accepts both the PHP $argv array, and an array of Parameters used to interpret them.
+		* After creating a new instance of Argh, the $argv array is interpreted against the specificed Parameters.
 		*
 		* @api
 		*
@@ -55,8 +65,10 @@ class Argh
 		*
 		* @param array $argv
 		* @param array $parameters Array of Parameters
+		*
+		* @return Argh
 		*/
-	public static function parse(array $argv, array $parameters)
+	public static function parse(array $argv, array $parameters) : Argh
 	{
 		$argh = new Argh($parameters);
 		
@@ -66,18 +78,21 @@ class Argh
 	}
 	
 	/**
-		* Convenience static function
+		* Create a new Argh instance and parses the arguments from $args string
 		*
-		* Instantiates a new Argh instance and parses the arguments from $args string
-		*
+		* This convenience method accepts both a string of command line arguments, and an array of Parameters used to interpret them.
+		* After creating a new instance of Argh, the $args string is interpreted against the specified Parameters.
+		* 
 		* @api
 		*
 		* @since 1.0.0
 		*
 		* @param string $args A string simulating command line entry
 		* @param array $parameters Array of Parameters
+		*
+		* @return Argh
 		*/
-	public static function parseString(string $args, array $parameters)
+	public static function parseString(string $args, array $parameters) : Argh
 	{
 		// Force $args into an array
 		$argv = explode(' ', $args);
@@ -95,7 +110,7 @@ class Argh
 	// MAGIC METHODS
 	//
 
-	/**
+	/** 
 		* Magic method providing access to parameter values via object properties syntax
 		*
 		* Forward requests for undefined object properties to Argh->get() method
@@ -140,11 +155,14 @@ class Argh
 	//
 
 	/**
-		* Contructs an Argh instance
+		* Contructs a new Argh instance
+		*
+		* Constructs a new instance of Argh with the specified Parameters.
+		* The resulting Argh instance is ready to interpret command line arguments.
 		*
 		* @api
 		*
-		* @since 1.0
+		* @since 1.0.0
 		*
 		* @param array $parameters An array of Parameters to use for interpreting command line arguments
 		*
@@ -166,7 +184,9 @@ class Argh
 	} // END: public function __construct()
 	
 	/**
-		* Parses the given $argv array using the pre-defined set of parameters
+		* Interprets an array of command line arguments
+		* 
+		* Parses the given $argv array using this instances pre-defined set of Parameters
 		*
 		* @api
 		*
@@ -207,7 +227,8 @@ class Argh
 		* Provides access to the $argv array (and its elements) as registered by PHP CLI
 		*
 		*	@api
-		* @since 1.0
+		*
+		* @since 1.0.0
 		*		 
 		* @param int|null $i The index of an $argv element; or null to return the entire $argv array
 		*
@@ -241,7 +262,8 @@ class Argh
 		* or, the default value as defined by the arguments corresponding Parameter.
 		*
 		*	@api
-		* @since 1.0
+		*
+		* @since 1.0.0
 		*		 
 		* @param string $key The name (or flag) of a defined Parameter
 		*
@@ -272,7 +294,23 @@ class Argh
 			return $this->parameters->get($key)->getDefault();
 		}
 	}
-	
+
+	/**
+		* Retrieves any (unmarked) variables that were supplied as command line arguments.
+		*
+		* Variables are a type of Parameter that are unmarked (they have no name or flag).
+		* To parse variables, a VariableParameter must be added when creating a new Argh instance.
+		* This function is used to retrieve unmarked variables supplied as command line arguments.
+		* Any variables will be returned as an array of values.
+		*
+		*	@api
+		*
+		* @since 1.0.0
+		*		 
+		* @param string $key The name (or flag) of a defined Parameter
+		*
+		* @return mixed An array of strings when variables are present, otherwise FALSE
+		*/	
 	public function variables()
 	{
 		if($this->parameters->hasVariable())
@@ -284,11 +322,42 @@ class Argh
 		return FALSE;
 	}
 	
-	public function parameters() { return $this->parameters; }
-	
-	//! TODO: Accept a formatting string/array (e.g. ['-f', '--name', 'text'])
+	/**
+		* Retrieves the ParameterCollection maintained by this Argh instance.
+		*
+		* Variables are a type of Parameter that are unmarked (they have no name or flag).
+		* To parse variables, a VariableParameter must be added when creating a new Argh instance.
+		* This function is used to retrieve unmarked variables supplied as command line arguments.
+		* Any variables will be returned as an array of values.
+		*
+		*	@api
+		*
+		* @since 1.0.0
+		*		 
+		* @param string $key The name (or flag) of a defined Parameter
+		*
+		* @return ParameterCollection A collection of Parameters maintained by Argh
+		*/	
+	public function parameters() : ParameterCollection { return $this->parameters; }
+
+	/**
+		* Creates a 'usage string' useful for describing the command line arguments accepted by your program.
+		*
+		* This method can be used to create a string of descriptive text that details the command line arguments your 
+		* program accepts. This can be displayed to users when your program is invoked with a 'help' flag, or 
+		* when invalid command line arguments are used.
+		*
+		*	@api
+		*
+		* @since 1.0.0
+		*		 
+		*
+		* @return string Descriptive text that details the command line arguments accepted by your program.
+		*/	
 	public function usageString()
 	{
+		//! TODO: Accept a formatting string/array (e.g. ['-f', '--name', 'text'])
+		
 		$buff = 'Usage: ';
 		$buff .= $this->argv(0) . "\n\n";
 	
@@ -340,7 +409,15 @@ class Argh
 		return $buff;
 	}
 	
-	// An alias for usageString()
+	/**
+		* An alias of function usage()
+		*
+		*	@api
+		*
+		* @since 1.0.0
+		*
+		* @return string Descriptive text that details the command line arguments accepted by your program.
+		*/	
 	public function usage() { return $this->usageString(); }
 	
 }

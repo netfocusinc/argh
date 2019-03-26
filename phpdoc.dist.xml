@@ -6,7 +6,7 @@
         <encoding>utf8</encoding>
         <markers>
             <item>TODO</item>
-            <item>FIXME</item>
+            <item>FIX</item>
         </markers>
         <extensions>
             <extension>php</extension>
@@ -17,7 +17,7 @@
         <target>docs</target>
     </transformer>
     <transformations>
-        <template name="responsive" />
+        <template name="clean" />
     </transformations>
     <files>
         <directory>src</directory>
