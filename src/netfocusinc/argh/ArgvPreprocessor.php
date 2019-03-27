@@ -1,13 +1,25 @@
 <?php
 	
+/**
+	* ArgvPreprocessor.php
+	*/
+	
 namespace netfocusinc\argh;
 
+/**
+	* Handles the preparation of PHP $argv arrays that is required before parsing
+	*
+	* @author Benjamin Hough
+	*
+	* @internal
+	*
+	* @since 1.0.0
+	*/
 class ArgvPreprocessor
 {
 	
 	/**
 	 * Prepare an array of arguments for parsing
-	 *
 	 * 
 	 * PHP registers the $argv array with input from the command line.
 	 * This process includes some items that make it difficult to parse the way Argh wants to.
@@ -20,7 +32,6 @@ class ArgvPreprocessor
 	 *
 	 * @return array
 	 */
-	
 	public static function process(array $argv)
 	{
 		if(count($argv) < 1)

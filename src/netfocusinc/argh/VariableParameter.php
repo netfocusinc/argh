@@ -1,15 +1,24 @@
 <?php
 	
+/**
+	* VariableParameter.php
+	*/
+	
 namespace netfocusinc\argh;
 
 use netfocusinc\argh\ArghException;
 use netfocusinc\argh\Parameter;
 
 /**
-	* A Variable Parameter.
+	* Variable parameter.
 	*
-	* Variable Parameters are used to save unamed input (naked variables)
-	* Their value always consists of an array
+	* Subtype of Parameter that represents an (unmarked) variable.
+	* Variable Parameters are used to save unmakred input (naked variables)
+	* Their value always consists of an array.
+	*
+	* @api
+	*
+	* @author Benjamin Hough
 	*
 	* @since 1.0.0
 	*/
@@ -26,6 +35,8 @@ class VariableParameter extends Parameter
 		* VariableParameters are always named with the ARGH_NAME_VARIABLE constant
 		*
 		* @since 1.0.1
+		*
+		* @return Parameter
 		*/
 	public static function create() : Parameter
 	{	
@@ -45,6 +56,10 @@ class VariableParameter extends Parameter
 		* VariableParameters need to be named with ARGH_NAME_VARIABLE constant; Argh uses this 'name' to find variables
 		*
 		* @since 1.0.2
+		*
+		* @param array $attributes
+		*
+		* @return Parameter
 		*/
 	public static function createWithAttributes(array $attributes) : Parameter
 	{	
@@ -62,7 +77,7 @@ class VariableParameter extends Parameter
 	//
 	
 	/**
-		* Returns one of the Parameter::ARGH_TYPE's
+		* Returns ARGH_TYPE_VARIABLE
 		*
 		* @since 1.0.0
 		*
@@ -79,6 +94,8 @@ class VariableParameter extends Parameter
 		* Forces all values into an array
 		*
 		* @since 1.0.0
+		*
+		* @param mixed $value
 		*/
 	public function setValue($value)
 	{	
@@ -100,7 +117,8 @@ class VariableParameter extends Parameter
 		*
 		* @since 1.0.0
 		*
-		* @return int
+		* @param mixed $value
+		*
 		*/	
 	public function addValue($value)
 	{

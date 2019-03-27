@@ -1,4 +1,8 @@
 <?php
+
+/**
+	* StringParameter.php
+	*/
 	
 namespace netfocusinc\argh;
 
@@ -7,7 +11,13 @@ use netfocusinc\argh\Parameter;
 
 
 /**
-	* A String Parameter.
+	* String parameter
+	*
+	* Subtype of Parameter that represents a string value.
+	*
+	* @api
+	*
+	* @author Benjamin Hough
 	*
 	* @since 1.0.0
 	*/
@@ -23,7 +33,7 @@ class StringParameter extends Parameter
 	//
 	
 	/**
-		* Returns one of the Parameter::ARGH_TYPE's
+		* Returns ARGH_TYPE_STRING
 		*
 		* @since 1.0.0
 		*
@@ -41,7 +51,9 @@ class StringParameter extends Parameter
 		*
 		* @since 1.0.0
 		*
-		* @return int
+		* @param mixed $value
+		*
+		* @throws ArghExpception If $value is an array.
 		*/
 	public function setValue($value)
 	{		

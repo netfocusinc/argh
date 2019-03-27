@@ -1,5 +1,9 @@
 <?php
 	
+/**
+	* IntegerParameter.php
+	*/
+	
 namespace netfocusinc\argh;
 
 use netfocusinc\argh\ArghException;
@@ -8,6 +12,12 @@ use netfocusinc\argh\Parameter;
 
 /**
 	* A Integer Parameter.
+	*
+	* Subtype of Parameter that represents an integer.
+	*
+	* @author Benjamin Hough
+	*
+	* @api
 	*
 	* @since 1.0.0
 	*/
@@ -23,7 +33,7 @@ class IntegerParameter extends Parameter
 	//
 	
 	/**
-		* Returns one of the Parameter::ARGH_TYPE's
+		* Returns one of the ARGH_TYPE_INT
 		*
 		* @since 1.0.0
 		*

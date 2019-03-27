@@ -1,14 +1,21 @@
 <?php
 	
+/**
+	* ArgumentParser.php
+	*/
+	
 namespace netfocusinc\argh;
 
 /**
-	* Summary.
+	* Internal class that performs the work of parsing command line arguments.
 	*
-	* Description
+	* Uses the provided Language and ParameterCollection to interpret an array of command line arguments.
+	*
+	* @author Benjamin Hough
 	*
 	* @internal
 	*
+	* @since 1.0.0
 	*/
 class ArgumentParser
 {
@@ -17,13 +24,24 @@ class ArgumentParser
 	// PRIVATE PROPERTIES
 	//
 	
+	/** @var Language A set of Rules used to interpret command line arguments */
 	private $language;
+	
+	/** @var ParameterCollection A collection of Parameters used to interpret command line arguments */
 	private $parameterCollection;
 	
 	//
 	// PUBLIC METHODS
 	//
 	
+	/**
+		* Constructs a new ArgumentParser
+		*
+		* Creates a new ArgumentParser instance with the specified Langugage and ParameterCollection
+		* The resulting instance is ready for parsing an array of arguments.
+		*
+		* @since 1.0.0
+		*/
 	public function __construct(Language $language, ParameterCollection $parameterCollection)
 	{
 		// Init properties on this instance
@@ -33,15 +51,17 @@ class ArgumentParser
 	
 		
 	/**
-		* Summary.
+		* Parse an array of command line arguments.
 		*
-		* Parse $args to create an array of Arguments
+		* Interprets an array of command line arguments using the Language and ParameterCollection
+		* that was configured during construction.
+		* When successful, this results in an array of Arguments (with key,value pairs).
 		*
 		* @param array $args A pre-processed $argv array
 		*
 		* @return Argument[]
-		* @throws
 		*
+		* @throws ArgumentException
 		*/
 	public function parse(array $args): array
 	{
@@ -201,9 +221,13 @@ class ArgumentParser
 	} // END: public static function parse()
 	
 	/**
-		* Attempts to create Arguments give a Rule and matching tokens
+		* Attempts to create Arguments given a Rule and matching tokens (from the command line arguments string)
 		*
-		* Long Descr
+		* When a set of matching tokens (from a command line argument string) is matched with a Rule (by the parse method)
+		* This function is used to determine if the matching tokens can yield an Argument from the matched Rule.
+		* This requires checking that the SEMANTICS of the Rule correspond with the matched tokens
+		* For example, if -xvf matches the Rule (hypenated multi flag), each character (of xvf) must also correspond to the flag of a 
+		* Parameter that was defined by the client. When no Argument is yielded, the parser can then attempt to match the tokens with another Rule.
 		*
 		* @internal
 		*

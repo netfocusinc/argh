@@ -1,5 +1,9 @@
 <?php
 
+/**
+	* Parameter.php
+	*/
+
 namespace netfocusinc\argh;
 
 /**
@@ -8,10 +12,11 @@ namespace netfocusinc\argh;
 	* Parameters are pre-configured arguments that your CLI application can retrieve
 	* from command line arguments.
 	*
-	* @author  Benjamin Hough <benjamin@netfocusinc.com>
+	* @api
+	*
+	* @author  Benjamin Hough
 	*
 	* @since 1.0.0
-	*
 	*/
 abstract class Parameter
 {
@@ -66,6 +71,21 @@ abstract class Parameter
 	// STATIC METHODS
 	//
 	
+	/**
+		* Creates a new Parameter (sub-type) using the provided attributes
+		*
+		* This function is called statically on the subtypes of Parameter (e.g. BooleanParameter)
+		* It uses the supplied attributes to construct a new Parameter.
+		*
+		* @api
+		*
+		* @since 1.0.0
+		*
+		* @param array $attributes
+		*
+		* @return Parameter
+		* @throws ArghException
+		*/
 	public static function createWithAttributes(array $attributes): Parameter
 	{
 		// Init default attributes for a new Parameter
@@ -95,6 +115,25 @@ abstract class Parameter
 	// PUBLIC METHODS
 	//
 	
+	/**
+		* Parameter contructor.
+		*
+		* This function defines a constructor that is leveraged by Parameter sub-types.
+		* Normally, Parameter (sub-types, e.g. BooleanParameter) are creating using the static Parameter:createWithAttributes() function.
+		* Parameter is an abstract class, and as such cannot be instantiated directly.
+		*
+		* @since 1.0.0
+		*
+		* @param string $name
+		* @param string $flag
+		* @param bool $required
+		* @param mixed $default
+		* @param string $description
+		* @param array $options
+		*
+		* @return Parameter
+		* @throws ArghException
+		*/
 	public function __construct(string $name, string $flag=null, bool $required=FALSE, $default=null, string $description=null, array $options=array())
 	{ 
 		// Required a non-empty 'name'
@@ -119,18 +158,67 @@ abstract class Parameter
 	// GETTERS
 	//
 	
+	/**
+		* Returns the text 'name' of this Parameter
+		*
+		* @since 1.0.0
+		*
+		* @return string
+		*/
 	public function getName(): string { return $this->name; }
 	
+	/**
+		* Returns the character 'flag' of this Parameter
+		*
+		* @since 1.0.0
+		*
+		* @return string
+		*/
 	public function getFlag() { return $this->flag; }
 	
+	/**
+		* Returns the a boolean value indicating if this Parameter is required
+		*
+		* @since 1.0.0
+		*
+		* @return boolean
+		*/
 	public function isRequired(): bool { return $this->required; }
 	
+	/**
+		* Returns the 'default' value of this Parmater
+		*
+		* @since 1.0.0
+		*
+		* @return mixed
+		*/
 	public function getDefault() { return $this->default; }
 	
+	/**
+		* Returns the text 'description' of this Parameter
+		*
+		* @since 1.0.0
+		*
+		* @return string
+		*/
 	public function getDescription() { return $this->description; }
-	
+
+	/**
+		* Returns an array of 'options' that are legal for this Parameters 'value'
+		*
+		* @since 1.0.0
+		*
+		* @return array
+		*/
 	public function	getOptions(): array { return $this->options; }
 	
+	/**
+		* Returns a boolean indicating if this Parameter has any defined 'options'
+		*
+		* @since 1.0.0
+		*
+		* @return bool
+		*/
 	public function hasOptions(): bool
 	{
 		if(count($this->options) > 0)
@@ -143,6 +231,15 @@ abstract class Parameter
 		}
 	}
 	
+	/**
+		* Returns a boolean indicating if the specified $value is a permissible 'option' of this Parameter
+		*
+		* @since 1.0.0
+		*
+		* @param mixed $value
+		* 
+		* @return bool
+		*/
 	public function isOption($value): bool
 	{
 		if( in_array($value, $this->options) )
@@ -154,7 +251,14 @@ abstract class Parameter
 			return FALSE;
 		}
 	}
-	
+
+	/**
+		* Returns the 'value' of this Parameter
+		*
+		* @since 1.0.0
+		*
+		* @return mixed
+		*/	
 	public function getValue()
 	{
 		return $this->value;
@@ -164,8 +268,22 @@ abstract class Parameter
 	// ABSTRACT METHODS
 	//
 	
+	/**
+		* Returns an int corresponding to this Parameters type
+		*
+		* @since 1.0.0
+		*
+		* @return int
+		*/
 	abstract public function getParameterType(): int;
 	
+	/**
+		* Sets the 'value' of this Paramter
+		*
+		* @since 1.0.0
+		*
+		* @param mixed $value
+		*/
 	abstract public function setValue($value);
 	
 }

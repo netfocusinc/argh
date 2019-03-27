@@ -1,5 +1,9 @@
 <?php
 	
+/**
+	* Language.php
+	*/
+	
 namespace netfocusinc\argh;
 
 //
@@ -26,7 +30,14 @@ define('ARGH_SEMANTICS_COMMAND', Rule::ARGH_SEMANTICS_COMMAND, true);
 define('ARGH_SEMANTICS_VARIABLE', Rule::ARGH_SEMANTICS_VARIABLE, true);
 
 /**
-	* Language class. Maintains an array of Rules.
+	* Langugage is a set of Rules (with Syntax and Semantics) used to interpret command line arguments.
+	*
+	* The Language class manages the Rules used to interpret command line arguments during parsing.
+	* This class is a container for Rules, and features convenience methods for constructing a language complete with a set of standard rules.
+	*
+	* @api
+	* 
+	* @author Benjamin Hough
 	*
 	* @since 1.0.0
 	*/
@@ -37,12 +48,22 @@ class Language
 	// PRIVATE PROPERTIES
 	//
 	
+	/** @var array An array of Rules */
 	private $rules; // array of Rule(s)
 	
 	//
 	// STATIC METHODS
 	//
 	
+	/**
+		* Creates a Language, complete with a set of Rules used for interpreting command line arguments
+		*
+		* This is the main function to use when creating a new Langugage.
+		*
+		* @since 1.0.0
+		*
+		* @return Language
+		*/
 	public static function createWithRules()
 	{
 		// Create a new Language instance
@@ -216,6 +237,16 @@ class Language
 	// PUBLIC METHODS
 	//
 	
+	/**
+		* Langugage Constructor
+		*
+		* The preferred way of constructing a new Language, is with the static createWithRules() method.
+		* This constructor is useful for creating custom languages, with non-standard rule sets.
+		*
+		* @since 1.0.0
+		*
+		* @throws Exception
+		*/
 	public function __construct()
 	{
 		try
@@ -230,11 +261,25 @@ class Language
 		
 	} // END: __construct()
 	
+	/**
+		* Returns the set of Rules maintained by this Language.
+		*
+		* @since 1.0.0
+		*
+		* @return array An array of Rules
+		*/
 	public function rules()
 	{
 		return $this->rules;
 	}
 	
+	/**
+		* Adds a Rule to the set of rules maintained by this Language.
+		*
+		* @since 1.0.0
+		*
+		* @param $rule Rule
+		*/
 	public function addRule(Rule $rule)
 	{
 		$this->rules[] = $rule;

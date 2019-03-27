@@ -1,8 +1,7 @@
 <?php
 	
 /**
- * This file defines the About class
- *
+ * About.php
  */
 	
 namespace netfocusinc\argh;

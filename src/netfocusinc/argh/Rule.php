@@ -1,7 +1,22 @@
 <?php
 	
+/**
+	* Rule.php
+	*/
+	
 namespace netfocusinc\argh;
 
+/**
+	* Representation of a Rule used to interpret command line arguments
+	*
+	* Rules are a combination of syntax and semantics used to interpret command line arguments.
+	* When a command line string matches the syntax of a rule, and its character content matches the sematics of the rule
+	* this command line string can be used to create an Argument.
+	*
+	* @author Benjamin Hough
+	*
+	* @since 1.0.0
+	*/
 class Rule
 {
 	//
@@ -9,6 +24,7 @@ class Rule
 	//
 	
 	// Syntax Contants
+	
 	const ARGH_SYNTAX_FLAG			= '[a-z]{1}';
 	const ARGH_SYNTAX_FLAGS			= '[a-z]+';
 	const ARGH_SYNTAX_NAME			= '[a-z0-9_]+';
@@ -31,15 +47,31 @@ class Rule
 	// PUBLIC PROPERTIES
 	//
 	
+	/** @var string The 'name' of this Rule */
 	private $name = null;
+	
+	/** @var string An 'example' string that matches the syntax of this Rule */
 	private $example = null;
+	
+	/** @var string A regular expression defining the acceptable syntax for this Rule */
 	private $syntax = null;
+	
+	/** @var int One of Rule's contants defining the semantical meaning for this Rule */
 	private $semantics = null;
 	
 	//
 	// STATIC FUNCTIONS
 	//
 	
+	/**
+		* Creates a new Rule with the specified $attributes
+		*
+		* Convenience method for creating new Rules with the specified $attributes
+		*
+		* @since 1.0.0
+		*
+		* @returns Rule
+		*/
 	public static function createWithAttributes(array $attributes): Rule
 	{
 		// Defaults
@@ -57,7 +89,16 @@ class Rule
 
 	}
 	
-	public static function semanticsToString($semantics)
+	/**
+		* Returns a (human friendly) string representation of a semantic int
+		*
+		* @since 1.0.0
+		*
+		* @param int $semantics
+		*
+		* @returns string
+		*/
+	public static function semanticsToString(int $semantics)
 	{
 		switch($semantics)
 		{
@@ -76,6 +117,20 @@ class Rule
 	// PUBLIC METHODS
 	//
 	
+	/**
+		* Rule contructor.
+		*
+		* Constructs a new Rule.
+		*
+		* @since 1.0.0
+		*
+		* @param string $name
+		* @param string $example
+		* @param string $syntax
+		* @param array $semantics
+		*
+		* @throws ArghException
+		*/
 	public function __construct(string $name, string $example, string $syntax, array $semantics)
 	{
 		
@@ -102,12 +157,16 @@ class Rule
 	/**
 		* Gets the 'name' property of this Rule
 		*
+		* @since 1.0.0
+		*
 		* @return string
 	*/
 	public function name(): string { return $this->name; }
 
 	/**
 		* Gets the 'syntax' property of this Rule
+		*
+		* @since 1.0.0
 		*
 		* @return string
 	*/
@@ -116,12 +175,16 @@ class Rule
 	/**
 		* Gets the 'semantics' property of this Rule
 		*
-		* @return string
+		* @since 1.0.0
+		*
+		* @return array
 	*/
 	public function semantics(): array { return $this->semantics; }
 	
 	/**
 		* Gets the 'sample' of this Rule
+		*
+		* @since 1.0.0
 		*
 		* @return string
 	*/

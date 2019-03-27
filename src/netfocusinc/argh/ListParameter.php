@@ -1,4 +1,8 @@
 <?php
+
+/**
+	* ListParameter.php
+	*/
 	
 namespace netfocusinc\argh;
 
@@ -8,6 +12,12 @@ use netfocusinc\argh\Parameter;
 
 /**
 	* A List Parameter.
+	*
+	* Subtype of Parameter that represents a list of text values.
+	*
+	* @api
+	*
+	* @author Benjamin Hough
 	*
 	* @since 1.0.0
 	*/
@@ -23,7 +33,9 @@ class ListParameter extends Parameter
 	//
 	
 	/**
-		* Returns one of the Parameter::ARGH_TYPE's
+		* ReturnsParameter::ARGH_TYPE_LIST
+		*
+		* Identifies this Parameter subtype as a ListParameter by returning constant ARGH_TYPE_LIST
 		*
 		* @since 1.0.0
 		*

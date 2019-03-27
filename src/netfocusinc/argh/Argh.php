@@ -1,11 +1,7 @@
 <?php
 	
 /**
-	* Defines the Argh class
-	*
-	* @author  Benjamin Hough - Net Focus, Inc.
-	*
-	* @since 1.0.0
+	* Argh.php
 	*/ 
 	
 namespace netfocusinc\argh;
@@ -24,7 +20,7 @@ define('ARGH_TYPE_VARIABLE', Parameter::ARGH_TYPE_VARIABLE, true);
 /**
 	* Argument Helper
 	* 
-	* The main class to be used by clients for parsing command line arguments
+	* The main class to be used by clients for parsing command line arguments.
 	*
 	* @api
 	*
@@ -40,13 +36,13 @@ class Argh
 	// PRIVATE PROPERTIES
 	//
 	
-	/** @var string A copy of the $argv array, as registered by PHP CLI */
+	/** @var array A copy of the $argv array, as registered by PHP CLI */
 	private $argv = null;
 	
-	/** @var Language  */
+	/** @var Language  A set of Rules used to interpret command line arguments */
 	private $language = null; // Language
 	
-	/** @var ParameterCollection  */
+	/** @var ParameterCollection  A collection of Parameters supplied by clients */
 	private $parameters = null;
 	
 	//
@@ -159,6 +155,9 @@ class Argh
 		*
 		* Constructs a new instance of Argh with the specified Parameters.
 		* The resulting Argh instance is ready to interpret command line arguments.
+		* It is usually preferred to use Argh:parse() to create new Argh instances.
+		* Direct contruction is only necessary if you want to re-use the same Argh instance
+		* for parsing multiple sets of command line arguments. 
 		*
 		* @api
 		*
