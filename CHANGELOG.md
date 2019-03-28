@@ -7,11 +7,11 @@ All notable changes to this project will be documented in this file.
 ## [1.0.3-alpha] - Coming soon
 
 ## Planned
-- Complete PHPDocumentor comments
 - Add more PHPUnit tests
 
 ## Changed
 - Use [PHPDocumentor](https://phpdoc.org/) style comments throughout source code
+- Improved Github README
 
 ## Added
 - [PHPDocumetor](https://phpdoc.org/) configuration file added
