@@ -2,7 +2,9 @@
 
 Interpret PHP command line arguments with ease so you can focus on your CLI application.
 
-Detailed information and usage examples are available at [Argh! Argument Helper for PHP CLI](https://www.netfocusinc.com/argh)
+- More about Argh at [Argh! Argument Helper for PHP CLI](https://www.netfocusinc.com/argh)
+
+- Detailed documentation in the [Argh! Wiki](https://github.com/netfocusinc/argh/wiki)
 
 # ALPHA RELEASE
 
@@ -50,7 +52,7 @@ Argh! by Benjamin Hough, Net Focus Inc. - https://www.netfocusinc.com/argh
 Using Argh is an easy way to interpret command line arguments in your PHP CLI scripts.
 
 When your PHP CLI script is invoked with command line arguments
-`$ php myprogram.php -m 'Hello World!'`
+`$ php myprogram.php --message='Hello World!'`
 
 ```
 <?php
@@ -80,6 +82,8 @@ See more examples of [how to use Argh](https://github.com/netfocusinc/argh/wiki/
 ## Running Unit Tests
 
 The [PHPUnit](https://phpunit.de/index.html) tests for Argh can be run like this.
+
+- When Argh is installed with [Composer](https://getcomposer.org/)
 
 ```
 $ vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests/
