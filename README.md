@@ -6,6 +6,10 @@ Interpret PHP command line arguments with ease so you can focus on your CLI appl
 
 - Detailed documentation in the [Argh! Wiki](https://github.com/netfocusinc/argh/wiki)
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/netfocusinc/argh/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/netfocusinc/argh/?branch=master)
+
+[![Build Status](https://scrutinizer-ci.com/g/netfocusinc/argh/badges/build.png?b=master)](https://scrutinizer-ci.com/g/netfocusinc/argh/build-status/master)
+
 # ALPHA RELEASE
 
 This project is currently under **alpha** release. Beta release will follow after the addition of more rigorous PHPUnit tests.
