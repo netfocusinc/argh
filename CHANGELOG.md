@@ -4,17 +4,29 @@ All notable changes to this project will be documented in this file.
 - The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
-## [1.0.3-alpha] - Coming soon
+<!---
+# Section Template
+## [x.y.x] - yyyy-mm-dd
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+-->
 
-## Planned
-- Add more PHPUnit tests
+## [1.0.3-beta] - 2019.04.30
+
+## Added
+- [PHPDocumetor](https://phpdoc.org/) configuration file added
+- Additional PHPUnit Tests
 
 ## Changed
 - Use [PHPDocumentor](https://phpdoc.org/) style comments throughout source code
 - Improved Github README
 
-## Added
-- [PHPDocumetor](https://phpdoc.org/) configuration file added
+## Fixed
+- Issues detected by [Scrutinizer](https://scrutinizer-ci.com)
 
 ## [1.0.2-alpha] - 2019-03-22
 
@@ -68,14 +80,3 @@ All notable changes to this project will be documented in this file.
 - Adopt [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 # End
-
-<!---
-# Section Template
-## [x.y.x] - yyyy-mm-dd
-### Added
-### Changed
-### Deprecated
-### Removed
-### Fixed
-### Security
--->

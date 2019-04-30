@@ -99,7 +99,6 @@ class VariableParameter extends Parameter
 		*/
 	public function setValue($value)
 	{	
-		echo "VariableParameter: setValue($value)" . PHP_EOL;
 		if(is_array($value))
 		{
 			$this->value = $value;

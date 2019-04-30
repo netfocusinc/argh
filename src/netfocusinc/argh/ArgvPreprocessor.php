@@ -48,9 +48,8 @@ class ArgvPreprocessor
 		//
 		// Lists
 		//
-		$count_args = count($args);
 		
-		for($i=0; $i<$count_args; $i++)
+		for($i=0; $i<count($args); $i++)
 		{
 			// Lists begin with an opening bracket '['
 			if( strpos($args[$i], '[') !== FALSE )
@@ -59,7 +58,7 @@ class ArgvPreprocessor
 				//echo "DEBUG: Found beginning of a list at $i\n";
 				
 				// Search for the end of the list; starting at the current element				
-				for($j=$i; $j<$count_args; $j++)
+				for($j=$i; $j<count($args); $j++)
 				{
 					if( strpos($args[$j], ']') !== FALSE )
 					{
@@ -109,7 +108,7 @@ class ArgvPreprocessor
 		//
 		
 		// Check for arguments with spaces, these were originally quoted on the command line
-		for($i=0; $i<$count_args; $i++)
+		for($i=0; $i<count($args); $i++)
 		{
 			if( strpos($args[$i], ' ') !== FALSE )
 			{

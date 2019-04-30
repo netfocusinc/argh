@@ -10,6 +10,7 @@ use netfocusinc\argh\CommandParameter;
 use netfocusinc\argh\IntegerParameter;
 use netfocusinc\argh\ListParameter;
 use netfocusinc\argh\StringParameter;
+use netfocusinc\argh\VariableParameter;
 
 class Trials extends TestCase
 {
@@ -98,7 +99,8 @@ class Trials extends TestCase
 						'description'	=>	'Level of verbosity to output.',
 						'options'			=>	array(0, 1, 2, 3)			
 					]
-				)			
+				),
+				VariableParameter::create()		
 			]
 		);
 		
@@ -121,7 +123,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', 'somefile.txt');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 		
 		$variables = $this->argh->variables();
 		
@@ -142,7 +144,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', 'somefile.txt', '/and/anotherfile.txt');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 		
 		$variables = $this->argh->variables();
 		
@@ -165,7 +167,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', 'wrong');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -193,7 +195,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', 'help');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -212,7 +214,7 @@ class Trials extends TestCase
 		
 		$this->expectException(ArghException::class);
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 		
 	}
 	
@@ -225,7 +227,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', '-dFq');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -263,7 +265,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', '-debug');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -279,7 +281,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', '--quiet');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -295,7 +297,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', '--file=/path/to/somefile.txt');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -311,7 +313,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', '-file', '/path/to/somefile.txt');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -327,7 +329,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', '-f', '/path/to/somefile.txt');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -343,7 +345,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', '--file=/path with space/file.txt');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -360,7 +362,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', '-f', '/path with space/file.txt');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -376,7 +378,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', '--colors=[red,', 'green,', 'blue]');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -399,7 +401,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', '--colors=[yellow,', 'blue,', 'blue green]');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -422,7 +424,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', '-c', '[red,', 'green,', 'blue]');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -445,7 +447,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', '-c', '[yellow,', 'blue,', 'blue green]');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -472,7 +474,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', '-F', '-q');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		
@@ -490,7 +492,7 @@ class Trials extends TestCase
 		
 		$argv = array('myscript.php', '-debug', '-force');
 		
-		$this->argh->parse($argv);
+		$this->argh->parseArguments($argv);
 	
 		// Test Results
 		

@@ -1,5 +1,7 @@
 # Argh
 
+> "Argh" is short for _Argument Helper_.
+
 Interpret PHP command line arguments with ease so you can focus on your CLI application.
 
 - More about Argh at [Argh! Argument Helper for PHP CLI](https://www.netfocusinc.com/argh)
