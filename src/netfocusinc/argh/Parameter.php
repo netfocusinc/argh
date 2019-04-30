@@ -287,5 +287,3 @@ abstract class Parameter
 	abstract public function setValue($value);
 	
 }
-
-?>

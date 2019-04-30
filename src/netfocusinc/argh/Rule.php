@@ -56,7 +56,7 @@ class Rule
 	/** @var string A regular expression defining the acceptable syntax for this Rule */
 	private $syntax = null;
 	
-	/** @var int One of Rule's contants defining the semantical meaning for this Rule */
+	/** @var array Array of Rule's contants defining the semantical meaning for this Rule */
 	private $semantics = null;
 	
 	//

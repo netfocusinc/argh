@@ -22,10 +22,8 @@ class About
 	public static $author = 'Benjamin Hough, Net Focus Inc.';
 	
 	/** @var string The current version number of this library  */
-	public static $version = '1.0.2-alpha';
+	public static $version = '1.0.3-beta';
 	
 	/** @var string The URL of this libraries home page  */
 	public static $url = 'https://www.netfocusinc.com/argh';
 }
-
-?>

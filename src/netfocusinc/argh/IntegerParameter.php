@@ -64,5 +64,3 @@ class IntegerParameter extends Parameter
 	}
 	
 }
-
-?>

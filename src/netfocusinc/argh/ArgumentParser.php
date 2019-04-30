@@ -246,7 +246,9 @@ class ArgumentParser
 		$argument = array();
 
 		// Loop through $tokens and define Argument(s) based on the current rules semantics
-		for($i=1; $i<count($tokens); $i++)
+		$count_tokens = count($tokens);
+		
+		for($i=1; $i<$count_tokens; $i++)
 		{
 			$token = $tokens[$i];
 			$semantics = $rule->semantics()[$i-1];

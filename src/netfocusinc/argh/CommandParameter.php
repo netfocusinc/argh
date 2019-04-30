@@ -101,5 +101,3 @@ class CommandParameter extends Parameter
 	}
 	
 }
-
-?>

@@ -420,5 +420,3 @@ class Argh
 	public function usage() { return $this->usageString(); }
 	
 }
-	
-?>

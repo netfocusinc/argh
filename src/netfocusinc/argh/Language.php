@@ -254,7 +254,7 @@ class Language
 			// Create an array of Rules
 			$this->rules = array();
 		}
-		catch(Exception $e)
+		catch(\Exception $e)
 		{
 			throw($e);
 		}
@@ -286,5 +286,3 @@ class Language
 	}
 	
 }
-	
-?>

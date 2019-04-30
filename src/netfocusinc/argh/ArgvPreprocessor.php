@@ -48,8 +48,9 @@ class ArgvPreprocessor
 		//
 		// Lists
 		//
+		$count_args = count($args);
 		
-		for($i=0; $i<count($args); $i++)
+		for($i=0; $i<$count_args; $i++)
 		{
 			// Lists begin with an opening bracket '['
 			if( strpos($args[$i], '[') !== FALSE )
@@ -58,7 +59,7 @@ class ArgvPreprocessor
 				//echo "DEBUG: Found beginning of a list at $i\n";
 				
 				// Search for the end of the list; starting at the current element				
-				for($j=$i; $j<count($args); $j++)
+				for($j=$i; $j<$count_args; $j++)
 				{
 					if( strpos($args[$j], ']') !== FALSE )
 					{
@@ -108,7 +109,7 @@ class ArgvPreprocessor
 		//
 		
 		// Check for arguments with spaces, these were originally quoted on the command line
-		for($i=0; $i<count($args); $i++)
+		for($i=0; $i<$count_args; $i++)
 		{
 			if( strpos($args[$i], ' ') !== FALSE )
 			{
@@ -156,33 +157,6 @@ class ArgvPreprocessor
 		//echo "\n-------------------------------------\n\n";
 		
 		return $args;	
-	}
-	
-	private static function quoteChar($arg)
-	{
-		//! TODO: TEST THIS AND THEN REMOVE THIS FUNCTION
-		
-		/*
-		// ALWAYS USE SINGLE QUOTES
-		// THERE IS NO REASON TO USE DOUBLE QUOTES ON THE COMMAND LINE
-		// THE SHELL WOULD INTERPRET THESE FOR VARIABLE EXPANSION PRIOR TO EXECUTING PHP
-		// ? DOES WINDOWS SHELL HANDLE THIS DIFFERENTLY ?
-		// 
-		
-		$quote = "'"; // default
-		
-		// If certain characters are contained in the argument, it should be nested in double quotes
-		// Example: apostrophe (single quote)
-		
-		if( strpos($arg, "'") !== FALSE ) $quote = '"';
-		if( strpos($arg, "!") !== FALSE ) $quote = '"';
-		
-		return $quote;
-		*/
-		
-		return "'";
-		
-	}
-	
+	}	
 	
 }

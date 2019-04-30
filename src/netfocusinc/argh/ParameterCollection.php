@@ -202,7 +202,7 @@ class ParameterCollection
 		}
 		else
 		{
-			throw(new ArghException(__CLASS__ . ': Parameter \'' . $param->name() . '\' cannot be redefined.'));
+			throw(new ArghException(__CLASS__ . ': Parameter \'' . $param->getName() . '\' cannot be redefined.'));
 		}
 	}
 	

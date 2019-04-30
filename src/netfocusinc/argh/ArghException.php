@@ -28,7 +28,7 @@ class ArghException extends \Exception
 			* @param Exception $previous The previous Exception to occurr
 			*
 			*/
-    public function __construct($message, $code = 0, Exception $previous = null) {
+    public function __construct($message, $code = 0, \Exception $previous = null) {
         // some code
     
         // make sure everything is assigned properly
