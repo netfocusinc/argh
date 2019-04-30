@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
 ## Added
 - [PHPDocumetor](https://phpdoc.org/) configuration file added
 
-## [1.0.2-alhpa] - 2019-03-22
+## [1.0.2-alpha] - 2019-03-22
 
 ### Changed
 - Updated bin/argh.php test program, to be useable insider PHAR archive

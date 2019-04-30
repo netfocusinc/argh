@@ -26,21 +26,21 @@ class Rule
 	// Syntax Contants
 	
 	const ARGH_SYNTAX_FLAG			= '[a-z]{1}';
-	const ARGH_SYNTAX_FLAGS			= '[a-z]+';
+	const ARGH_SYNTAX_FLAGS		= '[a-z]+';
 	const ARGH_SYNTAX_NAME			= '[a-z0-9_]+';
-	const ARGH_SYNTAX_VALUE			= '[a-z0-9_\.\/]*';
+	const ARGH_SYNTAX_VALUE		= '[a-z0-9_\.\/]*';
 	const ARGH_SYNTAX_LIST			= '[a-z0-9_\-,\' ]+';
-	const ARGH_SYNTAX_COMMAND		= '[a-z0-9_]{2,}';
+	const ARGH_SYNTAX_COMMAND	= '[a-z0-9_]{2,}';
 	const ARGH_SYNTAX_QUOTED		= '[a-z0-9_\-\'\\/\. ]+';
 	const ARGH_SYNTAX_VARIABLE	= '[a-z0-9_\.\/]*';
 	
 	// Semantic Contants
 	const ARGH_SEMANTICS_FLAG			= 1;
-	const ARGH_SEMANTICS_FLAGS		= 2;
+	const ARGH_SEMANTICS_FLAGS			= 2;
 	const ARGH_SEMANTICS_NAME			= 3;
-	const ARGH_SEMANTICS_VALUE		= 4;
+	const ARGH_SEMANTICS_VALUE			= 4;
 	const ARGH_SEMANTICS_LIST			= 5;
-	const ARGH_SEMANTICS_COMMAND	= 6;
+	const ARGH_SEMANTICS_COMMAND		= 6;
 	const ARGH_SEMANTICS_VARIABLE	= 7;
 	
 	//
